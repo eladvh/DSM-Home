@@ -1,4 +1,4 @@
-var express = require('express');
+/*var express = require('express');
 var app = express();
 var sql = require("mssql");
 var fs = require ("fs");
@@ -12,7 +12,7 @@ var fs = require ("fs");
     };
 
     console.log('connected');
-
+*/
  /*   function loadUsers() {
 
         var dbConn = new sql.ConnectionPool(dbConfig);
@@ -43,6 +43,6 @@ var fs = require ("fs");
           // console.log('Affected: ' + request.rowsAffected);
         // })
 
-    module.exports = Connection;
+    //module.exports = Connection;
     
 

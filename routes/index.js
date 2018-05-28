@@ -1,14 +1,26 @@
 var express = require('express');
 var router = express.Router();
+var sql = require('mssql');
 
+var server = require('../routes/server.js');
 
+/*
 router.get('/login', function(req, res, next) {
   res.sendfile('public/login.html');
 
-});
+});*/
   
 
-  router.post('/login', function(req, res, next) {
+  /*router.post('/login', function(req, res, next) {
+    req.checkBody('username' , 'Username field cannot be empty.').notEmpty();
+    const errors = req.validationErrors();
+    
+    if (errors){
+      console.log(`errors: ${JSON.stringify(errors)}`);
+      res.render('login' , {title: ' Login error'});
+    }*/
+
+/*2
     global.username = req.body.username;
     global.password = req.body.password;
     const Firstname = 'lala';
@@ -17,8 +29,40 @@ router.get('/login', function(req, res, next) {
     console.log(username);
     console.log(password);
 
-    const server = require('../routes/server.js');
+    cp.connect().then(function() {
+      console.log('Connection pool open for duty');
+      var request = new sql.Request(cp);
+      */
+
+      //request.query("INSERT INTO [Users] (Usermail, Userpassword) VALUES ('"+global.username+"', '"+global.password+"')").then(function(recordset) {
+        //console.log('Recordset: ' + recordset);
+        //console.log('Affected: ' + request.rowsAffected);
+       // console.log(recordset);
+     // });
+          /*3 request.query("select * from Users").then(function (recordSet) {
+            console.log(recordSet);
+          }); 
+        }).catch(function(err) {
+          console.error('Error creating connection pool', err);
+        }); 
+
+      res.sendfile('public/login.html');
+    });*/
+
     
+//router.get('/elad', function(req, res, next) {
+  //res.sendfile('public/index.html'); ;
+  //res.status(200).send('Hi elad');
+  //res.render('index', { title: 'Express' });
+
+//}); 
+
+module.exports = router;
+
+
+
+/*
+
     //const db = require('../db.js');
     //const query = require('../query.js');
     //query.loadUsers();
@@ -49,24 +93,3 @@ router.get('/login', function(req, res, next) {
       });
   }
   loadUser();*/
-
-    //request.query("INSERT INTO Users (Usermail, Userpassword) VALUES ('ssssdd', 435735)").then(function(recordset) {
-     //   console.log('Recordset: ' + recordset);
-     //   console.log('Affected: ' + request.rowsAffected);
-    //  })
-      //request.query("INSERT INTO Users (Usermail, Userpassword, Firstname, Lastname, Permission) VALUES (?, ?, ?, ?, ?)", [username, password, Firstname, Lastname, Permission]).then(function(recordset) {
-        //console.log('Recordset: ' + recordset);
-        //console.log('Affected: ' + request.rowsAffected);
-      //})
-      res.sendfile('public/login.html');
-    });
-
-    
-//router.get('/elad', function(req, res, next) {
-  //res.sendfile('public/index.html'); ;
-  //res.status(200).send('Hi elad');
-  //res.render('index', { title: 'Express' });
-
-//}); 
-
-module.exports = router;
