@@ -20,13 +20,13 @@ app.use(passport.session()); // persistent login sessions
 
 
  //For Handlebars
-app.set('views', '../app/views')
+app.set('views', './app/views')
 app.engine('hbs', exphbs({extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
 
 app.get('/', function(req, res){
-  res.send('Welcome to DSM-Home!');
+  res.sendfile('./public/mainpage.html');
 });
 
 
@@ -53,7 +53,7 @@ console.log(err,"Something went wrong with the Database Update!")
 
 
 app.listen(3000, function(err){
-    if(!err)
-    console.log("Site is live"); else console.log(err)
+  if(!err)
+  console.log("Site is live"); else console.log(err)
 
 });

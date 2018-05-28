@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var sql = require('mssql');
+var sql = require('mysql');
 
 var server = require('../routes/server.js');
 
