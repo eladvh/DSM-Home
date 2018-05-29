@@ -1,8 +1,27 @@
-var express = require('express');
-var router = express.Router();
-var sql = require('mysql');
+//var express = require('express');
+//var router = express.Router();
+/*var sql = require('mysql');
 
 var server = require('../routes/server.js');
+*/
+
+
+ 
+exports.index = function(req, res){
+  var message = '';
+res.render('index',{message: message});
+
+};
+
+//module.exports = router;
+/*router.get('/signin', function(req, res, next) {
+  res.sendfile('public/mainpage.html');
+
+}); 
+router.post('/signin', function(req, res, next) {
+  res.sendfile('index3.html');
+});
+*/
 
 /*
 router.get('/login', function(req, res, next) {
@@ -57,7 +76,7 @@ router.get('/login', function(req, res, next) {
 
 //}); 
 
-module.exports = router;
+
 
 
 

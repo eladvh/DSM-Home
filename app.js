@@ -1,18 +1,46 @@
 var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+//var express = require('express');
+//var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressValidator = require('express-validator');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+//authentication
+var session = require('express-session');
+var express = require('express')
+  //, routes = require('./routes')
+  //, user = require('./routes/user')
+  //, http = require('http')
+  , path = require('path');
 var app = express();
+var mysql      = require('mysql');
+var bodyParser=require("body-parser");
+
+var indexRouter = require('./routes/server');
+var usersRouter = require('./routes/users');
+//var userRouter = require('./routes/user');
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}))
+
+// all environments
+//app.set('port', process.env.PORT || 8080);
+app.set('views', '/home/eladp/DSM-Home/views');
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+//var app = express();
+
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());

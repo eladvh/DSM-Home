@@ -1,41 +1,25 @@
 {
   "name": "dsm-home",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
+  "version": "1.0.0",
+  "description": "dropshipping suppliers management",
+  "main": "./bin/www",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
-    "bootstrap": "^4.0.0",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "dotenv": "^5.0.1",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
-    "express-validator": "^5.2.0",
-    "http-errors": "~1.6.2",
-    "morgan": "~1.9.0",
     "mysql": "^2.15.0",
-    "mysql2": "^1.5.3",
-    "nodemon": "^1.17.5",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "pug": "2.0.0-beta11",
-    "sequelize": "^4.37.10"
+    "req-flash": "0.0.3"
   },
-  "devDependencies": {
-    "webpack": "^4.8.3"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "description": "Using Passport with Sequelize and MySQL",
-  "main": "routes/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eladvh/DSM-Home.git"
   },
-  "author": "Eladp",
+  "author": "eladp",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/eladvh/DSM-Home/issues"

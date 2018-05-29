@@ -1,4 +1,4 @@
-var express = require('express');
+/*var express = require('express');
 var sql     = require('mssql');
 
 const config = {
@@ -6,13 +6,13 @@ const config = {
     password: 'Vy93_r90pHY?', 
     server: 'den1.mssql4.gear.host', 
     database: 'dsmhomedb' 
-};
+};*/
 
 //module.exports = config;
 
 //instantiate a connection pool
-cp = new sql.ConnectionPool(config); //cp = connection pool
-var app = express();
+//cp = new sql.ConnectionPool(config); //cp = connection pool
+//var app = express();
 
 
 

@@ -1,59 +1,29 @@
-var express    = require('express')
-var app        = express()
-var passport   = require('passport')
-var session    = require('express-session')
-var bodyParser = require('body-parser')
-var env        = require('dotenv').load()
-var exphbs     = require('express-handlebars')
+var session = require('express-session');
+var express = require('express')
+  , routes = require('../routes')
+  , user = require('../routes/user')
+  , http = require('http')
+  , path = require('path');
+//var methodOverride = require('method-override');
+var app = express();
+var mysql      = require('mysql');
+var bodyParser = require("body-parser");
+var express = require('express');
+//var router = express.Router();
+//var app1 = require('../app.js')
+
+var db = require('../db');
+
+ 
+app.get('/', routes.index);//call for main index page
+app.get('/signup', user.signup);//call for signup page
+app.post('/signup', user.signup);//call for signup post 
+app.get('/login', routes.index);//call for login page
+app.post('/login', user.login);//call for login post
+app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
+app.get('/home/logout', user.logout);//call for logout
+app.get('/home/profile',user.profile);//to render users profile
 
 
 
-//For BodyParser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-
- // For Passport
-app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-
-
- //For Handlebars
-app.set('views', './app/views')
-app.engine('hbs', exphbs({extname: '.hbs'}));
-app.set('view engine', '.hbs');
-
-
-app.get('/', function(req, res){
-  res.sendfile('./public/mainpage.html');
-});
-
-
-//Models
-var models = require("../app/models");
-
-
-//Routes
-var authRoute = require('../app/routes/auth.js')(app,passport);
-
-
-//load passport strategies
-require('../app/config/passport/passport.js')(passport,models.user);
-
-
-//Sync Database
-   models.sequelize.sync().then(function(){
-console.log('Nice! Database looks fine')
-
-}).catch(function(err){
-console.log(err,"Something went wrong with the Database Update!")
-});
-
-
-
-app.listen(3000, function(err){
-  if(!err)
-  console.log("Site is live"); else console.log(err)
-
-});
+module.exports = app;
