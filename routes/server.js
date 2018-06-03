@@ -1,17 +1,9 @@
-var session = require('express-session');
 var express = require('express')
   , routes = require('../routes')
   , user = require('../routes/user')
   , http = require('http')
   , path = require('path');
-//var methodOverride = require('method-override');
 var app = express();
-var mysql      = require('mysql');
-var bodyParser = require("body-parser");
-var express = require('express');
-//var router = express.Router();
-//var app1 = require('../app.js')
-
 var db = require('../db');
 
  

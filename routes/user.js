@@ -2,6 +2,8 @@
 //---------------------------------------------signup page call------------------------------------------------------
 exports.signup = function(req, res){
     message = '';
+    var sess = req.session; 
+
     if(req.method == "POST"){
        var post  = req.body;
        var name= post.user_name;
@@ -10,12 +12,42 @@ exports.signup = function(req, res){
        var lname= post.last_name;
        var mob= post.mob_no;
  
-       var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + pass + "')";
+       var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"'"; 
  
-       var query = db.query(sql, function(err, result) {
- 
+       var query = db.query(sql, function(err, results) {
+        if(results.length){
+            
+          req.session.userId = results[0].id;
+          req.session.user = results[0];
+          console.log(results[0].id);
+          if(name == req.session.user.user_name){
+          console.log("duplicate");
+          }
+          
+       }
+       else{
+        //var query = db.query(sql, function(err, result) {
+          var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + pass + "')";
+        //message = "Succesfully! Your account has been created.";
+         // res.render('signup.ejs',{message: message});
+        //});
+        }
+        var query = db.query(sql, function(err, result) {
+        if(sql){
           message = "Succesfully! Your account has been created.";
           res.render('signup.ejs',{message: message});
+        }
+          else{
+            message = "duplicate.";
+            res.render('signup.ejs',{message: message});
+          }
+       });
+
+       /*else{
+        var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + pass + "')";
+          message = "duplicate.";
+          res.render('signup.ejs',{message: message});
+       }*/
        });
  
     } else {
@@ -33,9 +65,11 @@ exports.signup = function(req, res){
        var name= post.user_name;
        var pass= post.password;
       
-       var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";                           
+       var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'"; 
+
        db.query(sql, function(err, results){      
           if(results.length){
+            
              req.session.userId = results[0].id;
              req.session.user = results[0];
              console.log(results[0].id);
