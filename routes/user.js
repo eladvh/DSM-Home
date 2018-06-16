@@ -26,11 +26,7 @@ exports.signup = function(req, res){
           
        }
        else{
-        //var query = db.query(sql, function(err, result) {
           var sql = "INSERT INTO `users`(`first_name`,`last_name`,`mob_no`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + mob + "','" + name + "','" + pass + "')";
-        //message = "Succesfully! Your account has been created.";
-         // res.render('signup.ejs',{message: message});
-        //});
         }
         var query = db.query(sql, function(err, result) {
         if(sql){
@@ -77,12 +73,13 @@ exports.signup = function(req, res){
           }
           else{
              message = 'Wrong Credentials.';
-             res.render('index.ejs',{message: message});
+             res.render('login.ejs',{message: message});
+             console.log("wrong");
           }
                   
        });
     } else {
-       res.render('index.ejs',{message: message});
+       res.render('login.ejs',{message: message});
     }
             
  };
@@ -94,7 +91,7 @@ exports.signup = function(req, res){
 	userId = req.session.userId;
 	
 	if(userId == null){
-		res.redirect("/home/login");
+		res.redirect("/login");
 		return;
 	}
 	 
@@ -104,7 +101,7 @@ exports.signup = function(req, res){
 		   
 		   console.log(results);
 		   
-		   res.render('profile.ejs', {user:user});	  
+		   res.render('dashboard.ejs', {user:user});	  
 		  
 		});	 
 };
@@ -114,8 +111,16 @@ exports.signup = function(req, res){
        res.redirect("/login");
     })
  };
+ //------------------------------------check if user is connected----------------------------------------------
+ /*exports.isConnected=function(req,res){
+ var userId = req.session.userId;
+ if(userId == null){
+   res.redirect("/login");
+   return;
+ }
+}; */
  //--------------------------------render user details after login--------------------------------
- exports.profile = function(req, res){
+ /*exports.profile = function(req, res){
  
     var userId = req.session.userId;
     if(userId == null){
@@ -125,7 +130,7 @@ exports.signup = function(req, res){
  
     var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";          
     db.query(sql, function(err, result){  
-       res.render('profile.ejs',{data:result});
+       res.render('dashboard.ejs',{data:result});
     });
  };
  //---------------------------------edit users details after login----------------------------------
@@ -140,4 +145,4 @@ exports.signup = function(req, res){
     db.query(sql, function(err, results){
        res.render('edit_profile.ejs',{data:results});
     });
- };
+ }; */

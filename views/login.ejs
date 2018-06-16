@@ -83,10 +83,12 @@ span.psw {
     <img src="http://www.pueloautomotores.com/etc/designs/renault_v2/17.5.8-3/common-assets/img/avatar/avatar.png" alt="Avatar" class="avatar">
 
 </div>
-
+<% if (message.length > 0) { %>
+	<div class="alert alert-danger col-sm-12"><%= message %></div>
+<% } %>
   <div class="container">
     <label for="username"><b></b></label>
-    <input type="text" placeholder="Enter Username" name="username" required><br>
+    <input type="text" placeholder="Enter Username" name="user_name" required><br>
 
     <label for="password"><b></b></label>
     <input type="password" placeholder="Enter Password" name="password" required><br>
@@ -97,10 +99,13 @@ span.psw {
     </label>
   </div>
 
-  <div class="container" style="background-color:#f1f1f1">
+ <!-- <div class="container" style="background-color:#f1f1f1">
     <button type="button" class="cancelbtn">Cancel</button>
     <span class="psw">Forgot <a href="#">password?</a></span>
-  </div>
+  </div> -->
+  <div style="border-top: 1px solid; border-bottom: 1px solid; padding-top:15px; padding-bottom: 15px">
+    <span>Don't have an account? <a href="/signup">Sign Up Here!</a></span>
+  </div > 
 </form>
 
 </body>

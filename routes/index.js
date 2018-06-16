@@ -1,17 +1,32 @@
-//var express = require('express');
-//var router = express.Router();
-/*var sql = require('mysql');
+var express = require('express')
+  , routes = require('../routes')
+  , user = require('../routes/user')
+  
+  
 
-var server = require('../routes/server.js');
-*/
 
 
- 
 exports.index = function(req, res){
   var message = '';
-res.render('index',{message: message});
-
+  res.render('login',{message: message});
 };
+
+exports.userProfile = function(req, res){
+  var userId = req.session.userId;
+ if(userId == null){
+   res.redirect("/login");
+   return;
+ }
+  else{
+    res.render('profile');
+  }
+};
+
+exports.userProfile1 = function(req, res){
+  //res.sendfile('views/basic.ejs');
+};
+
+
 
 //module.exports = router;
 /*router.get('/signin', function(req, res, next) {
