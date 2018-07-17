@@ -2,13 +2,14 @@ var express = require('express')
   , routes = require('../routes')
   , user = require('../routes/user')
   
-  
-
 
 
 exports.index = function(req, res){
-  var message = '';
-  res.render('login',{message: message});
+console.log('asfdsf');
+  //var message = '';
+  res.render('../public/login');
+  //,{message: message});;
+  
 };
 
 exports.userProfile = function(req, res){
@@ -18,7 +19,7 @@ exports.userProfile = function(req, res){
    return;
  }
   else{
-    res.render('profile');
+    res.render('../public/profile');
   }
 };
 

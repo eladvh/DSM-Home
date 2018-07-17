@@ -1,4 +1,4 @@
-
+var express = require('express')
 //---------------------------------------------signup page call------------------------------------------------------
 exports.signup = function(req, res){
     message = '';
@@ -31,11 +31,11 @@ exports.signup = function(req, res){
         var query = db.query(sql, function(err, result) {
         if(sql){
           message = "Succesfully! Your account has been created.";
-          res.render('signup.ejs',{message: message});
+          res.render('../public/signup',{message: message});
         }
           else{
             message = "duplicate.";
-            res.render('signup.ejs',{message: message});
+            res.render('../public/signup',{message: message});
           }
        });
 
@@ -47,15 +47,25 @@ exports.signup = function(req, res){
        });
  
     } else {
-       res.render('signup');
+       res.render('../public/signup');
     }
  };
   
  //-----------------------------------------------login page call------------------------------------------------------
  exports.login = function(req, res){
-    var message = '';
-    var sess = req.session; 
- 
+  
+    //var message = '';
+    //var sess = req.session;
+    //console.log(sess)
+    var data = {
+      contactID: 1,
+      firstName: 'Elad',
+      lastName: 'Pinto',
+      email: 'Eladvh@gmail.com',
+      phone: '987654'
+  };
+  //res.send(data);
+
     if(req.method == "POST"){
        var post  = req.body;
        var name= post.user_name;
@@ -72,14 +82,36 @@ exports.signup = function(req, res){
              res.redirect('/home/dashboard');
           }
           else{
-             message = 'Wrong Credentials.';
-             res.render('login.ejs',{message: message});
+             //message = 'Wrong Credentials.';
+             //res.render('../public/login');
+             //,{message: message});
+             //res.render('login.html',{message: message});
+             
              console.log("wrong");
+             
+             res.render('../public/login');
+             res.send(data);
+             //,{data : data});
+             
+           
+      
           }
                   
        });
     } else {
-       res.render('login.ejs',{message: message});
+      //res.send(data);
+      /*var data = {
+        contactID: 1,
+        firstName: 'Elad',
+        lastName: 'Pinto',
+        email: 'Eladvh@gmail.com',
+        phone: '987654'
+    };
+
+    res.send(data);
+    res.render('../public/login');*/
+       //,{message: message});
+       //res.render('login.html',{message: message});
     }
             
  };
@@ -101,7 +133,7 @@ exports.signup = function(req, res){
 		   
 		   console.log(results);
 		   
-		   res.render('dashboard.ejs', {user:user});	  
+		   res.render('../public/dashboard.html', {user:user});	  
 		  
 		});	 
 };
@@ -111,14 +143,6 @@ exports.signup = function(req, res){
        res.redirect("/login");
     })
  };
- //------------------------------------check if user is connected----------------------------------------------
- /*exports.isConnected=function(req,res){
- var userId = req.session.userId;
- if(userId == null){
-   res.redirect("/login");
-   return;
- }
-}; */
  //--------------------------------render user details after login--------------------------------
  /*exports.profile = function(req, res){
  
@@ -130,11 +154,11 @@ exports.signup = function(req, res){
  
     var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";          
     db.query(sql, function(err, result){  
-       res.render('dashboard.ejs',{data:result});
+       res.render('../public/dashboard.ejs',{data:result});
     });
- };
+ }; */
  //---------------------------------edit users details after login----------------------------------
- exports.editprofile=function(req,res){
+ /*exports.editprofile=function(req,res){
     var userId = req.session.userId;
     if(userId == null){
        res.redirect("/login");
@@ -143,6 +167,6 @@ exports.signup = function(req, res){
  
     var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";
     db.query(sql, function(err, results){
-       res.render('edit_profile.ejs',{data:results});
+       res.render('../public/edit_profile.ejs',{data:results});
     });
  }; */

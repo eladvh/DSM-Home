@@ -7,7 +7,14 @@ var express = require('express')
 var app = express();
 var db = require('../db');
 
- 
+
+
+/*app.get('/home/userProfile', function (req, res) {
+  res.sendfile('../views/profile.html')
+})*/
+
+//app.post('/routes/user.js', user.login);
+//app.get('/routes/user.js', index.index);//call for main index page
 app.get('/', index.index);//call for main index page
 app.get('/signup', user.signup);//call for signup page
 app.post('/signup', user.signup);//call for signup post 
@@ -20,5 +27,6 @@ app.get('/home/userProfile', index.userProfile);
 //app.get('/home/profile',user.profile);//to render users profile
 
 
-
 module.exports = app;
+
+

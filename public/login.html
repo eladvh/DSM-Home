@@ -2,12 +2,15 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="./js/login.js"></script>
+
 
 <style>
 body {font-family: Verdana, Geneva, Tahoma, sans-serif;}
 
 
-form {border: 3px whitesmoke #f1f1f1;}
+form {border: 3px rgb(161, 29, 29) #f1f1f1;}
 
 input[type=text], input[type=password]{
     width: 300px;
@@ -75,17 +78,29 @@ span.psw {
 </style>
 </head>
 <body style="text-align:center;margin:0 auto;" >
-
+        
 <h2>Login Page</h2>
+
+
 
 <form action="/login" method="POST">
   <div class="imgcontainer">
     <img src="http://www.pueloautomotores.com/etc/designs/renault_v2/17.5.8-3/common-assets/img/avatar/avatar.png" alt="Avatar" class="avatar">
 
 </div>
-<% if (message.length > 0) { %>
+
+<!-- <% if (message.length > 0) { %>
 	<div class="alert alert-danger col-sm-12"><%= message %></div>
-<% } %>
+<% } %> -->
+
+<p id="noticeError"></p>
+
+        <!--<script>
+             function myFunct() {
+             document.getElementById("noticeError").innerHTML = "Hello World";
+        }       
+        </script> -->
+
   <div class="container">
     <label for="username"><b></b></label>
     <input type="text" placeholder="Enter Username" name="user_name" required><br>
@@ -93,11 +108,14 @@ span.psw {
     <label for="password"><b></b></label>
     <input type="password" placeholder="Enter Password" name="password" required><br>
         
-    <button type="submit">Login</button><br>
+    <button id="getButton" type="button" onclick="get()">Login</button><br>
+    <!--<button id="getButton" type="button" onclick="get()" >get</button><br>-->
     <label>
       <input type="checkbox" checked="checked" name="remember"> Remember me
     </label>
   </div>
+
+<pre id="postResponse"></pre>
 
  <!-- <div class="container" style="background-color:#f1f1f1">
     <button type="button" class="cancelbtn">Cancel</button>
@@ -107,6 +125,28 @@ span.psw {
     <span>Don't have an account? <a href="/signup">Sign Up Here!</a></span>
   </div > 
 </form>
+
+<script>
+        function get(){
+            $.ajax({
+                type: 'post',
+                url: 'http://127.0.0.1:3000/login',
+                dataType: 'json'
+            })
+            .done(function(data) {
+                console.log('POST response:' , JSON.stringify(data, "",2));
+                $('#postResponse').html(JSON.stringify(data, "",2));
+            })
+            .fail(function(jqXHR, textStatus, err) {
+                console.log('AJAX error response:', textStatus);
+            });
+      }
+    </script>
+ <!--<div class="alert flash">
+    <button type="button" class="close">×</button>
+    <i class="fa sign"></i><strong>{{type}}</strong> 
+    <span>{{message}}</span>
+  </div> -->
 
 </body>
 </html>
