@@ -5,7 +5,7 @@ var express = require('express')
 
 
 exports.index = function(req, res){
-console.log('asfdsf');
+  console.log('main page');
   //var message = '';
   res.render('../public/login');
   //,{message: message});;

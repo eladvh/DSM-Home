@@ -53,24 +53,17 @@ exports.signup = function(req, res){
   
  //-----------------------------------------------login page call------------------------------------------------------
  exports.login = function(req, res){
-  
+
     //var message = '';
     //var sess = req.session;
     //console.log(sess)
-    var data = {
-      contactID: 1,
-      firstName: 'Elad',
-      lastName: 'Pinto',
-      email: 'Eladvh@gmail.com',
-      phone: '987654'
-  };
-  //res.send(data);
+    var message = 'Wrong Credentials';
 
-    if(req.method == "POST"){
+    if(req.method == "POST") {
        var post  = req.body;
        var name= post.user_name;
        var pass= post.password;
-      
+
        var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'"; 
 
        db.query(sql, function(err, results){      
@@ -79,41 +72,26 @@ exports.signup = function(req, res){
              req.session.userId = results[0].id;
              req.session.user = results[0];
              console.log(results[0].id);
-             res.redirect('/home/dashboard');
+             
+             
+             //res.redirect('/home/dashboard');
+             res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/home/dashboard"});
+             //res.render('../public/dashboard');
           }
           else{
-             //message = 'Wrong Credentials.';
-             //res.render('../public/login');
-             //,{message: message});
-             //res.render('login.html',{message: message});
              
-             console.log("wrong");
-             
-             res.render('../public/login');
-             res.send(data);
-             //,{data : data});
-             
-           
-      
-          }
-                  
+             console.log('body: ' + JSON.stringify(message));
+             res.send(message);
+             //res.json({success : "Updated Successfully", status : 200});
+          }     
+
        });
     } else {
-      //res.send(data);
-      /*var data = {
-        contactID: 1,
-        firstName: 'Elad',
-        lastName: 'Pinto',
-        email: 'Eladvh@gmail.com',
-        phone: '987654'
-    };
-
-    res.send(data);
-    res.render('../public/login');*/
+      res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/login"});
        //,{message: message});
        //res.render('login.html',{message: message});
-    }
-            
+    } 
+      
  };
  //-----------------------------------------------dashboard page functionality----------------------------------------------
         
