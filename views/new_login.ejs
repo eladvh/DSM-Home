@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <%- include new_home %>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style>
+     body{
+            background-repeat: no-repeat;
+            background-size: 90% 800px;}
+            
+
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: 30px 1000px;
+  color: white;
+  font-size: 18px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.form {
+  position: relative;
+  z-index: 1;
+  border-style: solid;
+  border-color:white;
+  border-width: 5px;
+  border-radius: 12px;
+  background-color: rgba(128, 128, 128, 0.842);
+  opacity: 0.8;
+  padding: 50px 0px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 60%;
+  border-style: solid;
+  border-color:white;
+  border-radius: 12px;
+  margin: 0 0 15px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+.form button {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: rgba(228, 198, 30, 0.822);
+  width: 60%;
+  border-style: solid;
+  border-radius: 12px;
+  padding: 10px;
+  color: #FFFFFF;
+  font-size: 16px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background:  rgba(128, 128, 128, 0.842);
+}
+
+ </style>
+
+<div class="login-page">
+    <div class="form">
+            <h2>Sign-in</h2> </form>
+
+      <form id="my_form" action="/login" method="POST">
+        <input type="text" placeholder="username" name="user_name"/>
+        <input type="password" placeholder="password" name="password"/>
+        <div id="server-results"></div><br>
+        <button id="getButton" type="submit">Login</button><br>
+    
+        <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+
+      </form>
+    </div>
+  </div>
+  
+   <script type="text/javascript">
+          //function get(){
+              $("#my_form").submit(function(event){
+              event.preventDefault(); //prevent default action 
+              var post_url = $(this).attr("action"); //get form action url
+              var request_method = $(this).attr("method"); //get form GET/POST method
+              var form_data = $(this).serialize(); //Encode form elements for submission
+                      
+              var promise = $.ajax({
+                          url : post_url,
+                          type: request_method,
+                          data : form_data,
+                          });
+                          
+                          promise.fail( function() {
+                          window.alert("Fail!");
+                          });
+  
+                          promise.done( function(response) {
+                              if (response.redirect !== undefined && response.redirect) {
+                              window.location.href = response.redirect_url;
+                              }else{
+                                  $("#server-results").html(response);
+                              }
+                          
+                          });
+        })
+              
+      </script>
+
+</body>
+</html>

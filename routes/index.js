@@ -1,18 +1,26 @@
-var express = require('express')
+/*var express = require('express')
   , routes = require('../routes')
-  , user = require('../routes/user')
+  , user = require('../routes/user')*/
   
 
 
 exports.index = function(req, res){
   console.log('main page');
-  //var message = '';
-  res.render('../public/login');
-  //,{message: message});;
+  var userId = req.session.userId;
+  if(userId != null){
+     res.redirect("/home/dashboard");
+     return;
+  }
+
+  var message = '';
+  res.render('new_login',{message: message});
+
+  //res.render('../public/login');
+  
   
 };
 
-exports.userProfile = function(req, res){
+/*exports.userProfile = function(req, res){
   var userId = req.session.userId;
  if(userId == null){
    res.redirect("/login");
@@ -21,11 +29,11 @@ exports.userProfile = function(req, res){
   else{
     res.render('../public/profile');
   }
-};
+};*/
 
-exports.userProfile1 = function(req, res){
+/*exports.userProfile1 = function(req, res){
   //res.sendfile('views/basic.ejs');
-};
+};*/
 
 
 

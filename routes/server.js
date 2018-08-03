@@ -9,6 +9,7 @@ var db = require('../db');
 
 
 
+
 /*app.get('/home/userProfile', function (req, res) {
   res.sendfile('../views/profile.html')
 })*/
@@ -22,9 +23,9 @@ app.get('/login', index.index);//call for login page
 app.post('/login', user.login);//call for login post
 app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
 app.get('/home/logout', user.logout);//call for logout
-app.get('/home/userProfile', index.userProfile);
-//app.post('/home/userProfile', index.userProfile1);
-//app.get('/home/profile',user.profile);//to render users profile
+app.get('/home/editProfile', user.editprofile);
+app.post('/home/editProfile', user.editprofile);
+app.get('/home/profile',user.profile);//to render users profile
 
 
 module.exports = app;

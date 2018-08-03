@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <%- include new_home %>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+   body{
+            background-repeat: no-repeat;
+            background-size: 90% 800px;}
+
+
+.creat-supplier {
+  width: 1000px;
+  padding: 8% 0 0;
+  margin: 10px 1000px;
+  color: white;
+  font-size: 18px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.form {
+  position: relative;
+  z-index: 1;
+  border-style: solid;
+  border-color:white;
+  border-width: 5px;
+  border-radius: 12px;
+  background-color:rgba(128, 128, 128, 0.842);
+  opacity: 0.8;
+  padding: 50px 0px;
+  width: 40%;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 70%;
+  border-style: solid;
+  border-color:white;
+  border-radius: 12px;
+  margin: 0 0 15px;
+  padding: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+.form button {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: rgba(228, 198, 30, 0.822);
+  width: 50%;
+  border-style: solid;
+  border-radius: 12px;
+  padding: 10px;
+  color: #FFFFFF;
+  font-size: 16px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background:  rgba(128, 128, 128, 0.842);
+}
+.form .supplier-form {
+  display: none;
+}
+
+</style>
+
+
+<div class="creat-supplier">
+<div class="form">
+
+    <h2>Sign-up</h2>
+
+<form method="post" action="/signup">
+  <input type="text" placeholder="First name" name="first_name"><br>
+  <input type="text" placeholder="Last name" name="last_name"><br>
+  <input type="text" placeholder="E-mail" name="user_name"><br>
+  <input type="password" placeholder="Password" name="password"><br>
+  
+  <% if (message.length > 0) { %>
+    <div><%= message %></div>
+  <% } %>
+  <br>
+  <button type="submit">Create</button>
+  <p class="message">Already registered? <a href="/login">Sign in now!</a></p>
+
+</form> 
+
+</div>
+</div>
+
+</body>
+</html>

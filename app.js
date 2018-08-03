@@ -4,6 +4,7 @@ var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressValidator = require('express-validator');
+
 require('dotenv').config();
 
 //authentication
@@ -15,7 +16,7 @@ var express = require('express')
   , path = require('path');
 var app = express();
 var mysql      = require('mysql');
-var bodyParser=require("body-parser");
+var bodyParser = require("body-parser");
 
 
 var indexRouter = require('./routes/server');
@@ -23,19 +24,21 @@ var usersRouter = require('./routes/users');
 //var userRouter = require('./routes/user');
 
 
+//app.set('views', __dirname + '/views');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'views')));
+console.log('views', path.join(__dirname, 'views'));
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60000 }
-}))
+              secret: 'keyboard cat',
+              resave: false,
+              saveUninitialized: true,
+              cookie: { maxAge: 60000 }
+            }))
 
-//app.use(flash(app));
-// all environments
-//app.set('port', process.env.PORT || 8080);
-/*app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');*/
-var cons = require('consolidate');
+/*var cons = require('consolidate');
 
 // view engine setup
 app.engine('html', cons.swig)
@@ -43,7 +46,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));*/
 
 //var app = express();
 
