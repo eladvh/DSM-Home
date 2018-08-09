@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <%- include new_home %>
+    <%- include home_page %>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-   body{
-            background-repeat: no-repeat;
-            background-size: 90% 800px;}
-
 
 .creat-supplier {
   width: 1000px;
@@ -82,8 +78,8 @@
   <input type="text" placeholder="E-mail" name="user_name"><br>
   <input type="password" placeholder="Password" name="password"><br>
   
-  <% if (message.length > 0) { %>
-    <div><%= message %></div>
+  <% if (answer.message.length > 0) { %>
+    <div><%= answer.message %></div>
   <% } %>
   <br>
   <button type="submit">Create</button>

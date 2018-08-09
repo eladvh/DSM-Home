@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+<head> 
+<%- include sidebar %>
+    <style type="text/css">
+
+    .myLogsTable{
+        width:100% ;
+        border: 1px solid black;
+        font-family:'Agency FB';
+    }
+    h1{
+        text-align:center;
+    }
+    #logshistory{
+        width:100%;
+        border: 1px solid black;
+        font-family:'Agency FB';
+    }
+    
+input[type="text"] {
+    width: 100px;
+}
+
+input[type="datetime-local"] {
+    width: 100px;
+}
+
+input[type="methodlist"] {
+    width: 100px;
+}
+
+select { width: 100px;}
+
+
+
+    </style>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+
+<body>
+<div class="padding">
+    <h1> <b>+ New Supplier</b></h1>
+        <table class="myLogsTable"> 
+            <tr><th> Store Num</th>
+                <th> Supplier Name </th>
+            <th>Establish Year</th>
+            <th>Store Link</th>
+            <th> WeChat</th>
+            <th> Email</th>
+            <th> Skype ID</th>
+            <th> Phone Number</th>
+            <th> Cancel</th>
+            <th>submit</th>
+            </tr>
+            </table>
+            <div id="logRow">
+            <form method="post" action="/home/suppliers/addsup">
+            <table class="myLogsTable" cellspacing="10">
+            <tr ><td> <input type="text" placeholder="storenum" name="storeNum" /></td>
+            <td> <input type="text" placeholder="supplierName " name="supplierName" /></td>
+            <td> <input type="text" placeholder="establishYear" name="establishYear"/></td>
+            <td> <input type="text" placeholder="storeLink" name="storeLink"/></td>
+            <td> <input type="text" placeholder="wechat" name="wechat"/></td>
+            <td> <input type="text" placeholder="email" name="email"/></td>
+            <td> <input type="text" placeholder="skypeID" name="skypeID"/></td>
+            <td> <input type="text" placeholder="phoneNum" name="phoneNum"/></td>
+            <td> <input type="reset" value="Clear"/> </td>
+            <td><input id="submitbutt" type="submit" /></td>
+            
+            <!--<a href="/home/profile"><i class="fa fa-user icon"></i></a>-->
+            </tr>
+        </table>
+
+          
+        <!--<div style="text-align:center"> <input id="submitbutt" type="submit"></div>-->
+        </form>
+        </div>
+        
+        <div id="newLogRow"></div>
+
+        <button type="button" onclick="LogsFormClone()">+Add new log</button>
+
+        <h1><% if (answer.message.length > 0) { %> <div><%= answer.message %></div> <% } %></h1>
+
+
+        <script>
+        function LogsFormClone() {
+            var itm = document.getElementById("logRow");
+            var cln = itm.cloneNode(true);
+            document.getElementById("newLogRow").appendChild(cln);
+        }
+        </script>
+        
+<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!--  
+<form>
+    <h1> Logs history</h1>
+    <table id="logshistory">
+        <tr>
+            <th> Store num</th>
+            <th>Date of conversion</th>
+            <th> Subject</th>
+            <th> communication method</th>
+            <th> Content</th>
+        </tr>
+        <tr> <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+
+        </table>
+  </form>
+-->
+    </div>
+
+    
+</body>
+</html>

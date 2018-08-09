@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <%- include new_home %>
+    <%- include home_page %>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <style>
-     body{
-            background-repeat: no-repeat;
-            background-size: 90% 800px;}
             
-
 
 .login-page {
   width: 360px;
@@ -72,18 +68,24 @@
     <div class="form">
             <h2>Sign-in</h2> </form>
 
-      <form id="my_form" action="/login" method="POST">
-        <input type="text" placeholder="username" name="user_name"/>
-        <input type="password" placeholder="password" name="password"/>
-        <div id="server-results"></div><br>
-        <button id="getButton" type="submit">Login</button><br>
+      <form action="/login" method="POST">
+        <input type="text" placeholder="username" name="user_name"/><br>
+        <input type="password" placeholder="password" name="password"/><br>
+
+        <% if (answer.message.length > 0) { %>
+          <div><%= answer.message %></div>
+        <% } %>
+        <br>
+        <button type="submit">Login</button><br>
     
         <p class="message">Not registered? <a href="/signup">Create an account</a></p>
 
       </form>
     </div>
   </div>
-  
+
+  <!-- for ajax - need to add  id="my_form" in the title of the form , id="getButton" in the submit button, and <div id="server-results"></div><br> row under passwords for message
+
    <script type="text/javascript">
           //function get(){
               $("#my_form").submit(function(event){
@@ -114,5 +116,40 @@
               
       </script>
 
+//serverside
+       //-----------------------------------------------login page call------------------------------------------------------
+ exports.login = function(req, res){
+    
+    var message = 'Wrong Credentials';
+
+    if(req.method == "POST") {
+       var post  = req.body;
+       var name= post.user_name;
+       var pass= post.password;
+
+       var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'"; 
+
+       db.query(sql, function(err, results){      
+          if(results.length){
+
+             req.session.userId = results[0].id;
+             req.session.user = results[0];
+             console.log(results[0]);
+        
+             res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/home/dashboard"});
+          }else{
+             
+             console.log('body: ' + JSON.stringify(message));
+             res.send(message);
+          }     
+
+       });
+    } else {
+      res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/login"});
+    } 
+      
+ };
+
+  -->
 </body>
 </html>

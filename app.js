@@ -20,7 +20,7 @@ var bodyParser = require("body-parser");
 
 
 var indexRouter = require('./routes/server');
-var usersRouter = require('./routes/users');
+//var usersRouter = require('./routes/users');
 //var userRouter = require('./routes/user');
 
 
@@ -35,7 +35,7 @@ app.use(session({
               secret: 'keyboard cat',
               resave: false,
               saveUninitialized: true,
-              cookie: { maxAge: 60000 }
+              cookie: { maxAge: 300000 }
             }))
 
 /*var cons = require('consolidate');
@@ -64,7 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressValidator()); */
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

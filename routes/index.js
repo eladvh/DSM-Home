@@ -11,128 +11,121 @@ exports.index = function(req, res){
      res.redirect("/home/dashboard");
      return;
   }
-
+  var sendName = '';
   var message = '';
-  res.render('new_login',{message: message});
-
-  //res.render('../public/login');
-  
-  
+  var answer = {sendName, message};
+  res.render('new_login',{answer:answer});
 };
 
-/*exports.userProfile = function(req, res){
+
+exports.suppliers = function(req, res){
+  var user =  req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
+  var p = 0;
+  var message = '';
+  var post = {storeNum:'', supplierName:'', establishYear:'', storeLink:'', wechat:'', email:'', skypeID:'', phoneNum:''};
+  var answer = {post, message, p, sendName};
+  console.log(answer);
+
+  console.log('suppliers page');
   var userId = req.session.userId;
- if(userId == null){
-   res.redirect("/login");
-   return;
- }
-  else{
-    res.render('../public/profile');
+  if(userId == null){
+     res.redirect("/login");
+     return;
   }
-};*/
-
-/*exports.userProfile1 = function(req, res){
-  //res.sendfile('views/basic.ejs');
-};*/
-
-
-
-//module.exports = router;
-/*router.get('/signin', function(req, res, next) {
-  res.sendfile('public/mainpage.html');
-
-}); 
-router.post('/signin', function(req, res, next) {
-  res.sendfile('index3.html');
-});
-*/
-
-/*
-router.get('/login', function(req, res, next) {
-  res.sendfile('public/login.html');
-
-});*/
   
+  res.render('suppliers1',{answer:answer});
+}
 
-  /*router.post('/login', function(req, res, next) {
-    req.checkBody('username' , 'Username field cannot be empty.').notEmpty();
-    const errors = req.validationErrors();
-    
-    if (errors){
-      console.log(`errors: ${JSON.stringify(errors)}`);
-      res.render('login' , {title: ' Login error'});
-    }*/
+exports.addlogs = function(req, res){
+  console.log('logs page');
+  var user =  req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
+  var p = 0;
+  var message = '';
+  var answer = {message, p, sendName};
 
-/*2
-    global.username = req.body.username;
-    global.password = req.body.password;
-    const Firstname = 'lala';
-    const Lastname = 'lolo';
-    const Permission = 'admina';
-    console.log(username);
-    console.log(password);
-
-    cp.connect().then(function() {
-      console.log('Connection pool open for duty');
-      var request = new sql.Request(cp);
-      */
-
-      //request.query("INSERT INTO [Users] (Usermail, Userpassword) VALUES ('"+global.username+"', '"+global.password+"')").then(function(recordset) {
-        //console.log('Recordset: ' + recordset);
-        //console.log('Affected: ' + request.rowsAffected);
-       // console.log(recordset);
-     // });
-          /*3 request.query("select * from Users").then(function (recordSet) {
-            console.log(recordSet);
-          }); 
-        }).catch(function(err) {
-          console.error('Error creating connection pool', err);
-        }); 
-
-      res.sendfile('public/login.html');
-    });*/
-
-    
-//router.get('/elad', function(req, res, next) {
-  //res.sendfile('public/index.html'); ;
-  //res.status(200).send('Hi elad');
-  //res.render('index', { title: 'Express' });
-
-//}); 
-
-
-
-
-
-/*
-
-    //const db = require('../db.js');
-    //const query = require('../query.js');
-    //query.loadUsers();
-    //var request = new sql.Request(dbConn);
-    //request.query("INSERT INTO Users (Usermail, Userpassword) VALUES (?, ?)", [username, password]).then(function(recordset) {
-      //console.log('Recordset: ' + recordset);
-      //console.log('Affected: ' + request.rowsAffected);
-   // })
-    //var request = new sql.Request(conn);
-   // request.query("select * from Users").then(function (recordSet) {
-   //   console.log(recordSet);
-  //})
-    //loadUsers();
-    /*loadUser();
-    function loadUser() {
-      var dbConn = new sql.ConnectionPool(config);
-      dbConn.connect().then(function () {
-          var request = new sql.Request(dbConn);
-          request.query("select * from Users").then(function (recordSet) {
-              console.log(recordSet);
-              dbConn.close();
-          }).catch(function (err) {
-              console.log(err);
-              dbConn.close();
-          });
-      }).catch(function (err) {
-          console.log(err);
-      });
+  var userId = req.session.userId;
+  if(userId == null){
+     res.redirect("/login");
+     return;
   }
-  loadUser();*/
+  //if(req.method == "POST"){
+
+  //}
+
+  res.render('logs_page', {answer:answer});
+}
+
+
+exports.addsup = function(req, res){
+  console.log('add suppliers page');
+  var user =  req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
+  var p = 0;
+  var message = '';
+  var answer = {message, p, sendName};
+  
+  var userId = req.session.userId;
+  if(userId == null){
+     res.redirect("/login");
+     return;
+  }
+  if(req.method == "POST"){
+    var post  = req.body;
+    console.log(req.body);
+    var storeNum= post.storeNum;
+    var supplierName = post.supplierName;
+    var establishYear= post.establishYear;
+    var storeLink= post.storeLink;
+    var wechat= post.wechat;
+    var email= post.email;
+    var skypeID= post.skypeID;
+    var phoneNum= post.phoneNum;
+
+    answer = {post, message, p, sendName};
+    console.log(answer);
+
+    var sql="SELECT storeNum, supplierName, establishYear, storeLink, wechat, email,skypeID, phoneNum FROM `tblSuppliers` WHERE `storeNum`='"+storeNum+"'"; 
+    var query = db.query(sql, function(err, results) {
+      if(results.length){
+        q = results[0];
+        console.log('check if ' + answer.post.storeNum + ' = ' + q.storeNum + ' ?');
+
+        if(answer.post.storeNum == q.storeNum){
+          
+          console.log("duplicate");
+          answer.message = "duplicate";
+          answer.p = 1;
+          
+          res.render('addsup_page.ejs',{answer:answer});
+        }}else{
+          var sql = "INSERT INTO `tblSuppliers`(`storeNum`,`supplierName`,`establishYear`, `storeLink`, `wechat`, `email`,`skypeID`, `phoneNum` ) VALUES ('" + storeNum + "','" + supplierName + "','" + establishYear + "','" + storeLink + "' ,'" + wechat + "' ,'" + email + "' ,'" + skypeID + "' ,'" + phoneNum + "')";
+          var query = db.query(sql, function(err, result) {
+            answer.message = "Succesfully! supplier tab has been created.";
+            console.log('success');
+            answer.p = 1;
+            res.render('suppliers1.ejs',{answer:answer});
+          })
+        }
+
+    })
+  }else{
+    res.render('addsup_page', {answer:answer});
+  }
+}
+
+exports.analitics = function(req, res){
+  console.log('analitics page');
+  var user =  req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
+  var answer = {sendName};
+  
+  var userId = req.session.userId;
+  if(userId == null){
+     res.redirect("/login");
+     return;
+  }
+
+  res.render('analitics', {answer:answer});
+}

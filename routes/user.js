@@ -1,7 +1,11 @@
 //---------------------------------------------signup page call------------------------------------------------------
 exports.signup = function(req, res){
   message = '';
-  var userId = req.session.userId;
+  var sendName = '';
+  var sess = req.session; 
+  var answer = {sendName, message};
+
+  var userId = sess.userId;
   if(userId != null){
      res.redirect("/home/dashboard");
      return;
@@ -24,86 +28,66 @@ exports.signup = function(req, res){
 
           if(name == req.session.user.user_name){
           console.log("duplicate");
-          message = "duplicate";
-          res.render('new_signup.ejs',{message: message});
+          answer.message = "duplicate";
+          res.render('new_signup.ejs',{answer:answer});
 
           }} else {
           var sql = "INSERT INTO `users`(`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + name + "','" + pass + "')";
           var query = db.query(sql, function(err, result) {
-          message = "Succesfully! Your account has been created.";
-          res.render('new_signup.ejs',{message: message});
+          answer.message = "Succesfully! Your account has been created.";
+          res.render('new_signup.ejs',{answer:answer});
           })
         }
       });
 
   } else {
-     res.render('new_signup');
+     res.render('new_signup',{answer:answer});
   }
 };
  //-----------------------------------------------login page call------------------------------------------------------
  exports.login = function(req, res){
+  console.log('hi');
+  var message = '';
+  var sendName = '';
+  var sess = req.session; 
+  var answer = {sendName, message};
+
+  if(req.method == "POST"){
+     var post  = req.body;
+     var name= post.user_name;
+     var pass= post.password;
     
-    var message = 'Wrong Credentials';
-
-    if(req.method == "POST") {
-       var post  = req.body;
-       var name= post.user_name;
-       var pass= post.password;
-
-       var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'"; 
-
-       db.query(sql, function(err, results){      
-          if(results.length){
-
-             req.session.userId = results[0].id;
-             req.session.user = results[0];
-             //console.log(results[0].id);
-        
-             res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/home/dashboard"});
-          }else{
-             
-             console.log('body: ' + JSON.stringify(message));
-             res.send(message);
-          }     
-
-       });
-    } else {
-      res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/login"});
-    } 
-      
- };
+     var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";                           
+     db.query(sql, function(err, results){      
+        if(results.length){
+           sess.userId = results[0].id;
+           answer.sendName = results[0].first_name + ' ' + results[0].last_name;
+           sess.user = results[0];
+           console.log(results[0]);
+           res.render('home_page.ejs',{answer:answer});
+        }
+        else{
+           answer.message = 'Wrong Credentials.';
+           res.render('new_login.ejs',{answer:answer});
+        }
+                
+     });
+  } else {
+     res.render('new_login.ejs',{answer:answer});
+  }
+};
  //-----------------------------------------------dashboard page functionality----------------------------------------------
         
  exports.dashboard = function(req, res, next){
-	//var message = 'check';
-	var user =  req.session.user,
-	userId = req.session.userId;
-	
+  var user =  req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
+  var userId = req.session.userId;
+	var answer = {sendName};
 	if(userId == null){
 		res.redirect("/login");
 		return;
   }
-  res.render('new_home.ejs');
-  //res.render('../public/dashboard.html');
-  //res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/home/dashboard"});
-
-	 //var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";
-	 
-	   //db.query(sql, function(err, results){
-      //if(results.length){
-        
-      //res.send(JSON.stringify(message));
-		   //console.log(results);
-		   
-       //res.send('ccc');
-     
-       //res.json({"redirect":true,"redirect_url":"http://127.0.0.1:3000/login"});
-      //}
-      
-       //, {user:user});	  
-      
-    //});	 
-    
+  res.render('home_page.ejs', {answer:answer});
 };
  //------------------------------------logout functionality----------------------------------------------
  exports.logout=function(req,res){
@@ -114,6 +98,8 @@ exports.signup = function(req, res){
  //--------------------------------render user details after login--------------------------------
  exports.profile = function(req, res){
   var message = '';
+  var user = req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
   var userId = req.session.userId;
   if(userId == null){
      res.redirect("/login");
@@ -123,24 +109,29 @@ exports.signup = function(req, res){
   var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";          
   db.query(sql, function(err, result){ 
     if(result.length){ 
-      //console.log(result.length);
       var userName = result[0].user_name;
       var firstName = result[0].first_name;
       var lastName= result[0].last_name;
     
-     res.render('profile.ejs', {message:message, userName:userName, firstName:firstName, lastName:lastName});
+      var answer = {userName, firstName, lastName, sendName, message};
+
+     res.render('profile.ejs', {answer:answer});
     }
-     
-     //,{data:result});
+  
   });
 };
  //---------------------------------edit users details after login----------------------------------
  exports.editprofile=function(req,res){
+  var message = '';
+  var user =  req.session.user;
+  var sendName = user.first_name + ' ' + user.last_name;
   var userId = req.session.userId;
   if(userId == null){
      res.redirect("/login");
      return;
   }
+
+  var answer = {sendName};
 
   if(req.method == "POST") {
     var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";
@@ -158,21 +149,15 @@ exports.signup = function(req, res){
       }else{
         var lastName = result[0].last_name;
       }
-    
-    
-    //if(firstName!= '' || lastName!= ''){
+
+      var answer = {userName, firstName, lastName, sendName, message};
 
     var sql = "update users SET first_name = ? ,last_name = ? WHERE ID = ?";
     var query = db.query(sql, [firstName, lastName, userId], function(err, result) {
-    message = "Succesfully! Your profile details has been updated.";
-    res.render('profile.ejs', {message:message, userName:userName, firstName:firstName, lastName:lastName});
+    answer.message = "Succesfully! Your profile details has been updated.";
+    res.render('profile.ejs', {answer:answer});
     })
   });
-  //}
- // else{
- //   res.redirect('profile');
- // }
-
 }else{
   res.render('profile.ejs');
 }
