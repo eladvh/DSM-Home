@@ -18,7 +18,7 @@ exports.signup = function(req, res){
      var fname= post.first_name;
      var lname= post.last_name;
 
-     var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"'"; 
+     var sql="SELECT id, first_name, last_name, user_name FROM `tblUser` WHERE `user_name`='"+name+"'"; 
  
        var query = db.query(sql, function(err, results) {
         if(results.length){
@@ -32,7 +32,7 @@ exports.signup = function(req, res){
           res.render('new_signup.ejs',{answer:answer});
 
           }} else {
-          var sql = "INSERT INTO `users`(`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + name + "','" + pass + "')";
+          var sql = "INSERT INTO `tblUser`(`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + name + "','" + pass + "')";
           var query = db.query(sql, function(err, result) {
           answer.message = "Succesfully! Your account has been created.";
           res.render('new_signup.ejs',{answer:answer});
@@ -57,7 +57,7 @@ exports.signup = function(req, res){
      var name= post.user_name;
      var pass= post.password;
     
-     var sql="SELECT id, first_name, last_name, user_name FROM `users` WHERE `user_name`='"+name+"' and password = '"+pass+"'";                           
+     var sql="SELECT id, first_name, last_name, user_name FROM `tblUser` WHERE `user_name`='"+name+"' and password = '"+pass+"'";                           
      db.query(sql, function(err, results){      
         if(results.length){
            sess.userId = results[0].id;
@@ -106,7 +106,7 @@ exports.signup = function(req, res){
      return;
   }
 
-  var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";          
+  var sql="SELECT * FROM `tblUser` WHERE `id`='"+userId+"'";          
   db.query(sql, function(err, result){ 
     if(result.length){ 
       var userName = result[0].user_name;
@@ -134,7 +134,7 @@ exports.signup = function(req, res){
   var answer = {sendName};
 
   if(req.method == "POST") {
-    var sql="SELECT * FROM `users` WHERE `id`='"+userId+"'";
+    var sql="SELECT * FROM `tblUser` WHERE `id`='"+userId+"'";
     db.query(sql, function(err, result){ 
 
     var post  = req.body;
@@ -152,7 +152,7 @@ exports.signup = function(req, res){
 
       var answer = {userName, firstName, lastName, sendName, message};
 
-    var sql = "update users SET first_name = ? ,last_name = ? WHERE ID = ?";
+    var sql = "update tblUser SET first_name = ? ,last_name = ? WHERE ID = ?";
     var query = db.query(sql, [firstName, lastName, userId], function(err, result) {
     answer.message = "Succesfully! Your profile details has been updated.";
     res.render('profile.ejs', {answer:answer});
