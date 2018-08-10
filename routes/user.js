@@ -4,6 +4,7 @@ exports.signup = function(req, res){
   var sendName = '';
   var sess = req.session; 
   var answer = {sendName, message};
+  console.log('lala');
 
   var userId = sess.userId;
   if(userId != null){
