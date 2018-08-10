@@ -46,7 +46,7 @@ exports.signup = function(req, res){
 };
  //-----------------------------------------------login page call------------------------------------------------------
  exports.login = function(req, res){
-  console.log('hi');
+  console.log('login page');
   var message = '';
   var sendName = '';
   var sess = req.session; 
