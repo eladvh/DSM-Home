@@ -154,9 +154,13 @@ h3 {
 <div class="creat-supplier">
 <div class="form">       
 
+<form id="supForm" method="POST" action="/home/suppliers">
+<select id="supSelect" name="supName" method="POST" action="/home/suppliers">
+  <option selected disabled>Selecet Supplier</option>
+</select>
+</form>
   
 <form class="supplier-form">
-  
 
     <h3>Supplier Details</h3>
 
@@ -188,7 +192,6 @@ h3 {
                         <form class="logs" action="/home/suppliers/logs">
                           <button>+ Add new log</button>
                       </form>
-                
               </div>
             </div>
 
@@ -204,7 +207,12 @@ h3 {
 </form> 
 </div>
 </div>
-
+<p>Store Number: <% if (answer.p != '0') { %> <%= answer.post.storeNum %> <% } %></p>
+<p>Supplier Name <% if (answer.p != '0') { %> <%= answer.post.supplierName %> <% } %></p>
+<p>Date Of Conversion: <% if (answer.p != '0') { %> <%= answer.post.dateOfConversion %> <% } %></p>
+<p>Subject Link: <% if (answer.p != '0') { %> <%= answer.post.subject %> <% } %></p>
+<p>Method List: <% if (answer.p != '0') { %> <%= answer.post.methodList %> <% } %></p>
+<p>Content: <% if (answer.p != '0') { %> <%= answer.post.content %> <% } %></p>
 <div class="creat-blue">
 <div class="form">
 <form class="blue">
@@ -219,5 +227,27 @@ h3 {
 </div>
 </div>
 </div>
+<script>
+var myobject = JSON.parse('<%-JSON.stringify(answer.result)%>');
+
+var select = document.getElementById("supSelect");
+for(index in myobject) {
+    select.options[select.options.length] = new Option(myobject[index], myobject[index]);
+}
+
+document.getElementById("supSelect").onchange = function() {
+		document.getElementById("supForm").submit();
+	}
+/*function choose(){
+var select = document.getElementById("example-select");
+if(select.options.length > 0) {
+  var txt = select.options[select.selectedIndex].text;
+  document.getElementById("txt").innerHTML = txt;
+}
+else {
+    window.alert("Select box is empty");
+}
+}*/
+  </script> 
 </head>
 </html>

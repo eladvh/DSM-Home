@@ -48,6 +48,7 @@ select { width: 200px;}
     <h1> <b>+ New log</b></h1>
         <table  class="myLogsTable"> 
             <tr><th> Store num</th>
+            <th> Supplier Name</th>
             <th class="alignTB">Date of conversion</th>
             <th class="alignTB">  Subject</th>
             <th> communication method</th>
@@ -56,30 +57,32 @@ select { width: 200px;}
             </tr>
             </table>
             <div id="logRow">
-            <form>
+            <form method="post" action="/home/suppliers/logs">
             <table  class="myLogsTable" cellspacing="10">
-            <tr ><td class="alignTB"> <input type="text" placeholder="storenum" /></td>
-            <td> <input type="datetime-local" name="dateofconversion"/></td>
-            <td> <input type="text" placeholder="subject" /></td>
-            <td> <select name="methodlist" form="methodform">
+            <tr ><td class="alignTB"> <input type="text" placeholder="Store Number" name="storeNum"/></td>
+                <td> <input type="text" placeholder="Subject" name="supplierName" /></td>
+            <td> <input type="datetime-local" name="dateOfConversion"/></td>
+            <td> <input type="text" placeholder="Subject" name="subject" /></td>
+            <td> <select name="methodList">
             <option value="mail">Mail</option>
             <option value="wechat">Wechat</option>
             <option value="skype">Skype</option>
             <option value="phone">Phone</option>
                  </select> </td>
-            <td> <input type="text" placeholder="content" /></td>
+            <td> <input type="text" placeholder="Content" name="content" /></td>
             <td> <input type="reset" value="Clear" /> </td>
-            <!--<a href="/home/profile"><i class="fa fa-user icon"></i></a>-->
             </tr>
         </table>
+        <div style="text-align:center"><button id="submitbutt" type="submit" value="Submit">Submit</button></div>
         </form>
+        <button type="button" onclick="LogsFormClone()">+Add new log</button>
         </div>
 
         <div id="newLogRow"></div>
 
-        <button type="button" onclick="LogsFormClone()">+Add new log</button>
+        <h1><% if (answer.message.length > 0) { %> <div><%= answer.message %></div> <% } %></h1>
         
-        <div style="text-align:center"> <input id="submitbutt" type="submit" value="Submit" /></div>
+        
         
 
 

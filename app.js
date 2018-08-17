@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'views')));
 console.log('views', path.join(__dirname, 'views'));
+
 app.use(session({
               secret: 'keyboard cat',
               resave: false,
@@ -38,6 +39,7 @@ app.use(session({
               cookie: { maxAge: 300000 }
             }))
 
+            
 /*var cons = require('consolidate');
 
 // view engine setup

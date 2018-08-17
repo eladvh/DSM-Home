@@ -19,6 +19,7 @@ app.get('/home/editProfile', user.editprofile);//edit users details
 app.post('/home/editProfile', user.editprofile);//edit users details
 app.get('/home/profile',user.profile);//to render users profile
 app.get('/home/suppliers', index.suppliers);//to render suppliers page
+app.post('/home/suppliers', index.suppliers);//call for suppliers post
 app.get('/home/suppliers/logs', index.addlogs);//call for logs_page
 app.post('/home/suppliers/logs', index.addlogs);//call for logs_page post
 app.get('/home/suppliers/addsup', index.addsup);//call for addsup_page page 

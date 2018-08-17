@@ -4,7 +4,7 @@ exports.signup = function(req, res){
   var sendName = '';
   var sess = req.session; 
   var answer = {sendName, message};
-
+  console.log(req.session);
   var userId = sess.userId;
   if(userId != null){
      res.redirect("/home/dashboard");
@@ -23,8 +23,9 @@ exports.signup = function(req, res){
        var query = db.query(sql, function(err, results) {
         if(results.length){
             
+          req.session.userId = results[0].id;
           req.session.user = results[0];
-          console.log(req.session.user);
+          console.log(req.session);
 
           if(name == req.session.user.user_name){
           console.log("duplicate");
@@ -51,6 +52,7 @@ exports.signup = function(req, res){
   var sendName = '';
   var sess = req.session; 
   var answer = {sendName, message};
+  
 
   if(req.method == "POST"){
      var post  = req.body;
@@ -63,7 +65,7 @@ exports.signup = function(req, res){
            sess.userId = results[0].id;
            answer.sendName = results[0].first_name + ' ' + results[0].last_name;
            sess.user = results[0];
-           console.log(results[0]);
+           console.log(req.session);
            res.render('home_page.ejs',{answer:answer});
         }
         else{
