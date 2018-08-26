@@ -4,6 +4,7 @@
   "description": "dropshipping suppliers management",
   "main": "./bin/www",
   "dependencies": {
+    "ajax-request": "^1.2.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
@@ -14,7 +15,8 @@
     "morgan": "^1.9.0",
     "mysql": "^2.16.0",
     "nodemon": "^1.18.3",
-    "req-flash": "0.0.3"
+    "req-flash": "0.0.3",
+    "request": "^2.88.0"
   },
   "devDependencies": {},
   "scripts": {

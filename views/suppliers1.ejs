@@ -192,6 +192,16 @@ h3 {
                         <form class="logs" action="/home/suppliers/logs">
                           <button>+ Add new log</button>
                       </form>
+                      <p>Store Number: <% if (answer.p != '0') { %> <%= answer.post.storeNum %> <% } %></p>
+                      <p>Supplier Name <% if (answer.p != '0') { %> <%= answer.post.supplierName %> <% } %></p>
+                      <p>Date Of Conversion: <% if (answer.p != '0') { %> <%= answer.post.dateOfConversion %> <% } %></p>
+                      <p>Subject Link: <% if (answer.p != '0') { %> <%= answer.post.subject %> <% } %></p>
+                      <p>Method List: <% if (answer.p != '0') { %> <%= answer.post.methodList %> <% } %></p>
+                      <p>Content: <% if (answer.p != '0') { %> <%= answer.post.content %> <% } %></p>
+                      <br>
+                      
+                      <% if (answer.message.length > 0) { %> <div><%= answer.message %></div> <% } %>
+
               </div>
             </div>
 
@@ -207,12 +217,7 @@ h3 {
 </form> 
 </div>
 </div>
-<p>Store Number: <% if (answer.p != '0') { %> <%= answer.post.storeNum %> <% } %></p>
-<p>Supplier Name <% if (answer.p != '0') { %> <%= answer.post.supplierName %> <% } %></p>
-<p>Date Of Conversion: <% if (answer.p != '0') { %> <%= answer.post.dateOfConversion %> <% } %></p>
-<p>Subject Link: <% if (answer.p != '0') { %> <%= answer.post.subject %> <% } %></p>
-<p>Method List: <% if (answer.p != '0') { %> <%= answer.post.methodList %> <% } %></p>
-<p>Content: <% if (answer.p != '0') { %> <%= answer.post.content %> <% } %></p>
+
 <div class="creat-blue">
 <div class="form">
 <form class="blue">

@@ -1,7 +1,14 @@
 <%- include sidebar %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <div style="width:600px;height:600px" class="padding">
 <canvas id="myChart" width="400" height="400"></canvas>
+<div id="server-results">lala</div>
+
+<form id="my_form" action="/home/analitics" method="POST">
+      <button id="getButton" type="submit">click</button><br>
+  </form>
+
 </div>
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
@@ -41,4 +48,52 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+</script>
+
+<script type="text/javascript">
+
+
+            $("#my_form").submit(function(event){
+            event.preventDefault(); //prevent default action 
+            var post_url = $(this).attr("action"); //get form action url
+            var request_method = $(this).attr("method"); //get form GET/POST method
+            var form_data = $(this).serialize(); //Encode form elements for submission
+                    
+            var promise = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        promise.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        promise.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                $("#server-results").html(response);
+                            }
+                        
+                        });
+             })
+
+            /*var form = document.getElementById("my_form");
+
+            document.getElementById("now").addEventListener("click", function (event) {
+            form.submit();
+            
+            event.preventDefault()
+                //request('/home/suppliers/logs', function(err, res, body) {});
+                request({
+                url: '/home/suppliers/logs',
+                method: 'post',
+                //data: {
+                //  query1: 'value1'
+                //}
+                }, function(err, res, body) {
+                    document.getElementById("letsTry").innerHTML = body;
+                });
+            });*/
 </script>

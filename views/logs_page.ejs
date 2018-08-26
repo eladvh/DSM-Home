@@ -1,124 +1,408 @@
-﻿<!DOCTYPE html>
 
-<html>
-<head> 
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <%- include sidebar %>
-    <style type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>logs</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
 
-    .myLogsTable{
-        width:100% ;
-        border: 1px solid black;
-        font-family:'Agency FB';
+/*body {
+  width: 100%;
+  height: 2000px;
+  margin: 1;
+  padding: 0;
+}
+
+.border {
+  position:fixed;
+  top: 0;
+  left: 0;
+  border: 1px solid #000;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  margin: 12;
+  padding: 1em;
+  box-sizing: border-box;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}*/
+
+#logs{
+width:100% ;
+border: none;
+border-radius:none;
+padding:1px;
+font-size: 16px;
+text-align:left;
+text-decoration-line: underline; 
+font-family: Verdana, Geneva, Tahoma, sans-serif;            
+}
+
+#logs input{
+  border-radius:1px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 85%;
+  border-color: 1px solid black;
+  border-radius: 5px;
+  margin: 0 0 15px;
+  padding: 1px;
+  box-sizing: border-box;
+  font-size: 12px;
+        
     }
-    h1{
-        text-align:center;
+    h2{
+        text-align:left;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: white;
+        font-weight: bold;
     }
+    nav{
+        width: 100%;
+        background: Indigo;
+        padding: 20px;
+        box-shadow: 0 4px goldenrod; 
+       /* border-bottom: 1px solid black;*/
+    }
+  #methodform{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background: LightBlue;
+  border-color:LightBlue;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 110px;
+  padding: 5px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center; 
+    }
+
+  #newlog {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background: LightSlateGray;
+  border-color:LightSlateGray;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 110px;
+  padding: 5px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;   
+}
+#newlog:hover,.form button:active,.form button:focus {
+  background:darkgrey; ;
+}
+/*#Clear{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background: rgba(3, 34, 134, 0.842);
+  border-color:black;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 120px;
+  padding: 6px;
+  color: #FFFFFF;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;  
+}
+.button:hover,.form button:active,.form button:focus {
+  background:goldenrod;
+}*/
+
+/*#submitbutt{
+    background: white ;
+    border-radius: 5px;
+    border-color:LightSlateGray;
+    color: Teal;
+    box-shadow: 0 4px LightSlateGray;
+    padding: 1px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    width: 80px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}*/
+#submitbutt {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background:indigo;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 120px;
+  padding: 6px;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center; 
+  box-shadow: 0 4px goldenrod; 
+}
+#submitbutt:hover,.form button:active,.form button:focus {
+  background:goldenrod;
+}
     #logshistory{
-        width:100%;
-        border: 1px solid black;
-        font-family:'Agency FB';
+       width:100%;
+       border: none;
+       text-decoration-line: underline; 
+       font-family: Verdana, Geneva, Tahoma, sans-serif;
+       text-align:left;
     }
-    
-input[type="text"] {
-    width: 200px;
-}
-
-input[type="datetime-local"] {
-    width: 200px;
-}
-
-input[type="methodlist"] {
-    width: 200px;
-}
-
-select { width: 200px;}
-
-.alignTB{
-    margin-left: 30px;
-}
-
-
     </style>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-
+<div class = "padding">
 <body>
-<div class="padding">
-    <h1> <b>+ New log</b></h1>
-        <table  class="myLogsTable"> 
-            <tr><th> Store num</th>
+
+<div class="border"></div>
+
+    <form id="addNewLog" method="POST" action="/home/suppliers/logs">
+    <h2><nav> + New log</nav></h2>
+        <table id="logs"><tr>
             <th> Supplier Name</th>
-            <th class="alignTB">Date of conversion</th>
-            <th class="alignTB">  Subject</th>
-            <th> communication method</th>
+            <th> Store Num</th>
+            <th>Date Of Conversion</th>
+            <th> Subject</th>
+            <th> Communication Method</th>
             <th> Content</th>
-            <th> Cancel</th>
             </tr>
-            </table>
-            <div id="logRow">
-            <form method="post" action="/home/suppliers/logs">
-            <table  class="myLogsTable" cellspacing="10">
-            <tr ><td class="alignTB"> <input type="text" placeholder="Store Number" name="storeNum"/></td>
-                <td> <input type="text" placeholder="Subject" name="supplierName" /></td>
+        <tr>
+            <td>
+                <form id="supNameForm" method="POST" action="/home/suppliers/logs">
+                    <select id="supNameSelect" name="supplierName1" method="POST" action="/home/suppliers/logs">
+                    <option selected disabled>Selecet Supplier</option>
+                  </select>
+                </form>
+            </td>
+            <td> 
+                <select id="storeNumSelect" placeholder="Store Number" name="storeNum">
+                <option selected disabled>Select Store Num</option>
+              </select>
+            </td>
             <td> <input type="datetime-local" name="dateOfConversion"/></td>
-            <td> <input type="text" placeholder="Subject" name="subject" /></td>
-            <td> <select name="methodList">
-            <option value="mail">Mail</option>
-            <option value="wechat">Wechat</option>
-            <option value="skype">Skype</option>
-            <option value="phone">Phone</option>
-                 </select> </td>
-            <td> <input type="text" placeholder="Content" name="content" /></td>
-            <td> <input type="reset" value="Clear" /> </td>
+            <td> <input type="text" placeholder="subject" name="subject" /></td>
+            <td> <select id="methodlist" name="methodList">
+                <option value="Mail">Mail</option>
+                <option value="WeChat">Wechat</option>
+                <option value="Skype">Skype</option>
+                <option value="Phone">Phone</option>
+                </select>
+            </td>
+            <td> <input type="text"placeholder="content" name="content"/></td>
+            <td> <input id="Clear" type="reset" value="Clear"/></td>
             </tr>
         </table>
-        <div style="text-align:center"><button id="submitbutt" type="submit" value="Submit">Submit</button></div>
-        </form>
-        <button type="button" onclick="LogsFormClone()">+Add new log</button>
-        </div>
+        <div style="text-align:center"><button id="submitbutt" type="submit">Submit</button></div>
 
-        <div id="newLogRow"></div>
+    </form>
 
-        <h1><% if (answer.message.length > 0) { %> <div><%= answer.message %></div> <% } %></h1>
+        <input id="newlog" onclick="addRow()" type="button" value="+Add new log"/>
         
-        
-        
-
-
+        <div style="text-align:center"><h1 id="message"></h1></div>
 
         <script>
-        function LogsFormClone() {
-            var itm = document.getElementById("logRow");
-            var cln = itm.cloneNode(true);
-            document.getElementById("newLogRow").appendChild(cln);
-        }
+            function addRow() {
+                var table = document.getElementById('logs');
+                var columnLength = table.getElementsByTagName('tr')[0].children.length;
+                var units = document.getElementsByClassName('unit-table');
+                var tr = document.createElement('tr');
+                tr.className = 'unit-table';
+                for (var i = 0; i < columnLength; i++) {
+                    var td = document.createElement('td');
+                    var text = document.createElement('input');
+                    text.type = 'text';
+                    td.appendChild(text);
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+
+            document.getElementById('newlog').onclick = addRow;
+
         </script>
         
-<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
-  
-<form>
-    <h1> Logs history</h1>
-    <table id="logshistory">
-        <tr>
-            <th> Store num</th>
-            <th>Date of conversion</th>
-            <th> Subject</th>
-            <th> communication method</th>
-            <th> Content</th>
-        </tr>
-        <tr> <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
+
+    <h2><nav> Logs history</nav></h2><br>
+    <div style="text-align:center"><form id="supForm" method="POST" action="/home/suppliers/logs">
+        <select id="supSelect" name="supplierName2" method="POST" action="/home/suppliers/logs">
+          <option selected disabled>Selecet Supplier</option>
+        </select>
+        <table id="logshistory">
+                <tr>
+                    <th> Store num</th>
+                    <th>Supplier Name</th>
+                    <th>Date of conversion</th>
+                    <th> Subject</th>
+                    <th> communication method</th>
+                    <th> Content</th>
+                </tr>
+                <tr> <td id="storeNumLogs"></td>
+                    <td id="supplierNameLogs"> </td>
+                    <td id="dateOfConversionLogs"> </td>
+                    <td id="titleLogs"> </td>
+                    <td id="communicationMethodLogs"> </td>
+                    <td id="contentLogs"> </td>
+                </tr>
 
         </table>
-  </form>
 
     </div>
 
+      
+
+        <script>
+
+
+            $('#addNewLog').submit(function(){
+            event.preventDefault(); //prevent default action 
+            var post_url = $(this).attr("action"); //get form action url
+            var request_method = $(this).attr("method"); //get form GET/POST method
+            var form_data = $(this).serialize(); //Encode form elements for submission
+                    
+            var addLog = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        addLog.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        addLog.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var delayInMilliseconds = 2000;
+                                
+                                setTimeout(function() {
+                                    location.reload();
+                                }, delayInMilliseconds);
+                                
+                                $("#message").html(response);
+                            }
+                        });
+             })
+
+
+//-----------------------------------------------Load Logs History----------------------------------------------------------------
+            $('#supSelect').change(function(){
+            $('supForm').submit();
+            event.preventDefault(); //prevent default action 
+            var post_url = $(this).attr("action"); //get form action url
+            var request_method = $(this).attr("method"); //get form GET/POST method
+            var form_data = $(this).serialize(); //Encode form elements for submission
+                    
+            var loadLogs = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        loadLogs.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        loadLogs.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var logsListRes = response;
+                                LogsList(logsListRes);
+                            }
+                        
+                        });
+             })
+
+                                       
+            var logsListRes = JSON.parse('<%-JSON.stringify(answer.logsListRes)%>');
+            
+            function LogsList (logsListRes){
+
+            var storeNum = '';
+            var supplierName = '';
+            var dateOfConversion = '';
+            var title = '';
+            var communicationMethod = '';
+            var content = '';
+            var i = '';
+
+            for (i = 0; i < logsListRes.length; i++) { 
+            storeNum += logsListRes[i].storeNum + "<br><br>";
+            supplierName += logsListRes[i].supplierName + "<br><br>";
+            dateOfConversion += logsListRes[i].dateOfConversion + "<br><br>";
+            title += logsListRes[i].title + "<br><br>";
+            communicationMethod += logsListRes[i].communicationMethod + "<br><br>";
+            content += logsListRes[i].content + "<br><br>";
+            }
+            
+            document.getElementById("storeNumLogs").innerHTML = storeNum;
+            document.getElementById("supplierNameLogs").innerHTML = supplierName;
+            document.getElementById("dateOfConversionLogs").innerHTML = dateOfConversion;
+            document.getElementById("titleLogs").innerHTML = title;
+            document.getElementById("communicationMethodLogs").innerHTML = communicationMethod;
+            document.getElementById("contentLogs").innerHTML = content;
+        }
+
+            LogsList(logsListRes);
+
     
+//-----------------------------------------------Load Suppliers Options----------------------------------------------------------------
+
+            $('#supNameSelect').change(function(){
+            $('supNameForm').submit();
+            event.preventDefault();
+            var post_url = $(this).attr("action");
+            var request_method = $(this).attr("method");
+            var form_data = $(this).serialize();
+                    
+            var loadStores = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        loadStores.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        loadStores.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var storeNumRes = response;
+                                var select = document.getElementById("storeNumSelect")
+                                select.options.length = 0;
+                                for(index in storeNumRes) {
+                                    select.options[select.options.length] = new Option(storeNumRes[index], storeNumRes[index]);
+                                }
+                            }
+                        
+                        });
+             })
+
+            var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+            var select = document.getElementById("supNameSelect");
+            for(index in supplierNameRes) {
+                select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
+             }
+
+
+                    
+            var supplierFirstNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameMenuRes)%>'); //Load Filtered Supplier Logs List
+                        
+            var select = document.getElementById("supSelect");
+            for(index in supplierFirstNameRes) {
+                select.options[select.options.length] = new Option(supplierFirstNameRes[index], supplierFirstNameRes[index]);
+            }
+
+        </script>
 </body>
 </html>
