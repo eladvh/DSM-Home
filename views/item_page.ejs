@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+
+<html>
+ <%- include sidebar %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Items</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+
+    h2{
+        text-align:left;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: white;
+        font-weight: bold;
+    }
+.header nav{
+        width: 100%;
+        background: DarkOrange;
+        padding: 20px;
+        box-shadow: 0 4px darkgrey; 
+       /* border-bottom: 1px solid black;*/
+    }
+
+#logshistory{
+       width:100%;
+       border: none;
+       text-decoration-line: underline; 
+       font-family: Verdana, Geneva, Tahoma, sans-serif;
+       text-align:left;
+}
+
+.card1 {
+    float: left;
+width:50%;
+height: 450px;
+    max-width:600px ;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  margin:auto;
+  font-family: arial;
+}
+
+.card2 {
+    float:right;
+    width:50%;
+    height: 450px;
+  margin:auto;
+  max-width:600px ;
+    padding-left: 20px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  text-align: center;
+  font-family: arial;
+}
+
+.NewItem {
+  border: 2px solid black;
+  color: black;
+  background-color: white; 
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  position:relative;
+}
+
+
+.inp {
+  border: 2px solid black;
+  color: black;
+  background-image:url("images/home_pic.jpg");
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  width:80%
+}
+
+.checkButton{
+    padding: 8px 20px;
+
+}
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+
+.inspicd {
+  /* This bit sets up the horizontal layout */
+  display:flex;
+  flex-direction:row;
+  margin:auto;
+  border-radius: 8px;
+  width:100%;
+  /* This bit draws the box around it */
+  border: 2px solid black;
+  padding:3px;
+}
+
+.inspici {
+  display:flex;
+  flex-direction:row;
+  margin:auto;
+  border-radius: 8px;
+  /* This bit draws the box around it */
+  border: 2px solid black;
+  /* Tell the input to use all the available space */
+  flex-grow:2;
+  /* And hide the input's outline, so the form looks like the outline */
+  border:none;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 3px;
+}
+
+.inspicb {
+  /* Just a little styling to make it pretty */
+  border: none;
+  outline: 0;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px
+}
+
+#NewItemImage{
+    display:flex;
+    margin:15px;
+    
+}
+input , select{
+    border: 2px solid black;
+    color: black;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    width:200px;
+}
+
+#sub {
+  border: none;
+  outline: 0;
+  color: white;
+  background-color: darkorange;
+  cursor: pointer;
+  width: 50%;
+  font-size: 18px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+#sub:hover {
+  opacity: 0.7;
+}
+.alignImg{
+
+position:absolute;
+text-align:center;
+padding:20px;
+}
+
+.wrapper{
+    display:-webkit-flex;
+}
+#arrowImage{
+    display:flex;
+    margin-top:120px;
+    margin-left: 10px
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.footer nav{
+    width: 100%;
+    background: DarkOrange;
+    padding: 20px;
+    box-shadow: 0 4px darkgrey; 
+    margin-top: 20px;
+}
+
+.footer{
+    padding: 20px;
+    text-align: center;
+    background: white;
+    margin-top: 20px;
+}
+
+.box {
+        width:200px;
+        background:white;
+        padding:1%;
+        border: 1px solid black;
+        border-radius: 5px;
+        display:inline-block;
+        text-align: center;    
+    }
+
+.products {
+display:flex;
+flex-wrap: wrap;
+}
+
+.product-card {
+	display:table-column;
+	flex-direction:column;
+	padding: 2%;
+	flex: 1 16%;
+
+	background-color: #FFF;
+	box-shadow: none;
+}
+
+.product-image img {
+	width: 80%;
+}
+
+.product-info {
+	margin-top: auto;
+	padding-top: 20px;
+	text-align: left;
+    font-size: 15px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+    </style>
+
+<body>
+<div class="padding">
+<div class="header">
+    <h2><nav class="header"> + New Item</nav></h2>
+</div>
+    <div class="wrapper">
+
+    <div class="card1">
+            <div class="NewItem">Upload Item</div><br>
+            <form id="addNewItem" action="/home/suppliers/addItem" method="POST">
+            <img id="NewItemImage" style="display: inline-block" src="/images/img-icon.png" alt="No Pic" width:"300px" height="300px">
+            <span class="alignImg">
+            <div class="inspicd">
+                    <input id="itemImg" class="inspici" placeholder="Insert Item URL Picture" name="itemPic"/>
+                    <button class="inspicb" type="button" onclick="insertPic()" ><i class="fa fa-check" ></i></button>
+            </div><br>
+            <input type="text" placeholder="Item Name" name="itemName"/><br><br>
+            <input type="text" placeholder="Item Link" name="storeItemLink"/><br><br>
+            <input type="text" placeholder="Item Category" name="category"/><br><br>
+            <input type="text" placeholder="Price" name="itemPrice"/><br><br>
+        </span>
+    
+            <div style="text-align:center"><button id="sub" type="submit">List item</button></div>
+    </div>
+</form>
+
+    <img id="arrowImage" style="display: inline-block" src="/images/right arrow.png" alt="No Pic" width:"200px" height="200px">
+
+    <div class="card2">
+            <div class="NewItem">Upload item to supplier tab</div><br><br>
+
+            <form id="supNameForm" method="POST" action="/home/suppliers/addItem">
+                <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers/addItem" >
+                  <option selected disabled>Selecet Supplier</option>
+                </select>
+            </form><br><br>
+                <select id="storeNumSelect" name="storeNum" >
+                  <option selected disabled>Selecet Store Num</option>
+                </select><br><br> 
+                <select id="itemName" name="itemName" >
+                        <option selected disabled>Selecet Item Name</option>
+                </select><br><br>
+            <input type="text" placeholder="Supplier Item Link" /><br><br>
+            <input type="text" placeholder="Supplier Item Price" /><br><br><br><br>
+            <button id="sub">List item</button>
+            </div><br><br>
+
+            
+    </div><br><br>
+
+    <!--<div class="box">
+            <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
+            <section class="products">
+            <div class="product-card">
+                <div class="product-image">
+                  <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
+                </div>
+                <div class="product-info">
+                  name:<br>
+                  price:<br><br>
+                  <p class="link" style="float: left"></p>
+                  <a href="#"> my store</a><br>
+                  <p class="link" style="float: left"></p>
+                  <a href="#"> supplier store</a><br>
+                
+                </div>           
+          </div>
+        </div>-->
+        <div style="text-align:center"><h1 id="message"></h1></div><br><br>
+        <span style="text-align:center" id="createNewItem"></span>
+</div>
+
+
+
+<script>
+        function insertPic(){
+        var itemImg = document.getElementById("itemImg").value;
+        document.getElementById("NewItemImage").src = itemImg;
+        //document.getElementById("itemImg").value = '';
+        }
+
+            var itemListRes = JSON.parse('<%-JSON.stringify(answer.itemListRes)%>');
+            
+            var itemName = '';
+            var storeItemLink = '';
+            var itemPic = '';
+            var category = [];
+            var itemPrice = '';
+            var data = '';
+            var i = '';
+
+
+            for (i = 0; i < itemListRes.length; i++) { 
+            data += '<div class="box"><div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div><section class="products"><div class="product-card"><div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div><div class="product-info"><span style="font-weight: bold">name:</span> '+ itemListRes[i].itemName +'<br><br><span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'<br><br><p class="link" style="float: left"></p><a href="'+ itemListRes[i].storeItemLink +'" target="_blank"> my store</a><br><p class="link" style="float: left"></p><a href="#"> supplier store</a><br></div></div></div>'
+            }
+            
+            document.getElementById("createNewItem").innerHTML = data;
+
+
+            $('#addNewItem').submit(function(){
+            event.preventDefault(); //prevent default action 
+            var post_url = $(this).attr("action"); //get form action url
+            var request_method = $(this).attr("method"); //get form GET/POST method
+            var form_data = $(this).serialize(); //Encode form elements for submission
+                    
+            var addLog = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        addLog.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        addLog.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var delayInMilliseconds = 2000;
+                                
+                                setTimeout(function() {
+                                    location.reload();
+                                }, delayInMilliseconds);
+                                
+                                $("#message").html(response.message);
+                            }
+                        });
+             })
+</script>
+
+</body>
+</html>

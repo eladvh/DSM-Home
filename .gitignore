@@ -1,6 +1,6 @@
 node_modules/
 .env
-public/images/
+public/images
 config/config.json
 views/exp/
 views/css/

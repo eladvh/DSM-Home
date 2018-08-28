@@ -3,6 +3,8 @@ var express = require('express')
   , user = require('../routes/user')
   , index = require('../routes/index')
   , addLogs = require('../routes/addLogs')
+  , addSups = require('../routes/addSups')
+  , addItems = require('../routes/addItems')
   , http = require('http')
   , path = require('path');
 var app = express();
@@ -23,8 +25,10 @@ app.get('/home/suppliers', index.suppliers);//to render suppliers page
 app.post('/home/suppliers', index.suppliers);//call for suppliers post
 app.get('/home/suppliers/logs', addLogs.addLogs);//call for logs_page
 app.post('/home/suppliers/logs', addLogs.addLogs);//call for logs_page post
-app.get('/home/suppliers/addsup', index.addsup);//call for addsup_page page 
-app.post('/home/suppliers/addsup', index.addsup);//call for addsup_page post
+app.get('/home/suppliers/addsup', addSups.addsup);//call for addsup_page page 
+app.post('/home/suppliers/addsup', addSups.addsup);//call for addsup_page post
+app.get('/home/suppliers/addItem', addItems.addItem);//call for products_page page 
+app.post('/home/suppliers/addItem', addItems.addItem);//call for products_page post
 app.get('/home/analitics', index.analitics);//call for analitics page 
 app.post('/home/analitics', index.analitics);//call for analitics post page 
 

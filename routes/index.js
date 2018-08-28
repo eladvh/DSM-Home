@@ -80,7 +80,7 @@ exports.suppliers = function(req, res){
           });
     }
 
-      function mainPost() {
+    function mainPost() {
     asyncFunc()
     .then(result => {
       return asyncFunc2();
@@ -138,66 +138,6 @@ mainPost();
   }
 }
 
- //-----------------------------------------------add suppliers page----------------------------------------------------------------
-
-exports.addsup = function(req, res){
-  console.log('add suppliers page');
-  var user =  req.session.user;
-  var sendName = user.first_name + ' ' + user.last_name;
-  //var p = 0;
-  //var message = '';
-  var answer = {message: '', p: 0, sendName};
-  
-  var userId = req.session.userId;
-  if(userId == null){
-     res.redirect("/login");
-     return;
-  }
-  if(req.method == "POST"){
-    var post  = req.body;
-    console.log(req.body);
-    var storeNum= post.storeNum;
-    var supplierName = post.supplierName;
-    var establishYear= post.establishYear;
-    var storeLink= post.storeLink;
-    var wechat= post.wechat;
-    var email= post.email;
-    var skypeID= post.skypeID;
-    var phoneNum= post.phoneNum;
-
-    answer = {post, message: '', p: 0, sendName};
-    console.log(answer);
-
-    var sql="SELECT storeNum, supplierName, establishYear, storeLink, wechat, email,skypeID, phoneNum FROM `tblSuppliers` WHERE `storeNum`='"+storeNum+"'"; 
-    var query = db.query(sql, function(err, results) {
-      if(results.length){
-        var q = results[0];
-        console.log('check if ' + answer.post.storeNum + ' = ' + q.storeNum + ' ?');
-
-        if(answer.post.storeNum == q.storeNum){
-          
-          console.log("duplicate");
-          answer.message = "duplicate";
-          answer.p = 1;
-          
-          res.render('addsup_page.ejs',{answer:answer});
-        }}else{
-          var sql = "INSERT INTO `tblSuppliers`(`storeNum`,`supplierName`,`establishYear`, `storeLink`, `wechat`, `email`,`skypeID`, `phoneNum` ) VALUES ('" + storeNum + "','" + supplierName + "','" + establishYear + "','" + storeLink + "' ,'" + wechat + "' ,'" + email + "' ,'" + skypeID + "' ,'" + phoneNum + "')";
-          var query = db.query(sql, function(err, result) {
-            answer.message = "Succesfully! supplier tab has been created.";
-            console.log('success');
-            answer.p = 1;
-            res.render('suppliers.ejs',{answer:answer});
-          })
-        }
-
-    })
-  }else{
-    res.render('addsup_page', {answer:answer});
-  }
-}
-
-
  //-----------------------------------------------analitics page----------------------------------------------------------------
  exports.analitics = function(req, res){
 
@@ -218,7 +158,7 @@ exports.addsup = function(req, res){
     res.send(message);
   }
 
-  res.render('analitics', {answer:answer});
+  res.render('analytics', {answer:answer});
 }
 
 //-----------------------------------------------add logs page----------------------------------------------------------------
@@ -340,7 +280,7 @@ promise1 = new Promise((resolve, reject) => {
 
 promise2 = new Promise((resolve, reject) => {
     //setTimeout(() => {
-      console.log('Get Suppliers Names List');
+      console.log('Get Suppliers Details');
       db.query("SELECT supplierName FROM `tblSuppliers`", function(err, results, fields)
       {
            if(results.length){
