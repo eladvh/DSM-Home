@@ -271,7 +271,7 @@ flex-wrap: wrap;
 
     <div class="card2">
             <div class="NewItem">Upload item to supplier tab</div><br><br>
-
+            <form id="associate" action="/home/suppliers/addItem" method="POST">
             <form id="supNameForm" method="POST" action="/home/suppliers/addItem">
                 <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers/addItem" >
                   <option selected disabled>Selecet Supplier</option>
@@ -280,14 +280,14 @@ flex-wrap: wrap;
                 <select id="storeNumSelect" name="storeNum" >
                   <option selected disabled>Selecet Store Num</option>
                 </select><br><br> 
-                <select id="itemName" name="itemName" >
+                <select id="itemNameSelect" name="itemName" >
                         <option selected disabled>Selecet Item Name</option>
                 </select><br><br>
             <input type="text" placeholder="Supplier Item Link" /><br><br>
             <input type="text" placeholder="Supplier Item Price" /><br><br><br><br>
             <button id="sub">List item</button>
             </div><br><br>
-
+        </form>
             
     </div><br><br>
 
@@ -316,12 +316,15 @@ flex-wrap: wrap;
 
 
 <script>
+//-----------------------------------------------Image preview to item upload section----------------------------------------------------------------
+
         function insertPic(){
         var itemImg = document.getElementById("itemImg").value;
         document.getElementById("NewItemImage").src = itemImg;
         //document.getElementById("itemImg").value = '';
         }
 
+//-----------------------------------------------Load Items----------------------------------------------------------------
             var itemListRes = JSON.parse('<%-JSON.stringify(answer.itemListRes)%>');
             
             var itemName = '';
@@ -339,6 +342,7 @@ flex-wrap: wrap;
             
             document.getElementById("createNewItem").innerHTML = data;
 
+//-----------------------------------------------Add New Item----------------------------------------------------------------
 
             $('#addNewItem').submit(function(){
             event.preventDefault(); //prevent default action 
@@ -370,6 +374,90 @@ flex-wrap: wrap;
                             }
                         });
              })
+
+//-----------------------------------------------Item Association To Suppliers----------------------------------------------------------------
+
+            $('#associateItem').submit(function(){
+            event.preventDefault(); //prevent default action 
+            var post_url = $(this).attr("action"); //get form action url
+            var request_method = $(this).attr("method"); //get form GET/POST method
+            var form_data = $(this).serialize(); //Encode form elements for submission
+                    
+            var addLog = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        addLog.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        addLog.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var delayInMilliseconds = 2000;
+                                
+                                setTimeout(function() {
+                                    location.reload();
+                                }, delayInMilliseconds);
+                                
+                                $("#message").html(response.message);
+                            }
+                        });
+             })
+
+
+//-----------------------------------------------Load Suppliers Options----------------------------------------------------------------
+
+            $('#supNameSelect').change(function(){
+            $('supNameForm').submit();
+            event.preventDefault();
+            var post_url = $(this).attr("action");
+            var request_method = $(this).attr("method");
+            var form_data = $(this).serialize();
+                    
+            var loadStores = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        loadStores.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        loadStores.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var storeNumRes = response.storeNumRes;
+                                var selectStore = document.getElementById("storeNumSelect")
+                                selectStore.options.length = 0;
+                                for(index in storeNumRes) {
+                                    selectStore.options[selectStore.options.length] = new Option(storeNumRes[index], storeNumRes[index]);
+
+                                var itemsNameRes = response.itemsNameRes;
+                                var selectItem = document.getElementById("itemNameSelect");
+                                selectItem.options.length = 0;
+                                for(index in itemsNameRes) {
+                                    selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
+                                }
+
+                                }
+                            }
+                        
+                        });
+             })
+
+            var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+            var select = document.getElementById("supNameSelect");
+            for(index in supplierNameRes) {
+                select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
+             }
+
+
 </script>
 
 </body>

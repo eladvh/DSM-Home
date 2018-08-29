@@ -117,7 +117,7 @@ exports.addLogs = function(req, res){
   promise2 = new Promise((resolve, reject) => {
       //setTimeout(() => {
         console.log('Get Suppliers Names List');
-        db.query("SELECT supplierName FROM `tblSuppliers`", function(err, results, fields)
+        db.query("SELECT DISTINCT supplierName FROM `tblSuppliers`", function(err, results, fields)
         {
              if(results.length){
             for(var i = 0; i<results.length; i++ ){     
