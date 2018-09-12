@@ -5,6 +5,8 @@ var express = require('express')
   , addLogs = require('../routes/addLogs')
   , addSups = require('../routes/addSups')
   , addItems = require('../routes/addItems')
+  , addOrders = require('../routes/addOrders')
+  , analytics = require('../routes/analytics')
   , http = require('http')
   , path = require('path');
 var app = express();
@@ -28,9 +30,11 @@ app.post('/home/suppliers/logs', addLogs.addLogs);//call for logs_page post
 app.get('/home/suppliers/addsup', addSups.addsup);//call for addsup_page page 
 app.post('/home/suppliers/addsup', addSups.addsup);//call for addsup_page post
 app.get('/home/suppliers/addItem', addItems.addItem);//call for products_page page 
-app.post('/home/suppliers/addItem', addItems.addItem);//call for products_page post
-app.get('/home/analitics', index.analitics);//call for analitics page 
-app.post('/home/analitics', index.analitics);//call for analitics post page 
+app.post('/home/suppliers/addItem', addItems.addItem);//call for orders_page post
+app.get('/home/suppliers/addOrder', addOrders.addOrder);//call for orders_page page 
+app.post('/home/suppliers/addOrder', addOrders.addOrder);//call for products_page post
+app.get('/home/analitics', analytics.analytics);//call for analitics page 
+app.post('/home/analitics', analytics.analytics);//call for analitics post page 
 
 module.exports = app;
 

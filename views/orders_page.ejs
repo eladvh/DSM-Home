@@ -1,0 +1,504 @@
+
+<!DOCTYPE html>
+<html>
+<%- include sidebar %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orders Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+
+#logs{
+width:100% ;
+border: none;
+border-radius:none;
+padding:1px;
+font-size: 16px;
+text-align:left;
+font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+          
+}
+#logs th{
+    text-align: left;
+}
+
+#logs input,#logs select{
+    border-radius:1px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 300px;
+    border-color: 1px solid black;
+    border-radius: 5px;
+    margin: 0 0 15px;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 12px;
+    
+    }
+
+
+
+    h2{
+        text-align:left;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: white;
+        font-weight: bold;
+    }
+    nav{
+        width: 100%;
+        background: darkgreen;
+        padding: 20px;
+        box-shadow: 0 4px lightgreen; 
+    }
+  #methodform{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background: LightBlue;
+  border-color:LightBlue;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 110px;
+  padding: 5px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center; 
+    }
+
+  #newlog {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background: LightSlateGray;
+  border-color:LightSlateGray;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 150px;
+  padding: 5px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;  
+}
+#newlog:hover,.form button:active,.form button:focus {
+  background:darkgrey ;
+}
+
+#submitbutt {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  background:darkgreen;
+  border-radius: 5px; 
+  border-width: 1px;
+  width: 120px;
+  padding: 6px;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center; 
+  box-shadow: 0 4px lightgreen; 
+}
+#submitbutt:hover,.form button:active,.form button:focus {
+  background:lightgreen;
+}
+#logshistory{
+    width:100%;
+    border: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align:center;
+    font-size: 13px;
+}
+#logshistory th{
+    text-align: center;
+}
+
+    </style>
+
+<body>
+<div class="padding">
+<div class="border"></div>
+
+    <form id="addNewOrder" action="/home/suppliers/addOrder" method="POST">
+    <h2><nav> + New Order</nav></h2>
+        <table id="logs"><tr>
+            <th>Supplier Name</th>
+            <th>Item Name</th>
+            <th>Order Date</th>
+            <th>Quantity sold</th>
+            </tr>
+        <tr>
+            <td>
+                <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers/addOrder">
+                    <option selected="" disabled="">Selecet Supplier</option>
+                </select>
+            </td>
+            <td>
+                <select id="itemNameSelect" name="itemName">
+                        <option selected="" disabled="">Selecet Item Name</option>
+                </select>
+            </td>
+            <td><input type="datetime-local" placeholder="Order Date" name="orderDate"/></td>
+            <td><input type="number" placeholder="Quantity sold" name="qtySold"/></td>
+            <td><input id="Clear" type="reset" value="Clear" style="width:70px"/></td>
+            </tr>
+        </table><br><br>
+        <div style="text-align:center"><input id="submitbutt" type="submit" value="Submit" /></div>
+    </form>
+
+    <div style="text-align:center"><h1 id="message"></h1></div><br>
+
+
+    <h2><nav>Orders History</nav></h2><br>
+    <table id="logshistory">
+        <tr>
+            <th>Supplier Name</th>
+            <th>Item Name</th>
+            <th>Sold For</th>
+            <th>Order Date</th>
+            <th>Quantity sold</th>
+            <th>status Of Order</th>
+            <th>Awaiting shipment?</th>
+            <th>Tracking Number</th>
+        </tr>
+        <tr>
+            <td id="supplierNameRecord"></td>
+            <td id="itemNameRecord"></td>
+            <td id="itemPriceRecord"></td>
+            <td id="orderDateRecord"></td>
+            <td id="qtySoldRecord"></td>
+            <td id="statusOfOrderRecord"></td>
+            <td id="awShipRecord"></td>
+            <td id="trackNumRecord"></td>
+            <td id="addTrackNumRecord"></td>
+            <td id="deleteRecord"></td>
+            <td id="refundRecord"></td>
+        </tr>
+
+        </table>
+
+
+        <div class="container">
+                <h2>Edit Tracking Number</h2>
+                <div class="modal fade" id="myEditModal" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="text-center">Edit Tracking Number</h4>
+                      </div>
+                      <form id="editTrackForm" action="/home/suppliers/addOrder" method="POST">
+                      <div class="modal-body">
+                          <div class="text-center">
+                                <label >Tracking number: </label><input type="text" name="trackNum">
+                                <input type="hidden" name="orderNum">
+                            </div>
+                      </div>
+                      <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button id="saveModal" type="submit" class="btn btn-primary">Save changes</button>
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container">
+                    <h2>Delete Record</h2>
+                    <div class="modal fade" id="myDeleteModal" role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="text-center">Are you sure to delete the record?</h4>
+                          </div>
+                          <form id="deleteForm" action="/home/suppliers/addOrder" method="POST">
+                            <div class="modal-body">
+                                    <input type="hidden" name="orderNum">
+                            </div>
+                          <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button id="saveModal" type="submit" class="btn btn-primary">Delete</button>
+                              </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="container">
+                        <h2>Refund Order</h2>
+                        <div class="modal fade" id="myRefundModal" role="dialog">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="text-center">Are you sure to refund the customer?</h4>
+                              </div>
+                              <form id="refundForm" action="/home/suppliers/addOrder" method="POST">
+                                <div class="modal-body">
+                                        <input type="hidden" name="orderNum">
+                                        <input type="hidden" name="supplierName">
+                                        <input type="hidden" name="itemName">
+                                        <input type="hidden" name="itemPrice">
+                                        <input type="hidden" name="qtySold">
+                                        <label >Reason for refund: </label><input type="text" name="reason">
+                                </div>
+                              <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button id="saveModal" type="submit" class="btn btn-primary">Refund</button>
+                                  </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+    </div>
+
+
+
+    <script>
+//-----------------------------------------------Add New Order----------------------------------------------------------------
+
+        $('#addNewOrder').submit(function(event){
+        event.preventDefault();
+        var post_url = $(this).attr("action");
+        var request_method = $(this).attr("method");
+        var form_data = $(this).serialize();
+                
+        var addNewItem = $.ajax({
+                    url : post_url,
+                    type: request_method,
+                    data : form_data,
+                    });
+                    
+                    addNewItem.fail( function() {
+                    window.alert("Fail!");
+                    });
+
+                    addNewItem.done( function(response) {
+                        if (response.redirect !== undefined && response.redirect) {
+                        window.location.href = response.redirect_url;
+                        }else{
+                            var delayInMilliseconds = 2000;
+                            
+                            setTimeout(function() {
+                                location.reload();
+                            }, delayInMilliseconds);
+                            
+                            $("#message").html(response.message);
+                        }
+                    });
+            })
+//-----------------------------------------------Load orders details----------------------------------------------------------------
+
+        var ordersListRes = JSON.parse('<%-JSON.stringify(answer.ordersListRes)%>');
+        
+        var supplierName = '';
+        var itemName = '';
+        var itemPrice = '';
+        var orderDate = '';
+        var qtySold = '';
+        var statusOfOrder = '';
+        var awShip = '';
+        var trackNum = '';
+        var addTrackNum = '';
+        var deleteOrder = '';
+        var refundOrder = '';
+
+        for (var i = 0; i < ordersListRes.length; i++) { 
+        supplierName += ordersListRes[i].supplierName + "<br><br>";
+        itemName += ordersListRes[i].itemName + "<br><br>";
+        itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
+        orderDate += ordersListRes[i].orderDate + "<br><br>";
+        qtySold += ordersListRes[i].qtySold + "<br><br>";
+        statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+        awShip += ordersListRes[i].awShip + "<br><br>";
+        trackNum += ordersListRes[i].trackNum + "<br><br>";
+        addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br><br>";
+        deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br><br>";
+        refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br><br>";
+        }
+        
+        document.getElementById("supplierNameRecord").innerHTML = supplierName;
+        document.getElementById("itemNameRecord").innerHTML = itemName;
+        document.getElementById("itemPriceRecord").innerHTML = itemPrice;
+        document.getElementById("orderDateRecord").innerHTML = orderDate;
+        document.getElementById("qtySoldRecord").innerHTML = qtySold;
+        document.getElementById("statusOfOrderRecord").innerHTML = statusOfOrder;
+        document.getElementById("awShipRecord").innerHTML = awShip;
+        document.getElementById("trackNumRecord").innerHTML = trackNum;
+        document.getElementById("addTrackNumRecord").innerHTML = addTrackNum;
+        document.getElementById("deleteRecord").innerHTML = deleteOrder;
+        document.getElementById("refundRecord").innerHTML = refundOrder;
+
+
+        //triggered when modal is about to be shown
+        $('#myEditModal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var orderNum = $(e.relatedTarget).data('value');
+
+        $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
+        });
+
+
+        $('#myDeleteModal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var orderNum = $(e.relatedTarget).data('value');
+
+        $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
+        });
+
+
+        //triggered when modal is about to be shown
+        $('#myRefundModal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var orderNum = $(e.relatedTarget).data('value');
+        var supplierName = $(e.relatedTarget).data('value1');
+        var itemName = $(e.relatedTarget).data('value2');
+        var itemPrice = $(e.relatedTarget).data('value3');
+        var qtySold = $(e.relatedTarget).data('value4');
+
+        $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
+        $(e.currentTarget).find('input[name="supplierName"]').val(supplierName);
+        $(e.currentTarget).find('input[name="itemName"]').val(itemName);
+        $(e.currentTarget).find('input[name="itemPrice"]').val(itemPrice);
+        $(e.currentTarget).find('input[name="qtySold"]').val(qtySold);
+        });
+
+//-----------------------------------------------Load item names----------------------------------------------------------------
+
+        $('#supNameSelect').change(function(){
+        $('supNameForm').submit();
+        event.preventDefault();
+        var post_url = $(this).attr("action");
+        var request_method = $(this).attr("method");
+        var form_data = $(this).serialize();
+                
+        var loadItems = $.ajax({
+                    url : post_url,
+                    type: request_method,
+                    data : form_data,
+                    });
+                    
+                    loadItems.fail( function() {
+                    window.alert("Fail!");
+                    });
+
+                    loadItems.done( function(response) {
+                        if (response.redirect !== undefined && response.redirect) {
+                        window.location.href = response.redirect_url;
+                        }else{
+                            var itemsNameRes = response.itemsNameRes;
+                            var selectItem = document.getElementById("itemNameSelect");
+                            selectItem.options.length = 0;
+                            for(index in itemsNameRes) {
+                                selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
+                            }
+                        }
+                    });
+            })
+
+//-----------------------------------------------Load supplier names----------------------------------------------------------------
+        var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+        var select = document.getElementById("supNameSelect");
+        for(index in supplierNameRes) {
+            select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
+            }
+
+
+//-----------------------------------------------Edit Tracking Number----------------------------------------------------------------
+
+        $('#editTrackForm').submit(function(event){
+            event.preventDefault();
+        var post_url = $(this).attr("action");
+        var request_method = $(this).attr("method");
+        var form_data = $(this).serialize();
+                
+        var editTrack = $.ajax({
+                    url : post_url,
+                    type: request_method,
+                    data : form_data,
+                    });
+                    
+                    editTrack.fail( function() {
+                    window.alert("Fail!");
+                    });
+
+                    editTrack.done( function(response) {
+                        if (response.redirect !== undefined && response.redirect) {
+                        window.location.href = response.redirect_url;
+                        }else{
+                            location.reload();
+                            $('#myEditModal').modal('hide');
+                        }
+                    });
+            })
+//-----------------------------------------------Delete Record----------------------------------------------------------------
+
+        $('#deleteForm').submit(function(event){
+            event.preventDefault();
+        var post_url = $(this).attr("action");
+        var request_method = $(this).attr("method");
+        var form_data = $(this).serialize();
+                
+        var deleteRecord = $.ajax({
+                    url : post_url,
+                    type: request_method,
+                    data : form_data,
+                    });
+                    
+                    deleteRecord.fail( function() {
+                    window.alert("Fail!");
+                    });
+
+                    deleteRecord.done( function(response) {
+                        if (response.redirect !== undefined && response.redirect) {
+                        window.location.href = response.redirect_url;
+                        }else{
+                            location.reload();
+                            $('#myDeleteModal').modal('hide');
+                        }
+                    });
+            })
+
+//-----------------------------------------------Delete Record----------------------------------------------------------------
+
+        $('#refundForm').submit(function(event){
+            event.preventDefault();
+        var post_url = $(this).attr("action");
+        var request_method = $(this).attr("method");
+        var form_data = $(this).serialize();
+                
+        var refundRecord = $.ajax({
+                    url : post_url,
+                    type: request_method,
+                    data : form_data,
+                    });
+                    
+                    refundRecord.fail( function() {
+                    window.alert("Fail!");
+                    });
+
+                    refundRecord.done( function(response) {
+                        if (response.redirect !== undefined && response.redirect) {
+                        window.location.href = response.redirect_url;
+                        }else{
+                            location.reload();
+                            $('#myRefundModal').modal('hide');
+                        }
+                    });
+            })
+
+    </script>
+
+</body>
+</html>

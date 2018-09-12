@@ -1,7 +1,3 @@
-var http = require('http');
-var formidable = require('formidable');
-var fs = require('fs');
- 
  //-----------------------------------------------items page----------------------------------------------------------------
  exports.addItem = function(req, res){
 
@@ -9,11 +5,12 @@ var fs = require('fs');
     var user =  req.session.user;
     var sendName = user.first_name + ' ' + user.last_name;
     var message = '';
+    var nitemListRes = [];
     var itemListRes = [];
     var itemsNameRes = [];
     var supplierNameRes = [];
     var storeNumRes = [];
-    var answer = {sendName, message, supplierNameRes, storeNumRes, itemsNameRes};
+    var answer = {sendName, message, supplierNameRes, storeNumRes, nitemListRes, itemsNameRes, itemListRes};
   
     var userId = req.session.userId;
   
@@ -25,15 +22,16 @@ var fs = require('fs');
   
     if(req.method == "POST"){
       var post  = req.body;
-      console.log(post);
+      //console.log(post);
       var itemName = post.itemName;
       var storeItemLink = post.storeItemLink;
       var itemPic = post.itemPic;
       var category = post.category;
       var itemPrice = post.itemPrice;
       var supplierName = post.supplierName;
-
-
+      var storeNum = post.storeNum;
+      var supItemLink = post.supItemLink;
+      var supItemPrice = post.supItemPrice;
 
       function asyncFunc() {
         return new Promise(
@@ -53,7 +51,7 @@ var fs = require('fs');
 
     function asyncFunc2() {
       return new Promise(
-        function (resolve, reject) {
+        function (resolve, reject) { 
           console.log('Get Item Details');
           db.query("SELECT itemName FROM `tblItems` ORDER BY itemCode DESC", function(err, results, fields)
           {
@@ -67,14 +65,41 @@ var fs = require('fs');
     })
   }
 
-    function asyncFunc3() {
+  function asyncFunc3() {
+    return new Promise(
+      function (resolve, reject) {
+        console.log('Update supplierItem table'); 
+        db.query("SELECT itemCode FROM `tblItems` WHERE `itemName`='"+itemName+"'", function(err, results, fields){
+          //console.log(results);
+          if(results.length){
+            db.query("SELECT itemCode FROM `tblsupplieritem` WHERE `itemCode`='"+results[0].itemCode+"'", function(err, results1, fields){
+            if(results1.length){
+              var sql = "update tblsupplieritem SET altSupplierName = ? ,altSupItemLink = ?, altSupItemPrice = ? WHERE itemCode = ?";
+              db.query(sql, [supplierName, supItemLink, supItemPrice, results[0].itemCode], function(err, result) {
+              })
+            }else{
+        var sql = "INSERT INTO `tblsupplieritem`(`supplierName`,`storeNum`, `itemCode`,`supItemPrice`, `supItemLink`) VALUES ('" + supplierName + "','" + storeNum + "','" + results[0].itemCode + "','" + supItemPrice + "','" + supItemLink + "')";
+        db.query(sql, function(err, result) {
+          //console.log(result);
+          console.log('Successed to insert supplier item');
+        })
+      }})
+      }
+      })
+      answer.message = "Succesfully! item has been associated to supplier.";
+      resolve(message); 
+  })
+}
+
+    function asyncFunc4() {
       return new Promise(
         function (resolve, reject) {
               console.log('Update DB'); 
-              var sql = "INSERT INTO `tblItems`(`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + itemName + "','" + storeItemLink + "','" + itemPic + "' ,'" + category + "','" + itemPrice + "')";
-              var query = db.query(sql, function(err, result) {
+              var sql1 = "INSERT INTO `tblItems`(`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + itemName + "','" + storeItemLink + "','" + itemPic + "' ,'" + category + "','" + itemPrice + "')";
+              var query = db.query(sql1, function(err, result) {
                 if(result.length){
                 console.log('success');
+                console.log(result);
                 }     
                 answer.message = "Succesfully! New item has been listed.";
                 resolve(message); 
@@ -82,8 +107,8 @@ var fs = require('fs');
     })
   }
 
-      async function callSupFunc() {
-        await asyncFunc()
+       function callSupFunc() {
+         asyncFunc()
         .then(result => {
           return asyncFunc2();
         })
@@ -94,6 +119,14 @@ var fs = require('fs');
       }
 
       function callInsertFunc() {
+        asyncFunc4()
+        .then(result => {
+          res.send(answer);
+        })
+        .catch(error => {});
+      }
+      
+      function callInsertSupFunc(){
         asyncFunc3()
         .then(result => {
           res.send(answer);
@@ -101,109 +134,47 @@ var fs = require('fs');
         .catch(error => {});
       }
     
-if(supplierName)callSupFunc();
-if(itemName && !supplierName  )callInsertFunc();
-
-      /*function asyncFunc() {
-          return new Promise(
-            function (resolve, reject) {
-              if(itemName){
-                  console.log('Update DB'); 
-                  var sql = "INSERT INTO `tblItems`(`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + itemName + "','" + storeItemLink + "','" + itemPic + "' ,'" + category + "','" + itemPrice + "')";
-                  var query = db.query(sql, function(err, result) {
-                    if(result.length){
-                    console.log('success');
-                    }     
-                    answer.message = "Succesfully! New item has been listed.";
-                    resolve(answer.message); 
-                  })
-                }else{
-                console.log('skip Update DB');
-                resolve();
-                }
-        })
-
-      }
-
-      function asyncFunc2() {
-        return new Promise(
-            function (resolve, reject) {
-              if(supplierName){
-              console.log('Get Store Num List');
-              db.query("SELECT storeNum FROM `tblSuppliers` WHERE `supplierName`='"+supplierName+"'", function(err, results, fields)
-              {
-                   if(results.length){
-                  for(var i = 0; i<results.length; i++ ){     
-                          storeNumRes.push(results[i].storeNum);
-                      }
-                   }
-                   resolve(storeNumRes);
-              })
-            }else{
-            console.log('skip Get Store Num List');
-            resolve();
-            }
-      })
-    }
-
-    async function asyncFunc3() {
-      return new Promise(
-          function (resolve, reject) {
-            if(supplierName){
-            console.log('Get Store Num List');
-            db.query("SELECT storeNum FROM `tblSuppliers` WHERE `supplierName`='"+supplierName+"'", function(err, results, fields)
-            {
-                 if(results.length){
-                for(var i = 0; i<results.length; i++ ){     
-                        storeNumRes.push(results[i].storeNum);
-                    }
-                 }
-                 resolve(storeNumRes);
-            })
-          }else{
-          console.log('skip Get Store Num List');
-          resolve();
-          }
-    })
-  }
-
-      function mainPost() {
-        asyncFunc()
-        .then(result => {
-          return asyncFunc2();
-        })
-        .then(result2 => {
-          answer.storeNumRes = storeNumRes;
-        })
-        .then(result3 => {
-          answer.storeNumRes = storeNumRes;
-          res.send(answer);
-        })
-        .catch(error => {});
-      }
-    
-    mainPost();*/
+if(supplierName && ! itemName)callSupFunc();
+if(itemName && !supplierName)callInsertFunc();
+if(itemName && supplierName)callInsertSupFunc();
 
     }else{
   
       function asyncFunc() {
         return new Promise(
             function (resolve, reject) {
-              console.log('Get Item Details');
-              db.query("SELECT * FROM `tblItems` ORDER BY itemCode DESC", function(err, results, fields)
+              console.log('Get associated Item Details');
+              db.query("CALL Get_Associated_Items_Details", function(err, results, fields)
               {
                    if(results.length){
-                  for(var i = 0; i<results.length; i++ ){     
-                            itemListRes.push(results[i]);
-                      }
+                    for(var i = 0; i<results[0].length; i++){   
+                            itemListRes.push(results[0][i]);
+                    }
+                    console.log(itemListRes)
                    }
                    resolve(itemListRes);
               });
             });
       }
-    
 
       function asyncFunc2() {
+        return new Promise(
+            function (resolve, reject) {
+              console.log('Get Item Details');
+              db.query("CALL Get_Non_Associated_Items_Details", function(err, results, fields)
+              {
+                   if(results.length){
+                    for(var i = 0; i<results[0].length; i++){   
+                            nitemListRes.push(results[0][i]);
+                    }
+                   }
+                   resolve(nitemListRes);
+              });
+            });
+      }
+    
+
+      function asyncFunc3() {
         return new Promise(
             function (resolve, reject) {
               console.log('Get Suppliers Names List');
@@ -219,14 +190,21 @@ if(itemName && !supplierName  )callInsertFunc();
             });
       }
 
+
+
     
       function main() {
         asyncFunc()
         .then(result => {
           answer.itemListRes = itemListRes;
+          console.log(itemListRes);
           return asyncFunc2();
         })
         .then(result2 => {
+          answer.nitemListRes = nitemListRes;
+          return asyncFunc3();
+        })
+        .then(result3 => {
           answer.supplierNameRes = supplierNameRes;
           res.render('item_page',{answer:answer});
         })

@@ -65,7 +65,7 @@ exports.signup = function(req, res){
            sess.userId = results[0].id;
            answer.sendName = results[0].first_name + ' ' + results[0].last_name;
            sess.user = results[0];
-           console.log(req.session);
+           //console.log(req.session);
            res.render('home_page.ejs',{answer:answer});
         }
         else{
