@@ -44,7 +44,6 @@
                   });
                   answer.message = "Succesfully! supplier tab has been created.";
                 }
-                  //answer.message = "Succesfully! supplier tab has been created.";
                   resolve(answer.message);
                 
             });
@@ -58,61 +57,11 @@
             console.log(answer);
             res.send(answer);
         })
-      /*  })
-        .then(result2 => {
-    
-          answer.logsListRes = logsListRes;
-          console.log(answer.logsListRes);
-          res.send(answer);
-        })*/
         .catch(error => {});
       }
     
     mainPost();
     }else{
-  
-    /*if(req.method == "POST"){
-      var post  = req.body;
-      console.log(req.body);
-      var storeNum= post.storeNum;
-      var supplierName = post.supplierName;
-      var establishYear= post.establishYear;
-      var storeLink= post.storeLink;
-      var wechat= post.wechat;
-      var email= post.email;
-      var skypeID= post.skypeID;
-      var phoneNum= post.phoneNum;
-  
-      answer = {post, message: '', p: 0, sendName};
-      console.log(answer);
-  
-      var sql="SELECT storeNum, supplierName, establishYear, storeLink, wechat, email,skypeID, phoneNum FROM `tblSuppliers` WHERE `storeNum`='"+storeNum+"'"; 
-      var query = db.query(sql, function(err, results) {
-        if(results.length){
-          var q = results[0];
-          console.log('check if ' + answer.post.storeNum + ' = ' + q.storeNum + ' ?');
-  
-          if(answer.post.storeNum == q.storeNum){
-            
-            console.log("duplicate");
-            answer.message = "duplicate";
-            answer.p = 1;
-            
-            res.render('addsup_page.ejs',{answer:answer});
-          }}else{
-            var sql = "INSERT INTO `tblSuppliers`(`storeNum`,`supplierName`,`establishYear`, `storeLink`, `wechat`, `email`,`skypeID`, `phoneNum` ) VALUES ('" + storeNum + "','" + supplierName + "','" + establishYear + "','" + storeLink + "' ,'" + wechat + "' ,'" + email + "' ,'" + skypeID + "' ,'" + phoneNum + "')";
-            var query = db.query(sql, function(err, result) {
-              answer.message = "Succesfully! supplier tab has been created.";
-              console.log('success');
-              answer.p = 1;
-              res.render('suppliers.ejs',{answer:answer});
-            })
-          }
-  
-      })
-    }else{
-      res.render('addsup_page', {answer:answer});
-    }*/
   
     function asyncFunc() {
       return new Promise(
@@ -143,4 +92,41 @@
 }
   }
   
-  
+  //-----------------------------------------------Search New Supplier----------------------------------------------------------------
+  var AliExpressSpider = require('aliexpress');
+  exports.searchsup = function(req, res){
+
+    console.log('add suppliers page');
+    var user =  req.session.user;
+    var sendName = user.first_name + ' ' + user.last_name;
+    var suppliersData= [];
+    var answer = {sendName, suppliersData};
+    
+    var userId = req.session.userId;
+    if(userId == null){
+       res.redirect("/login");
+       return;
+    }
+    if(req.method == "POST"){
+      var post  = req.body;
+      var search = post.search;
+      var qty = post.qty;
+      console.log(qty + '' + search)
+
+        AliExpressSpider.Search({
+        keyword: search,
+        page: 3
+
+      }).then(function(data){
+          for(var i=0; i<qty ; i++){
+            suppliersData.push(data.list[i].store);
+        console.log('Item data: ', data.list[i].store);
+          }
+          console.log(suppliersData);
+          answer.suppliersData = suppliersData;
+          res.send(answer);
+      })
+    }else{
+    res.render('serachsup_page',{answer:answer});
+  }
+  }

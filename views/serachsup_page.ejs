@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<%- include sidebar %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+}
+nav{
+    width: 100%;
+    background: darkred;
+    padding: 20px;
+    box-shadow: 0 4px darksalmon; 
+}
+
+#logshistory{
+width:80% ;
+border: none;
+border-radius:none;
+padding:1px;
+font-size: 16px;
+text-align:center;
+font-family: Verdana, Geneva, Tahoma, sans-serif;   
+}
+#logshistory th{
+text-decoration-line: underline; 
+text-align:center;
+}
+
+</style>
+<body>
+<div class="padding">
+<h2><nav>Search suppliers in <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Aliexpress_logo.svg/2000px-Aliexpress_logo.svg.png" alt="Aliexpress" width="180px"></span></nav></h2><br>
+<form id="searchNewSup" action="/home/suppliers/searchsup" method="POST"> 
+  <div class="row">
+    <div class="col-xs-6 col-md-offset-3">
+        How many supplier do you want to search? <input id="qty" type="number" min="1" max="20" name="qty"/>
+      <div class="input-group">
+        <input id="search" type="text" name="search" class="form-control" placeholder="What do you want to sell?"/>
+        <div class="input-group-btn">
+          <button class="btn btn-primary" type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form><br><br>
+<div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+      </div>
+
+<table id="logshistory">
+        <tr>
+                <th> Supplier Name</th>
+                <th> Store Link</th>
+        </tr>
+        <tr>
+            <td id="supplierNameRecord"> </td>
+            <td id="storeLinkRecord"></td>
+        </tr>
+        </table>
+
+</div>
+
+<script>
+        document.getElementById('qty').value = '5';
+    
+                $('#searchNewSup').submit(function(event){
+                event.preventDefault(); //prevent default action 
+                var post_url = $(this).attr("action"); //get form action url
+                var request_method = $(this).attr("method"); //get form GET/POST method
+                var form_data = $(this).serialize(); //Encode form elements for submission
+                        
+                var searchsup = $.ajax({
+                            url : post_url,
+                            type: request_method,
+                            data : form_data,
+                            });
+                            
+                            searchsup.fail( function() {
+                            window.alert("Fail!");
+                            });
+    
+                            searchsup.done( function(response) {
+                                if (response.redirect !== undefined && response.redirect) {
+                                window.location.href = response.redirect_url;
+                                }else{
+    
+                                    var suppliersData = response.suppliersData;
+                
+                                    var supplierName = '';
+                                    var storeLink = '';
+                                    var i = '';
+    
+                                    for (i = 0; i < suppliersData.length; i++) { 
+                                    supplierName += suppliersData[i].name + "<br><br>";
+                                    storeLink +='<a href="'+ suppliersData[i].url +'" target="_blank">Go To Store</a>' + "<br><br>";
+                                    }
+                                    
+                                    document.getElementById("supplierNameRecord").innerHTML = supplierName;
+                                    document.getElementById("storeLinkRecord").innerHTML = storeLink;
+                                }
+                            });
+                 })
+    </script>
+</body>
+</html>

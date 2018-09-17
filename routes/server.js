@@ -29,6 +29,8 @@ app.get('/home/suppliers/logs', addLogs.addLogs);//call for logs_page
 app.post('/home/suppliers/logs', addLogs.addLogs);//call for logs_page post
 app.get('/home/suppliers/addsup', addSups.addsup);//call for addsup_page page 
 app.post('/home/suppliers/addsup', addSups.addsup);//call for addsup_page post
+app.get('/home/suppliers/searchsup', addSups.searchsup);//call for searchsup_page page 
+app.post('/home/suppliers/searchsup', addSups.searchsup);//call for searchsup post
 app.get('/home/suppliers/addItem', addItems.addItem);//call for products_page page 
 app.post('/home/suppliers/addItem', addItems.addItem);//call for orders_page post
 app.get('/home/suppliers/addOrder', addOrders.addOrder);//call for orders_page page 

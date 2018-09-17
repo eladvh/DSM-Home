@@ -27,11 +27,10 @@ exports.suppliers = function(req, res){
   var user =  req.session.user;
   var sendName = user.first_name + ' ' + user.last_name;
   var logsListRes= [];
-  var supplierNameMenuRes = [];
   var supplierNameRes= [];
-  var storeNumRes = [];
+  var itemListRes = [];
   var post = [];
-  var answer = {post, logsListRes, message: '', p: 0, sendName};
+  var answer = {itemListRes, post ,logsListRes, message: '',sendName};
 
   var userId = req.session.userId;
   if(userId == null){
@@ -73,30 +72,38 @@ exports.suppliers = function(req, res){
           });
     }
 
+    function asyncFunc3() {
+      return new Promise(
+        function (resolve, reject) { 
+          console.log('Get Item Details');
+          db.query("Call Get_items_Details_By_SupplierName('"+ supplierName +"')", function(err, results, fields)
+          {
+               if(results.length){
+              for(var i = 0; i<results[0].length; i++ ){     
+                        itemListRes.push(results[0][i]);
+                  }
+               }
+               resolve(itemListRes);
+          });
+    })
+  }
+
     function mainPost() {
     asyncFunc()
     .then(result => {
       return asyncFunc2();
     })
     .then(result2 => {
-
       answer.logsListRes = logsListRes;
-            console.log(answer.logsListRes);
+      return asyncFunc3();
+    }).then(result3 => {
+      answer.itemListRes = itemListRes;
       res.send(answer);
     })
     .catch(error => {});
   }
 
 mainPost();
-
-  /*var sql = "CALL Get_Supplier_Details('"+req.body.supName+"')";
-  db.query(sql, function(err, results, fields){
-    if(results.length){
-      answer.post = results[0][0];
-      console.log(answer.post);
-      answer.p = 1;
-    }
-  })*/
 
   }else{
 
@@ -105,7 +112,7 @@ mainPost();
     return new Promise(
         function (resolve, reject) {
           console.log('Get Suppliers Names List');
-          db.query("SELECT supplierName FROM `tblSuppliers`", function(err, results, fields)
+          db.query("SELECT DISTINCT supplierName FROM `tblSuppliers`", function(err, results, fields)
           {
                if(results.length){
               for(var i = 0; i<results.length; i++ ){     

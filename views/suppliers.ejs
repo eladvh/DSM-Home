@@ -92,23 +92,26 @@
 #btn:hover {
     background-color:goldenrod;
 }
-.box {
-        width:200px;
-        background:white;
-        padding:1%;
-        border: 1px solid black;
-        border-radius: 5px;
-        display:inline-block;
-        text-align: center;    
-    }
-    table{
+
+table{
     border-collapse:collapse;
     border-spacing:0;
     table-layout:fixed;
 }
-  .products {
-	display:flex;
-	flex-wrap: wrap;
+
+.box {
+    width:300px;
+    background:white;
+    padding:1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    display:inline-block;
+    text-align: center;  
+}
+
+.products {
+display:flex;
+flex-wrap: wrap;
 }
 
 .product-card {
@@ -116,19 +119,21 @@
 	flex-direction:column;
 	padding: 2%;
 	flex: 1 16%;
-
 	background-color: #FFF;
 	box-shadow: none;
 }
 
 .product-image img {
-	width: 60%;
+	width: 80%;
 }
 
 .product-info {
+    
 	margin-top: auto;
 	padding-top: 20px;
 	text-align: left;
+    font-size: 13px;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 .box3 { 
@@ -212,188 +217,10 @@ th{
     
     <div class="box2">
       <h3>product</h3>
-      <button class="button">+ New product</button><br><br> 
-    
-      <div class="box">
-      <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-      <section class="products">
-      <div class="product-card">
-          <div class="product-image">
-            <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-          </div>
-          <div class="product-info">
-            name:<br>
-            price:<br><br>
-            <p class="link" style="float: left"></p>
-            <a href="#"> my store</a><br>
-            <p class="link" style="float: left"></p>
-            <a href="#"> supplier store</a><br>
-          
-          </div>           
-    </div>
-    </div>
-    <div class="box">
-        <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-        <section class="products">
-        <div class="product-card">
-            <div class="product-image">
-              <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-            </div>
-            <div class="product-info">
-              name:<br>
-              price:<br><br>
-              <p class="link" style="float: left"></p>
-              <a href="#"> my store</a><br>
-              <p class="link" style="float: left"></p>
-              <a href="#"> supplier store</a><br>
-            
-            </div>           
-      </div>
-      </div>
-      <div class="box">
-          <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-          <section class="products">
-          <div class="product-card">
-              <div class="product-image">
-                <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-              </div>
-              <div class="product-info">
-                name:<br>
-                price:<br><br>
-                <p class="link" style="float: left"></p>
-                <a href="#"> my store</a><br>
-                <p class="link" style="float: left"></p>
-                <a href="#"> supplier store</a><br>
-              
-              </div>           
-        </div>
-        </div>
-        <div class="box">
-            <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-            <section class="products">
-            <div class="product-card">
-                <div class="product-image">
-                  <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                </div>
-                <div class="product-info">
-                  name:<br>
-                  price:<br><br>
-                  <p class="link" style="float: left"></p>
-                  <a href="#"> my store</a><br>
-                  <p class="link" style="float: left"></p>
-                  <a href="#"> supplier store</a><br>
-                
-                </div>           
-          </div>
-          </div>
-          <div class="box">
-              <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-              <section class="products">
-              <div class="product-card">
-                  <div class="product-image">
-                    <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                  </div>
-                  <div class="product-info">
-                    name:<br>
-                    price:<br><br>
-                    <p class="link" style="float: left"></p>
-                    <a href="#"> my store</a><br>
-                    <p class="link" style="float: left"></p>
-                    <a href="#"> supplier store</a><br>
-                  
-                  </div>           
-            </div>
-            </div>
-            <div class="box">
-                <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-                <section class="products">
-                <div class="product-card">
-                    <div class="product-image">
-                      <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                    </div>
-                    <div class="product-info">
-                      name:<br>
-                      price:<br><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> my store</a><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> supplier store</a><br>
-                    
-                    </div>           
-              </div>
-              </div>
-              <div class="box">
-                <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-                <section class="products">
-                <div class="product-card">
-                    <div class="product-image">
-                      <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                    </div>
-                    <div class="product-info">
-                      name:<br>
-                      price:<br><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> my store</a><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> supplier store</a><br>
-                    
-                    </div>           
-              </div>
-              </div>
-              <div class="box">
-                <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-                <section class="products">
-                <div class="product-card">
-                    <div class="product-image">
-                      <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                    </div>
-                    <div class="product-info">
-                      name:<br>
-                      price:<br><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> my store</a><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> supplier store</a><br>
-                    
-                    </div>           
-              </div>
-              </div>
-              <div class="box">
-                <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-                <section class="products">
-                <div class="product-card">
-                    <div class="product-image">
-                      <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                    </div>
-                    <div class="product-info">
-                      name:<br>
-                      price:<br><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> my store</a><br>
-                      <p class="link" style="float: left"></p>
-                      <a href="#"> supplier store</a><br>
-                    
-                    </div>           
-              </div>
-              </div>
-              <div class="box">
-                  <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>
-                  <section class="products">
-                  <div class="product-card">
-                      <div class="product-image">
-                        <img src="https://cdn.shopify.com/s/files/1/0938/8938/products/10231100205_1_1315x1800_300_CMYK_1024x1024.jpeg?v=1445623369">
-                      </div>
-                      <div class="product-info">
-                        name:<br>
-                        price:<br><br>
-                        <p class="link" style="float: left"></p>
-                        <a href="#"> my store</a><br>
-                        <p class="link" style="float: left"></p>
-                        <a href="#"> supplier store</a><br>
-                      
-    </div>           
-    </div>
-    </div>                   
+      <form action="/home/suppliers/addItem" method="get">
+      <button class="button" type="submit">+ New product</button><br><br> 
+      </form>
+      <span style="text-align:center" id="createNewAccosiatedItem"></span>
     </div>
 
         <div class="box3"><h3>Logs history</h3>
@@ -436,6 +263,7 @@ th{
 
 <script>
 
+//-----------------------------------------------Load Logs List----------------------------------------------------------------
 
 $('#supNameForm').change(function(){
 $('supNameForm').submit();
@@ -459,23 +287,23 @@ var addLog = $.ajax({
                 window.location.href = response.redirect_url;
                 }else{
 
-                  var supplierName = response.post.supplierName;
-                  var storeNum = response.post.storeNum;
-                  var storeLink = response.post.storeLink;
-                  var establishYear = response.post.establishYear;
-                  var phoneNum = response.post.phoneNum;
-                  var email = response.post.email;
-                  var wechat = response.post.wechat;
-                  var skypeID = response.post.skypeID;
+                  var supplierNameDet = response.post.supplierName;
+                  var storeNumDet = response.post.storeNum;
+                  var storeLinkDet = response.post.storeLink;
+                  var establishYearDet = response.post.establishYear;
+                  var phoneNumDet = response.post.phoneNum;
+                  var emailDet = response.post.email;
+                  var wechatDet = response.post.wechat;
+                  var skypeIDDet = response.post.skypeID;
 
-                  document.getElementById("supplierName").innerHTML = supplierName;
-                  document.getElementById("storeNum").innerHTML = storeNum;
-                  document.getElementById("storeLink").setAttribute("href",storeLink);
-                  document.getElementById("establishYear").innerHTML = establishYear;
-                  document.getElementById("phoneNum").innerHTML = phoneNum;
-                  document.getElementById("email").innerHTML = email;
-                  document.getElementById("wechat").innerHTML = wechat;
-                  document.getElementById("skypeID").innerHTML = skypeID;
+                  document.getElementById("supplierName").innerHTML = supplierNameDet;
+                  document.getElementById("storeNum").innerHTML = storeNumDet;
+                  document.getElementById("storeLink").setAttribute("href",storeLinkDet);
+                  document.getElementById("establishYear").innerHTML = establishYearDet;
+                  document.getElementById("phoneNum").innerHTML = phoneNumDet;
+                  document.getElementById("email").innerHTML = emailDet;
+                  document.getElementById("wechat").innerHTML = wechatDet;
+                  document.getElementById("skypeID").innerHTML = skypeIDDet;
 
 
                   var supplierNameLog = '';
@@ -501,7 +329,54 @@ var addLog = $.ajax({
                   document.getElementById("communicationMethodLogs").innerHTML = communicationMethodLog;
                   document.getElementById("contentLogs").innerHTML = contentLog;
 
-                  LogsList(logsListRes);
+
+
+                  var itemListRes = response.itemListRes;
+            
+                  var itemName = '';
+                  var supplierName = '';
+                  var storeItemLink = '';
+                  var supItemLink = '';
+                  var itemPic = '';
+                  var category = '';
+                  var itemPrice = '';
+                  var data = '';
+                  var supItemPrice = '';
+                  var altSupplierName = '';
+                  var altSupItemLink = '';
+                  var altSupItemPrice = '';
+                  //itemListRes[0].altSupItemLink = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
+                  
+                  for (var j = 0; j < itemListRes.length; j++) { 
+                  if(itemListRes[j].altSupplierName == null)itemListRes[j].altSupplierName = 'Associate supplier';
+                  if(itemListRes[j].altSupItemLink == null)itemListRes[j].altSupItemLink = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
+                  if(itemListRes[j].altSupItemPrice == null)itemListRes[j].altSupItemPrice = '';
+                  }
+                  
+
+                  var i = ''
+                  for (i = 0; i < itemListRes.length; i++) { 
+                  data += '<div class="box"> \
+                            <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div> \
+                            <section class="products"> \
+                              <div class="product-card"> \
+                                <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div> \
+                                <div class="product-info"><span style="font-weight: bold">Name: </span>'+ itemListRes[i].itemName +'<br><br> \
+                                <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br> \
+                                <span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'<br><br> \
+                                <span style="font-weight: bold">1st Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
+                                <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
+                                <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$<br><br> \
+                                <span style="font-weight: bold">2nd Supplier name: </span>'+ itemListRes[i].altSupplierName +'<br> \
+                                <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].altSupItemLink +'" target="_blank">Go</a><br> \
+                                <span style="font-weight: bold">Price: </span>'+ itemListRes[i].altSupItemPrice +'$</div> \
+                            </section> \
+                            </div> \
+                          </div>'
+                  }
+                  function make() {alert()}
+                  document.getElementById("createNewAccosiatedItem").innerHTML = data;
+
                 }
             });
   })
@@ -513,39 +388,6 @@ var addLog = $.ajax({
             for(index in supplierNameRes) {
                 select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
              }
-
-//-----------------------------------------------Load Logs History----------------------------------------------------------------
-
-            var logsListRes = JSON.parse('<%-JSON.stringify(answer.logsListRes)%>');
-            
-            function LogsList (logsListRes){
-
-            var storeNum = '';
-            var supplierName = '';
-            var dateOfConversion = '';
-            var title = '';
-            var communicationMethod = '';
-            var content = '';
-            var i = '';
-
-            for (i = 0; i < logsListRes.length; i++) { 
-            storeNum += logsListRes[i].storeNum + "<br><br>";
-            supplierName += logsListRes[i].supplierName + "<br><br>";
-            dateOfConversion += logsListRes[i].dateOfConversion + "<br><br>";
-            title += logsListRes[i].title + "<br><br>";
-            communicationMethod += logsListRes[i].communicationMethod + "<br><br>";
-            content += logsListRes[i].content + "<br><br>";
-            }
-            
-            document.getElementById("storeNumLogs").innerHTML = storeNum;
-            document.getElementById("supplierNameLogs").innerHTML = supplierName;
-            document.getElementById("dateOfConversionLogs").innerHTML = dateOfConversion;
-            document.getElementById("titleLogs").innerHTML = title;
-            document.getElementById("communicationMethodLogs").innerHTML = communicationMethod;
-            document.getElementById("contentLogs").innerHTML = content;
-        }
-
-            LogsList(logsListRes);
 
 
 </script>

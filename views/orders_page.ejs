@@ -7,7 +7,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 <style>
 
 #logs{
@@ -40,8 +42,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
     
     }
 
-
-
     h2{
         text-align:left;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -55,7 +55,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         box-shadow: 0 4px lightgreen; 
     }
   #methodform{
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, san s-serif;
   text-transform: uppercase;
   background: LightBlue;
   border-color:LightBlue;
@@ -121,7 +121,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 <body>
 <div class="padding">
 <div class="border"></div>
-
+      
     <form id="addNewOrder" action="/home/suppliers/addOrder" method="POST">
     <h2><nav> + New Order</nav></h2>
         <table id="logs"><tr>
@@ -137,7 +137,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                 </select>
             </td>
             <td>
-                <select id="itemNameSelect" name="itemName">
+                <select id="itemNameSelect" data-live-search="true" class="selectpicker" name="itemName">
                         <option selected="" disabled="">Selecet Item Name</option>
                 </select>
             </td>
@@ -320,9 +320,9 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
         awShip += ordersListRes[i].awShip + "<br><br>";
         trackNum += ordersListRes[i].trackNum + "<br><br>";
-        addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br><br>";
-        deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br><br>";
-        refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br><br>";
+        addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br style='line-height: 33px'>";
+        deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
+        refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br style='line-height: 33px'>";
         }
         
         document.getElementById("supplierNameRecord").innerHTML = supplierName;
@@ -403,6 +403,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                             for(index in itemsNameRes) {
                                 selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
                             }
+                            $("#itemNameSelect").selectpicker("refresh");
                         }
                     });
             })
