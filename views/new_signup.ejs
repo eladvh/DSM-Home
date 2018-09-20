@@ -73,10 +73,11 @@
     <h2>Sign-up</h2>
 
 <form method="post" action="/signup">
-  <input type="text" placeholder="First name" name="first_name"><br>
-  <input type="text" placeholder="Last name" name="last_name"><br>
   <input type="text" placeholder="E-mail" name="user_name"><br>
   <input type="password" placeholder="Password" name="password"><br>
+  <input type="text" placeholder="eBay Store Name" name="store_name"><br>
+  <input type="text" placeholder="First Name" name="first_name"><br>
+  <input type="text" placeholder="Last Name" name="last_name"><br>
   
   <% if (answer.message.length > 0) { %>
     <div><%= answer.message %></div>

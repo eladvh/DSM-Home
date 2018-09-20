@@ -13,12 +13,13 @@ exports.signup = function(req, res){
 
   if(req.method == "POST"){
      var post  = req.body;
+     var sname= post.store_name;
      var name= post.user_name;
      var pass= post.password;
      var fname= post.first_name;
      var lname= post.last_name;
 
-     var sql="SELECT id, first_name, last_name, user_name FROM `tblUser` WHERE `user_name`='"+name+"'"; 
+     var sql="SELECT id,store_name, first_name, last_name, user_name FROM `tblUser` WHERE `user_name`='"+name+"'"; 
  
        var query = db.query(sql, function(err, results) {
         if(results.length){
@@ -33,8 +34,8 @@ exports.signup = function(req, res){
           res.render('new_signup.ejs',{answer:answer});
 
           }} else {
-          var sql = "INSERT INTO `tblUser`(`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + fname + "','" + lname + "','" + name + "','" + pass + "')";
-          var query = db.query(sql, function(err, result) {
+          var sql = "INSERT INTO `tblUser`(`store_name`,`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + sname + "','" + fname + "','" + lname + "','" + name + "','" + pass + "')";
+          db.query(sql, function(err, result) {
           answer.message = "Succesfully! Your account has been created.";
           res.render('new_signup.ejs',{answer:answer});
           })
@@ -98,8 +99,9 @@ exports.signup = function(req, res){
     })
  };
  //--------------------------------render user details after login--------------------------------
+ const Ebay = require("ebay-node-api");
+ 
  exports.profile = function(req, res){
-  var message = '';
   var user = req.session.user;
   var sendName = user.first_name + ' ' + user.last_name;
   var userId = req.session.userId;
@@ -108,59 +110,108 @@ exports.signup = function(req, res){
      return;
   }
 
+
+  if(req.method == "POST") {
+    var post  = req.body;
+    var message = '';
+    var firstName = post.first_name;
+    var lastName = post.last_name;
+    var storeName = post.store_name;
+    var currency = post.currency;
+    var breakEven = post.break_even;
+    console.log(post);
+
+
+    function asyncFunc() {
+      return new Promise(
+        function (resolve, reject) {
+              console.log('Edit User Details'); 
+              var sql="SELECT * FROM `tblUser` WHERE `id`='"+userId+"'";
+              db.query(sql, function(err, result){ 
+                if(firstName == ''){
+                   firstName = result[0].first_name;
+                 }
+               if(lastName == ''){
+                   lastName = result[0].last_name;
+                 }
+               if(storeName == ''){
+                   storeName = result[0].store_name;
+                 }
+              var sql1 = "update tblUser SET store_name = ?, first_name = ?, last_name = ? WHERE id = ?";
+              db.query(sql1, [storeName, firstName, lastName, userId], function(err, result) {
+              })
+              })
+              console.log('DB Updated')
+              message = "Succesfully! Your profile details has been updated.";
+              resolve(message);
+    })
+  }
+
+    function asyncFunc2() {
+      return new Promise(
+        function (resolve, reject) {
+              console.log('Edit Financial Details'); 
+              var sql="SELECT * FROM `tblUser` WHERE `id`='"+userId+"'";
+              db.query(sql, function(err, result){ 
+              if(currency == ''){
+                  currency = result[0].currency;
+                }
+              if(breakEven == ''){
+                  breakEven = result[0].break_even;
+                }
+              var sql1 = "update tblUser SET currency = ?, break_even = ? WHERE id = ?";
+              db.query(sql1, [currency, breakEven, userId], function(err, result) {
+              })
+              })
+              console.log('DB Updated')
+              message = "Succesfully! Your financial details has been updated.";
+              resolve(message);
+    })
+  }
+
+  function editUserDetails() {
+    asyncFunc()
+    .then(result => {
+        res.send(message);
+    })
+    .catch(error => {});
+}
+
+    function editFinancial() {
+      asyncFunc2()
+      .then(result => {
+          res.send(message);
+      })
+      .catch(error => {});
+  }
+
+    if(firstName || lastName || storeName)editUserDetails();
+    if(currency || breakEven)editFinancial();
+
+  }else{
+
   var sql="SELECT * FROM `tblUser` WHERE `id`='"+userId+"'";          
   db.query(sql, function(err, result){ 
     if(result.length){ 
       var userName = result[0].user_name;
+      var storeName = result[0].store_name
       var firstName = result[0].first_name;
       var lastName= result[0].last_name;
+      var currency= result[0].currency;
+      var breakEven= result[0].break_even;
     
-      var answer = {userName, firstName, lastName, sendName, message};
-
-     res.render('profile.ejs', {answer:answer});
+      let ebay = new Ebay({
+        clientID: "EladPint-DSMHome-PRD-0820665a8-01939c18",
+        details: true // To require detailed info or put false
+    });
+    ebay.getUserDetails(storeName).then((data) => {
+        //console.log(data);
+        var answer = {data,userName,storeName, firstName, lastName, currency, breakEven, sendName};
+        res.render('profile.ejs', {answer:answer});
+    }, (error) => {
+        console.log(error);
+    });
     }
-  
   });
-};
- //---------------------------------edit users details after login----------------------------------
- exports.editprofile=function(req,res){
-  var message = '';
-  var user =  req.session.user;
-  var sendName = user.first_name + ' ' + user.last_name;
-  var userId = req.session.userId;
-  if(userId == null){
-     res.redirect("/login");
-     return;
-  }
-
-  var answer = {sendName};
-
-  if(req.method == "POST") {
-    var sql="SELECT * FROM `tblUser` WHERE `id`='"+userId+"'";
-    db.query(sql, function(err, result){ 
-
-    var post  = req.body;
-    var userName = req.session.user.user_name;
-    if(post.first_name != ''){
-       var firstName = post.first_name; 
-      }else{
-        var firstName = result[0].first_name;
-      }
-    if(post.last_name != ''){
-      var lastName = post.last_name;
-      }else{
-        var lastName = result[0].last_name;
-      }
-
-      var answer = {userName, firstName, lastName, sendName, message};
-
-    var sql = "update tblUser SET first_name = ? ,last_name = ? WHERE ID = ?";
-    var query = db.query(sql, [firstName, lastName, userId], function(err, result) {
-    answer.message = "Succesfully! Your profile details has been updated.";
-    res.render('profile.ejs', {answer:answer});
-    })
-  });
-}else{
-  res.render('profile.ejs');
 }
 };

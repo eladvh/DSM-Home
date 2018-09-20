@@ -2,7 +2,90 @@
 <html>
 <head>
 <%- include sidebar %>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
 <style>
+* {
+    box-sizing: border-box;
+}
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+}
+
+/* Add a gray background color with some padding */
+
+
+.header nav{
+    width: 100%;
+    background: cornflowerblue;
+    padding: 20px;
+    box-shadow: 0 4px darkgrey; 
+}
+
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {   
+    float: left;
+    width: 30%;
+}
+
+/* Right column */
+.centercolumn {
+    float: left;
+    width: 30%;
+    padding-left: 20px;
+}
+
+/* Right column */
+.rightcolumn {
+    float: left;
+    width: 30%;
+    padding-left: 20px;
+}
+
+/* Fake image */
+.fakeimg {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Add a card effect for articles */
+.card1 {
+     background-color: white;
+     padding: 20px;
+     margin-top: 20px;
+     border-style: solid;
+     text-align: center;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Footer */
+.footer {
+    padding: 20px;
+    text-align: center;
+    background: #ddd;
+    margin-top: 20px;
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+    .leftcolumn,.centercolumn, .rightcolumn {   
+        width: 100%;
+        padding: 0;
+    }
+}
 
 .card {
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
@@ -27,7 +110,7 @@
   background-color: cornflowerblue;;
   text-align: center;
   cursor: pointer;
-  width: 100%;
+  width: 80%;
   font-size: 18px;
 }
 
@@ -54,40 +137,230 @@ a {
 button:hover, a:hover {
   opacity: 0.7;
 }
+p{
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#calendar{
+    width: 130px;
+    height: 190px;
+    background-color: cornflowerblue;
+    color: #fff;
+    border-radius: 5%;
+    box-shadow: 0 4px 4px 0 rgba(50, 50, 50, 0.4);
+}
+
+#calendar>p{
+    font-family: Verdana, Arial, sans-serif;
+    padding: 10px 0;
+    margin: 0;
+    color: #fff;
+    text-align: center;
+}
+
+#calendar-day{
+    font-size: 16px;
+}
+
+#calendar-month-year{
+    font-size: 14px;
+}
+
+#calendar-date{
+    font-size: 64px;
+    padding-top: 10px;
+    padding-bottom: 0;
+}
 </style>
 </head>
 <body>
-    
-  <div class="card">   
-<h2 style="text-align:center">User Profile Card</h2>
+    <div class="padding">
+      <div class="header">
+          <h2><nav class="header">User Profile</nav></h2>
+      </div>
+
+      <div class="row">
+
+          <div class="leftcolumn">
+              <div class="card1">
+                  <h1 style="text-align:center">User Details</h1>
+                  <p>User Name: <span id="userNametag"></span></p>
+                  <p>Store Name: <span id="storeNametag"></span></p>
+                  <p>First Name: <span id="firstNametag"></span></p>
+                  <p>Last Name: <span id="lastNametag"></span></p>
+                  <form id="ED_Form" style="display: none" action="/home/profile" method="POST">
+                    <br><input type="text" placeholder="Enter Store Name" name="store_name"><br><br>
+                    <input type="text" placeholder="Enter first Name" name="first_name"><br><br>
+                    <input type="text" placeholder="Enter Last Name" name="last_name"><br><br>
+                       <button class="buttonS" type="submit">Submit</button>
+                       <button class="buttonS" type="button" onclick="showForm(0)">cancel</button>
+                  </form>
+                  <p id="message"></p>
+                 <button class="button" onclick="showForm(1)">Edit Details</button><br>
+              </div>
+          </div>
+
+          <div class="centercolumn">
+              <div class="card1">
+                <h1>Store Details</h1>
+                <a id="MyWorldURLtag" href="#" target="_blank"><img id="MyWorldLargeImagetag" src="" alt="MyWorldLargeImage"><br></a>
+                <a id="StoreURLtag" href="#" target="_blank"><i class="material-icons" style="font-size:36px">store</i></a>
+                <a id="SellerItemsURLtag" href="#" target="_blank"><i class="material-icons" style="font-size:36px">shopping_basket</i></a>
+                <a id="FeedbackDetailsURLtag" href="#" target="_blank"><i class="material-icons" style="font-size:36px">star</i></a>
+                <p>Store Name: <span id="UserIDtag"></span></p>
+                <p>Registration Date: <span id="RegistrationDatetag"></span></p>
+                <p>Registration Site: eBay <span id="RegistrationSitetag"></span></p>
+                <p>Last Login: <span id="Timestamptag"></span></p>
+                <p>User Feedbacks Precent: <span id="PositiveFeedbackPercenttag"></span>%</p>
+                <p>User Feedbacks Score: <span id="FeedbackScoretag"></span></p>
+              </div>
+            </div>
+
+          <div class="rightcolumn">
+              <div class="card1">
+                <h1>Financial Details</h1>
+                <p>Currency: <span id="currencytag"></span></p>
+                <p>Break Even: <span id="breakEventag"></span>%</p>
+                <form id="ED_Form1" style="display: none" action="/home/profile" method="POST">
+                  <br><input type="text" placeholder="Enter Currency" name="currency"><br><br>
+                  <input type="text" placeholder="Enter Break Even" name="break_even"><br><br>
+                     <button class="buttonS" type="submit">Submit</button>
+                     <button class="buttonS" type="button" onclick="showForm1(0)">cancel</button>
+                </form>
+                <p id="message1"></p>
+               <button class="button" onclick="showForm1(1)">Edit Details</button><br>
+              </div>
+          </div>
+
+          <div id="calendar" style="float:right; margin-top:20px">
+              <p id="calendar-day"></p>
+              <p id="calendar-date"></p>
+              <p id="calendar-month-year"></p>
+          </div>
+       </div>
 
 
-  <img src="http://www.danmulhern.com/wp-content/uploads/2018/05/Image-for-Strong-in-Google-search-1.jpeg" alt="No Picture" style="width:100%">
 
-  <p class="title">User Name: <%= answer.userName %> </p>
-  <p class="title">First Name: <%= answer.firstName %> </p>
-  <p class="title">Last Name: <%= answer.lastName %> </p>
-  
-  <form id="ED_Form"  style="display: none" action="/home/editProfile" method="POST">
-    <input type="text" placeholder="Enter first Name" name="first_name"><br><br>
-    <input type="text" placeholder="Enter Last Name" name="last_name"><br><br>
-    <table>
-      <tr>
-       <td> <button class="buttonS" type="submit">Submit</button></td>
-       <td><button class="buttonS" type="button" onclick="showForm(0)">cancel</button></td>
-      </tr>
-      
-    </table>
-    
-  </form><br>
-  
-  <p> <%= answer.message %> </p>
- <button class="button" onclick="showForm(1)">Edit Details</button><br>
- 
 </div>
 
 <script>
-    function showForm(x){
+
+      var data = JSON.parse('<%-JSON.stringify(answer.data)%>');
+
+      var MyWorldURL = data.User.MyWorldURL;
+      var MyWorldLargeImage = data.User.MyWorldLargeImage;
+      var StoreURL = data.User.StoreURL;
+      var SellerItemsURL = data.User.SellerItemsURL;
+      var FeedbackDetailsURL = data.User.FeedbackDetailsURL;
+      var UserID = data.User.UserID;
+      var RegistrationDate = data.User.RegistrationDate.substring(0, 10);
+      var RegistrationSite = data.User.RegistrationSite;
+      var Timestamp = data.Timestamp.replace("T", ",").substr(0, data.Timestamp.lastIndexOf("."));
+      var PositiveFeedbackPercent = data.User.PositiveFeedbackPercent;
+      var FeedbackScore = data.User.FeedbackScore;
+      var userName = JSON.parse('<%-JSON.stringify(answer.userName)%>');
+      var storeName = JSON.parse('<%-JSON.stringify(answer.storeName)%>');
+      var firstName = JSON.parse('<%-JSON.stringify(answer.firstName)%>');
+      var lastName = JSON.parse('<%-JSON.stringify(answer.lastName)%>');
+      var currency = JSON.parse('<%-JSON.stringify(answer.currency)%>');
+      var breakEven = JSON.parse('<%-JSON.stringify(answer.breakEven)%>');
+
+      document.getElementById("MyWorldURLtag").href = MyWorldURL;
+      document.getElementById("MyWorldLargeImagetag").src = MyWorldLargeImage;
+      document.getElementById("StoreURLtag").href = StoreURL;
+      document.getElementById("SellerItemsURLtag").href = SellerItemsURL;
+      document.getElementById("FeedbackDetailsURLtag").href = FeedbackDetailsURL;
+      document.getElementById("UserIDtag").innerHTML = UserID;
+      document.getElementById("RegistrationDatetag").innerHTML = RegistrationDate;
+      document.getElementById("RegistrationSitetag").innerHTML = RegistrationSite;
+      document.getElementById("Timestamptag").innerHTML = Timestamp;
+      document.getElementById("PositiveFeedbackPercenttag").innerHTML = PositiveFeedbackPercent;
+      document.getElementById("FeedbackScoretag").innerHTML = FeedbackScore;
+      document.getElementById("userNametag").innerHTML = userName;
+      document.getElementById("storeNametag").innerHTML = storeName;
+      document.getElementById("firstNametag").innerHTML = firstName;
+      document.getElementById("lastNametag").innerHTML = lastName;
+      document.getElementById("currencytag").innerHTML = currency;
+      document.getElementById("breakEventag").innerHTML = breakEven;
+
+//-----------------------------------------------Edit Financial Details----------------------------------------------------------------
+
+    $('#ED_Form1').submit(function(){
+    event.preventDefault(); //prevent default action 
+    var post_url = $(this).attr("action"); //get form action url
+    var request_method = $(this).attr("method"); //get form GET/POST method
+    var form_data = $(this).serialize(); //Encode form elements for submission
+            
+    var editUserDetails = $.ajax({
+                url : post_url,
+                type: request_method,
+                data : form_data,
+                });
+                
+                editUserDetails.fail( function() {
+                window.alert("Fail!");
+                });
+
+                editUserDetails.done( function(response) {
+                    if (response.redirect !== undefined && response.redirect) {
+                    window.location.href = response.redirect_url;
+                    }else{
+                        var delayInMilliseconds = 2000;
+                        
+                        setTimeout(function() {
+                            location.reload();
+                        }, delayInMilliseconds);
+                        
+                        $("#message1").html(response);
+                    }
+                });
+      })
+
+      function showForm1(x){
+      console.log(x);
+      if(x==1){
+        document.getElementById("ED_Form1").style.display="block";
+      }else if(x==0){
+        document.getElementById("ED_Form1").style.display="none";
+      }
+    }
+
+
+//-----------------------------------------------Edit User Details----------------------------------------------------------------
+
+    $('#ED_Form').submit(function(){
+    event.preventDefault(); //prevent default action 
+    var post_url = $(this).attr("action"); //get form action url
+    var request_method = $(this).attr("method"); //get form GET/POST method
+    var form_data = $(this).serialize(); //Encode form elements for submission
+            
+    var editUserDetails = $.ajax({
+                url : post_url,
+                type: request_method,
+                data : form_data,
+                });
+                
+                editUserDetails.fail( function() {
+                window.alert("Fail!");
+                });
+
+                editUserDetails.done( function(response) {
+                    if (response.redirect !== undefined && response.redirect) {
+                    window.location.href = response.redirect_url;
+                    }else{
+                        var delayInMilliseconds = 2000;
+                        
+                        setTimeout(function() {
+                            location.reload();
+                        }, delayInMilliseconds);
+                        
+                        $("#message").html(response);
+                    }
+                });
+      })
+
+          function showForm(x){
       console.log(x);
       if(x==1){
         document.getElementById("ED_Form").style.display="block";
@@ -95,6 +368,32 @@ button:hover, a:hover {
         document.getElementById("ED_Form").style.display="none";
       }
     }
+
+//-----------------------------------------------Show Time----------------------------------------------------------------
+
+//this function will find today's date
+function calendar(){
+    var day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var month=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var d=new Date();
+    setText('calendar-day', day[d.getDay()]);
+    setText('calendar-date', d.getDate());
+    setText('calendar-month-year', month[d.getMonth()]+' '+(1900+d.getYear()));
+};
+
+//this function will set the text value of tags
+function setText(id, val){
+    if(val < 10){
+        val = '0' + val;    //add leading 0 if val < 10
+    }
+    document.getElementById(id).innerHTML = val;
+};
+
+//call calendar() when page load
+window.onload = calendar;
+
+
+
   </script>
 
 

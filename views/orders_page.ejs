@@ -142,7 +142,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                 </select>
             </td>
             <td><input type="datetime-local" placeholder="Order Date" name="orderDate"/></td>
-            <td><input type="number" placeholder="Quantity sold" name="qtySold"/></td>
+            <td><input type="number" placeholder="Quantity sold" name="qtySold" min="1"/></td>
             <td><input id="Clear" type="reset" value="Clear" style="width:70px"/></td>
             </tr>
         </table><br><br>
@@ -160,7 +160,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
             <th>Sold For</th>
             <th>Order Date</th>
             <th>Quantity sold</th>
-            <th>status Of Order</th>
+            <th>Order Status</th>
             <th>Awaiting shipment?</th>
             <th>Tracking Number</th>
         </tr>
@@ -245,8 +245,8 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                                         <input type="hidden" name="supplierName">
                                         <input type="hidden" name="itemName">
                                         <input type="hidden" name="itemPrice">
-                                        <input type="hidden" name="qtySold">
-                                        <label >Reason for refund: </label><input type="text" name="reason">
+                                        <p><label >Quantity: </label><input type="number" min="1" max="" name="qtySold"></p>
+                                        <p><label >Reason for refund: </label><input type="text" name="reason"></p>
                                 </div>
                               <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -315,7 +315,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         supplierName += ordersListRes[i].supplierName + "<br><br>";
         itemName += ordersListRes[i].itemName + "<br><br>";
         itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
-        orderDate += ordersListRes[i].orderDate + "<br><br>";
+        orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
         qtySold += ordersListRes[i].qtySold + "<br><br>";
         statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
         awShip += ordersListRes[i].awShip + "<br><br>";
@@ -371,7 +371,11 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         $(e.currentTarget).find('input[name="supplierName"]').val(supplierName);
         $(e.currentTarget).find('input[name="itemName"]').val(itemName);
         $(e.currentTarget).find('input[name="itemPrice"]').val(itemPrice);
-        $(e.currentTarget).find('input[name="qtySold"]').val(qtySold);
+        $(e.currentTarget).find('input[name="qtySold"]').val(qtySold).attr("max",qtySold);
+        
+        $("[type='number']").keypress(function (evt) {
+            evt.preventDefault();
+        });
         });
 
 //-----------------------------------------------Load item names----------------------------------------------------------------

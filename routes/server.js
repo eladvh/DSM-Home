@@ -20,9 +20,8 @@ app.get('/login', index.index);//call for login page
 app.post('/login', user.login);//call for login post
 app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
 app.get('/home/logout', user.logout);//call for logout
-app.get('/home/editProfile', user.editprofile);//edit users details
-app.post('/home/editProfile', user.editprofile);//edit users details
-app.get('/home/profile',user.profile);//to render users profile
+app.get('/home/profile',user.profile);//to render users profile page
+app.post('/home/profile',user.profile);//to render users profile post page
 app.get('/home/suppliers', index.suppliers);//to render suppliers page
 app.post('/home/suppliers', index.suppliers);//call for suppliers post
 app.get('/home/suppliers/logs', addLogs.addLogs);//call for logs_page

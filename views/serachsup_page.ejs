@@ -17,20 +17,57 @@ nav{
     box-shadow: 0 4px darksalmon; 
 }
 
-#logshistory{
-width:80% ;
-border: none;
-border-radius:none;
-padding:1px;
-font-size: 16px;
-text-align:center;
-font-family: Verdana, Geneva, Tahoma, sans-serif;   
-}
-#logshistory th{
-text-decoration-line: underline; 
-text-align:center;
+
+.spacer { margin:0; padding:0; height:50px; }
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  position: fixed;
+  left: 52%;
+  top: 50%;
 }
 
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+table, th, td {
+    width:50%;
+    text-align:center;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td{
+    text-align:center;
+    padding: 15px;
+}
+table#logshistory tr:nth-child(even) {
+    text-align:center;
+    background-color: #eee;
+}
+table#logshistory tr:nth-child(odd) {
+   text-align:center;
+   background-color: #fff;
+}
+table#logshistory th {
+   text-align:center;
+   background-color: darkred;
+   color: white;
+   font-size: 20px
+}
 </style>
 <body>
 <div class="padding">
@@ -38,7 +75,7 @@ text-align:center;
 <form id="searchNewSup" action="/home/suppliers/searchsup" method="POST"> 
   <div class="row">
     <div class="col-xs-6 col-md-offset-3">
-        How many supplier do you want to search? <input id="qty" type="number" min="1" max="20" name="qty"/>
+        <p class="spacer">How many supplier do you want to search? <input id="qty" type="number" min="1" max="20" name="qty"/></p>
       <div class="input-group">
         <input id="search" type="text" name="search" class="form-control" placeholder="What do you want to sell?"/>
         <div class="input-group-btn">
@@ -50,11 +87,10 @@ text-align:center;
     </div>
   </div>
 </form><br><br>
-<div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
-      </div>
 
-<table id="logshistory">
+<div class="loader"></div>
+
+<table id="logshistory" style="width:100%">
         <tr>
                 <th> Supplier Name</th>
                 <th> Store Link</th>
@@ -68,6 +104,15 @@ text-align:center;
 </div>
 
 <script>
+        $('.loader').hide();
+        $( document ).ajaxStart(function() {
+            $( ".loader" ).show();
+        });
+
+         $( document ).ajaxComplete(function() {
+            $( ".loader" ).hide();
+         });
+
         document.getElementById('qty').value = '5';
     
                 $('#searchNewSup').submit(function(event){

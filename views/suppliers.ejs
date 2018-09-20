@@ -180,7 +180,47 @@ th{
   text-decoration-line: underline;
 }
 
+* {
+    box-sizing: border-box;
+}
 
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* The grid: Three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 31%;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    border:none;
+    margin: 1%;
+}
+
+.containerTab {
+    padding-top: 10px;
+    -webkit-text-fill-color: black;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Closable button inside the container tab */
+.closebtn {
+    float: right;
+    color: black;
+    font-size: 35px;
+    cursor: pointer;
+}
 
 </style>
 
@@ -200,7 +240,7 @@ th{
 
     <p class="link"><a href="#" target="_blank" id="storeLink"><i class=" fa fa-cart-arrow-down"></i> go to store</a></p></div>
     <h3><i style="font-size: 20px" class="fa fa-vcard"></i> Supplier Details</h3>
-    <img style="float: left" "width: 200px" height="200px" src="https://png.icons8.com/color/1600/supplier.png" alt="No Picture" >
+    <img style="float: left" width: "200px" height="200px" src="https://png.icons8.com/color/1600/supplier.png" alt="No Picture" >
     <span style="text-align:center">
       <div>
     <i class="fa fa-user-secret"></i><span class="b"> Supplier Name: </span><span id="supplierName"></span><br><br>
@@ -317,7 +357,7 @@ var addLog = $.ajax({
                   var logsListRes = response.logsListRes;
 
                   for (i = 0; i < logsListRes.length; i++) { 
-                  dateOfConversionLog += logsListRes[i].dateOfConversion + "<br><br>";
+                  dateOfConversionLog += logsListRes[i].dateOfConversion.replace("T", ",").substr(0, logsListRes[i].dateOfConversion.lastIndexOf(".")) + "<br><br>";
                   titleLog += logsListRes[i].title + "<br><br>";
                   communicationMethodLog += logsListRes[i].communicationMethod + "<br><br>";
                   contentLog += logsListRes[i].content + "<br><br>";
@@ -364,23 +404,57 @@ var addLog = $.ajax({
                                 <div class="product-info"><span style="font-weight: bold">Name: </span>'+ itemListRes[i].itemName +'<br><br> \
                                 <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br> \
                                 <span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'<br><br> \
-                                <span style="font-weight: bold">1st Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
-                                <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
-                                <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$<br><br> \
-                                <span style="font-weight: bold">2nd Supplier name: </span>'+ itemListRes[i].altSupplierName +'<br> \
-                                <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].altSupItemLink +'" target="_blank">Go</a><br> \
-                                <span style="font-weight: bold">Price: </span>'+ itemListRes[i].altSupItemPrice +'$</div> \
+                                <div style="text-align:center"> \
+                                </div> \
+                                <div class="row"> \
+                                    <div class="column" onclick='+"openTab("+[i]+"+'b1');"+' style="background:green;"> \
+                                    Sup 1 \
+                                    </div> \
+                                    <div class="column" onclick='+"openTab("+[i]+"+'b2');"+' style="background:orange;"> \
+                                    Sup 2 \
+                                    </div> \
+                                    <div class="column" onclick='+"openTab("+[i]+"+'b3');"+' style="background:red;">\
+                                    Sup 3 \
+                                    </div> \
+                                </div> \
+                                <div id="'+[i]+'b1" class="containerTab" > \
+                                    <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
+                                    <span style="font-weight: bold">1st Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
+                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
+                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$<br><br> \
+                                </div> \
+                                <div id="'+[i]+'b2" class="containerTab" style="display:none;"> \
+                                    <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
+                                    <span style="font-weight: bold">2nd Supplier name: </span>'+ itemListRes[i].altSupplierName +'<br> \
+                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].altSupItemLink +'" target="_blank">Go</a><br> \
+                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].altSupItemPrice +'$</div> \
+                                </div> \
+                                <div id="'+[i]+'b3" class="containerTab" style="display:none;"> \
+                                    <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
+                                    <p></p> \
+                                </div> \
                             </section> \
                             </div> \
-                          </div>'
+                    </div>'
                   }
+
+
+
                   function make() {alert()}
                   document.getElementById("createNewAccosiatedItem").innerHTML = data;
 
                 }
             });
   })
-
+  
+                  function openTab(tabName) {
+                  var i, x;
+                  x = document.getElementsByClassName("containerTab");
+                  for (i = 0; i < x.length; i++) {
+                      x[i].style.display = "none";
+                  }
+                  document.getElementById(tabName).style.display = "block";
+                  }
 //-----------------------------------------------Load Suppliers Options----------------------------------------------------------------
 
               var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');

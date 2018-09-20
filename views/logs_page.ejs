@@ -340,7 +340,7 @@ text-decoration-line: underline;
             for (i = 0; i < logsListRes.length; i++) { 
             storeNum += logsListRes[i].storeNum + "<br><br>";
             supplierName += logsListRes[i].supplierName + "<br><br>";
-            dateOfConversion += logsListRes[i].dateOfConversion + "<br><br>";
+            dateOfConversion += logsListRes[i].dateOfConversion.replace("T", ",").substr(0, logsListRes[i].dateOfConversion.lastIndexOf(".")) + "<br><br>";
             title += logsListRes[i].title + "<br><br>";
             communicationMethod += logsListRes[i].communicationMethod + "<br><br>";
             content += logsListRes[i].content + "<br><br>";
