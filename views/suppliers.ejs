@@ -194,7 +194,7 @@ body {
     float: left;
     width: 31%;
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
     cursor: pointer;
     color: white;
     border-radius: 20px;
@@ -408,24 +408,24 @@ var addLog = $.ajax({
                                 </div> \
                                 <div class="row"> \
                                     <div class="column" onclick='+"openTab("+[i]+"+'b1');"+' style="background:green;"> \
-                                    Sup 1 \
+                                    1st Sup \
                                     </div> \
                                     <div class="column" onclick='+"openTab("+[i]+"+'b2');"+' style="background:orange;"> \
-                                    Sup 2 \
+                                    2nd Sup \
                                     </div> \
                                     <div class="column" onclick='+"openTab("+[i]+"+'b3');"+' style="background:red;">\
-                                    Sup 3 \
+                                    3rd Sup \
                                     </div> \
                                 </div> \
                                 <div id="'+[i]+'b1" class="containerTab" > \
                                     <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <span style="font-weight: bold">1st Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
+                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
                                     <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
                                     <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$<br><br> \
                                 </div> \
                                 <div id="'+[i]+'b2" class="containerTab" style="display:none;"> \
                                     <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <span style="font-weight: bold">2nd Supplier name: </span>'+ itemListRes[i].altSupplierName +'<br> \
+                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].altSupplierName +'<br> \
                                     <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].altSupItemLink +'" target="_blank">Go</a><br> \
                                     <span style="font-weight: bold">Price: </span>'+ itemListRes[i].altSupItemPrice +'$</div> \
                                 </div> \

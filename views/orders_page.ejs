@@ -157,16 +157,18 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         <tr>
             <th>Supplier Name</th>
             <th>Item Name</th>
+            <th>Bought For</th>
             <th>Sold For</th>
-            <th>Order Date</th>
+            <th>Order/Refund Date</th>
             <th>Quantity sold</th>
             <th>Order Status</th>
-            <th>Awaiting shipment?</th>
+            <th>Shipped?</th>
             <th>Tracking Number</th>
         </tr>
         <tr>
             <td id="supplierNameRecord"></td>
             <td id="itemNameRecord"></td>
+            <td id="supItemPriceRecord"></td>
             <td id="itemPriceRecord"></td>
             <td id="orderDateRecord"></td>
             <td id="qtySoldRecord"></td>
@@ -245,6 +247,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                                         <input type="hidden" name="supplierName">
                                         <input type="hidden" name="itemName">
                                         <input type="hidden" name="itemPrice">
+                                        <input type="hidden" name="refundDate">
                                         <p><label >Quantity: </label><input type="number" min="1" max="" name="qtySold"></p>
                                         <p><label >Reason for refund: </label><input type="text" name="reason"></p>
                                 </div>
@@ -302,6 +305,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         var supplierName = '';
         var itemName = '';
         var itemPrice = '';
+        var supItemPrice = '';
         var orderDate = '';
         var qtySold = '';
         var statusOfOrder = '';
@@ -311,9 +315,24 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         var deleteOrder = '';
         var refundOrder = '';
 
-        for (var i = 0; i < ordersListRes.length; i++) { 
+        for (var i = 0; i < ordersListRes.length; i++) {
+        if(ordersListRes[i].statusOfOrder == 'Refund'){
         supplierName += ordersListRes[i].supplierName + "<br><br>";
         itemName += ordersListRes[i].itemName + "<br><br>";
+        supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
+        itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
+        orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
+        qtySold += ordersListRes[i].qtySold + "<br><br>";
+        statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+        awShip += ordersListRes[i].awShip + "<br><br>";
+        trackNum += ordersListRes[i].trackNum + "<br><br>";
+        addTrackNum += "<br><br>";
+        deleteOrder += "<br><br>";
+        refundOrder += "<br><br>";
+        }else{
+        supplierName += ordersListRes[i].supplierName + "<br><br>";
+        itemName += ordersListRes[i].itemName + "<br><br>";
+        supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
         itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
         orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
         qtySold += ordersListRes[i].qtySold + "<br><br>";
@@ -324,9 +343,11 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
         refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br style='line-height: 33px'>";
         }
+        }
         
         document.getElementById("supplierNameRecord").innerHTML = supplierName;
         document.getElementById("itemNameRecord").innerHTML = itemName;
+        document.getElementById("supItemPriceRecord").innerHTML = supItemPrice;
         document.getElementById("itemPriceRecord").innerHTML = itemPrice;
         document.getElementById("orderDateRecord").innerHTML = orderDate;
         document.getElementById("qtySoldRecord").innerHTML = qtySold;
@@ -360,6 +381,15 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         //triggered when modal is about to be shown
         $('#myRefundModal').on('show.bs.modal', function(e) {
 
+
+        var currentdate = new Date(); 
+        var refundDate = currentdate.getFullYear() + "-"
+                + (currentdate.getMonth()+1)  + "-" 
+                + currentdate.getDate() + " "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
         //get data-id attribute of the clicked element
         var orderNum = $(e.relatedTarget).data('value');
         var supplierName = $(e.relatedTarget).data('value1');
@@ -372,10 +402,13 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         $(e.currentTarget).find('input[name="itemName"]').val(itemName);
         $(e.currentTarget).find('input[name="itemPrice"]').val(itemPrice);
         $(e.currentTarget).find('input[name="qtySold"]').val(qtySold).attr("max",qtySold);
-        
+        $(e.currentTarget).find('input[name="refundDate"]').val(refundDate);
+
         $("[type='number']").keypress(function (evt) {
             evt.preventDefault();
         });
+
+
         });
 
 //-----------------------------------------------Load item names----------------------------------------------------------------

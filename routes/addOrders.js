@@ -29,12 +29,14 @@ if(req.method == "POST"){
     var itemPrice = post.itemPrice;
     var orderDate = post.orderDate;
     var qtySold = post.qtySold;
-    var statusOfOrder = 'PENDING';
-    var awShip = 'YES';
+    //var statusOfOrder = req.body;
+    //var awShip = req.body;
     var trackNum = post.trackNum;
     var orderNum = post.orderNum;
+    var refundDate = post.refundDate;
     var reason = post.reason;
-    console.log(supplierName + ' ' + itemName + ' ' + itemPrice + ' ' + qtySold + ' ' + reason);
+
+    console.log(orderNum + ' ' + supplierName + ' ' + itemName + ' ' + itemPrice + ' ' + qtySold + ' ' + refundDate + ' ' + reason);
 
     function asyncFunc() {
         return new Promise(
@@ -56,15 +58,19 @@ if(req.method == "POST"){
         return new Promise(
           function (resolve, reject) {
                 console.log('Update DB'); 
-                db.query("SELECT itemPrice FROM `tblItems` WHERE `itemName`='"+itemName+"'", function(err, results, fields){
+                db.query("SELECT itemCode, itemPrice FROM `tblItems` WHERE `itemName`='"+itemName+"'", function(err, results, fields){
                 if(results.length){
-                var sql = "INSERT INTO `tblorders`(`supplierName`,`itemName`,`itemPrice`,`orderDate`, `qtySold`,`statusOfOrder`,`awShip`) VALUES ('" + supplierName + "','" + itemName + "','" + results[0].itemPrice + "','" + orderDate + "','" + qtySold + "' ,'" + statusOfOrder + "','" + awShip + "')";
-                var query = db.query(sql, function(err, result) {
-                  if(result.length){
-                  console.log('success');
-                  console.log(result);
-                  }
-                })
+                    db.query("SELECT supItemPrice FROM `tblsupplieritem` WHERE `itemCode`='"+results[0].itemCode+"'", function(err, results1, fields){
+                    if(results.length){
+                    var sql = "INSERT INTO `tblorders`(`supplierName`,`itemName`,`itemPrice`,`supItemPrice`,`orderDate`, `qtySold`,`statusOfOrder`,`awShip`) VALUES ('" + supplierName + "','" + itemName + "','" + results[0].itemPrice + "','" + results1[0].supItemPrice + "','" + orderDate + "','" + qtySold + "' ,'Pending','No')";
+                    var query = db.query(sql, function(err, result) {
+                    if(result.length){
+                    console.log('success');
+                    console.log(result);
+                    }
+                    })
+                    }
+                    })
                 }    
                   answer.message = "Succesfully! New order has been added.";
                   resolve(message); 
@@ -77,7 +83,7 @@ if(req.method == "POST"){
           function (resolve, reject) {
                 console.log('Edit Tracking Number'); 
                 var sql = "update tblOrders SET statusOfOrder = ? ,awShip = ?, trackNum = ? WHERE orderNum = ?";
-                db.query(sql, ['ACCEPTED', 'NO',trackNum, orderNum ], function(err, result) {
+                db.query(sql, ['ACCEPTED', 'Yes',trackNum, orderNum ], function(err, result) {
                 })
                 console.log('DB Updated')
                 resolve();
@@ -100,7 +106,10 @@ if(req.method == "POST"){
         return new Promise(
           function (resolve, reject) {
                 console.log('Insert refund'); 
-                var sql = "INSERT INTO `tblRefunds`(`supplierName`,`itemName`,`refundAmount`,`qtyRefunded`,`reason`) VALUES ('" + supplierName + "','" + itemName + "','" + itemPrice*qtySold + "','" + qtySold + "' ,'" + reason + "')";
+                var sql1 = "update tblOrders SET statusOfOrder = ?, orderDate = ? WHERE orderNum = ?";
+                db.query(sql1, ['Refund',refundDate, orderNum], function(err, result) {
+                })
+                var sql = "INSERT INTO `tblRefunds`(`refundNum`,`supplierName`,`itemName`,`refundAmount`,`qtyRefunded`,`refundDate`,`reason`) VALUES ('" + orderNum + "','" + supplierName + "','" + itemName + "','" + itemPrice*qtySold + "','" + qtySold + "' ,'" + refundDate +"','" + reason + "')";
                 var query = db.query(sql, function(err, result) {
                   if(result.length){
                   console.log('success');
