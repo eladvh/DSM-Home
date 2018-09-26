@@ -184,7 +184,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 
 
         <div class="container">
-                <h2>Edit Tracking Number</h2>
                 <div class="modal fade" id="myEditModal" role="dialog">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -210,7 +209,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
               </div>
 
               <div class="container">
-                    <h2>Delete Record</h2>
                     <div class="modal fade" id="myDeleteModal" role="dialog">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -233,7 +231,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                   </div>
               
                   <div class="container">
-                        <h2>Refund Order</h2>
                         <div class="modal fade" id="myRefundModal" role="dialog">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -301,7 +298,8 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 //-----------------------------------------------Load orders details----------------------------------------------------------------
 
         var ordersListRes = JSON.parse('<%-JSON.stringify(answer.ordersListRes)%>');
-        
+        var TrakerInfo = JSON.parse('<%-JSON.stringify(answer.trakeInfo)%>');
+
         var supplierName = '';
         var itemName = '';
         var itemPrice = '';
@@ -314,6 +312,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         var addTrackNum = '';
         var deleteOrder = '';
         var refundOrder = '';
+        var j = -1;
 
         for (var i = 0; i < ordersListRes.length; i++) {
         if(ordersListRes[i].statusOfOrder == 'Refund'){
@@ -338,7 +337,12 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         qtySold += ordersListRes[i].qtySold + "<br><br>";
         statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
         awShip += ordersListRes[i].awShip + "<br><br>";
-        trackNum += ordersListRes[i].trackNum + "<br><br>";
+        if(ordersListRes[i].trackNum != null){
+            j++;
+            trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+            }else{
+            trackNum += ordersListRes[i].trackNum + "<br><br>";
+        }   
         addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br style='line-height: 33px'>";
         deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
         refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br style='line-height: 33px'>";
@@ -475,7 +479,10 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                         if (response.redirect !== undefined && response.redirect) {
                         window.location.href = response.redirect_url;
                         }else{
-                            location.reload();
+                            var delayInMilliseconds = 2000;
+                            setTimeout(function() {
+                                location.reload();
+                            }, delayInMilliseconds);
                             $('#myEditModal').modal('hide');
                         }
                     });
