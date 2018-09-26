@@ -4,3 +4,5 @@ public/images
 config/config.json
 views/exp/
 views/css/
+/.vscode
+/package-lock.json
