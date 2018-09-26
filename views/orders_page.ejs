@@ -121,30 +121,29 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 <body>
 <div class="padding">
 <div class="border"></div>
-      
+
     <form id="addNewOrder" action="/home/suppliers/addOrder" method="POST">
     <h2><nav> + New Order</nav></h2>
         <table id="logs"><tr>
             <th>Supplier Name</th>
             <th>Item Name</th>
             <th>Order Date</th>
-            <th>Quantity sold</th>
             </tr>
         <tr>
-            <td>
-                <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers/addOrder">
-                    <option selected="" disabled="">Selecet Supplier</option>
+            <td rowspan="3">
+                <select id="supNameSelect" data-live-search="true" class="selectpicker" multiple="multiple" name="supplierName"  method="POST" action="/home/suppliers/addOrder">
                 </select>
-            </td>
+            </td rowspan="3">
             <td>
-                <select id="itemNameSelect" data-live-search="true" class="selectpicker" name="itemName">
-                        <option selected="" disabled="">Selecet Item Name</option>
+                <select id="itemNameSelect" data-live-search="true" class="selectpicker" multiple="multiple" name="itemName">
                 </select>
-            </td>
+            </td rowspan="3">
             <td><input type="datetime-local" placeholder="Order Date" name="orderDate"/></td>
-            <td><input type="number" placeholder="Quantity sold" name="qtySold" min="1"/></td>
+            <td id="insertInput"></td><br>
             <td><input id="Clear" type="reset" value="Clear" style="width:70px"/></td>
-            </tr>
+        </tr>
+
+            
         </table><br><br>
         <div style="text-align:center"><input id="submitbutt" type="submit" value="Submit" /></div>
     </form>
@@ -262,7 +261,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 
 
 
-    <script>
+    <script type="text/javascript">
 //-----------------------------------------------Add New Order----------------------------------------------------------------
 
         $('#addNewOrder').submit(function(event){
@@ -296,7 +295,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                     });
             })
 //-----------------------------------------------Load orders details----------------------------------------------------------------
-
+$(document).ready(function(){
         var ordersListRes = JSON.parse('<%-JSON.stringify(answer.ordersListRes)%>');
         var TrakerInfo = JSON.parse('<%-JSON.stringify(answer.trakeInfo)%>');
 
@@ -339,7 +338,8 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         awShip += ordersListRes[i].awShip + "<br><br>";
         if(ordersListRes[i].trackNum != null){
             j++;
-            trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+            trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+            //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
             }else{
             trackNum += ordersListRes[i].trackNum + "<br><br>";
         }   
@@ -414,7 +414,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 
 
         });
-
+    });
 //-----------------------------------------------Load item names----------------------------------------------------------------
 
         $('#supNameSelect').change(function(){
@@ -423,7 +423,8 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
         var post_url = $(this).attr("action");
         var request_method = $(this).attr("method");
         var form_data = $(this).serialize();
-                
+        //var itemsNameResNew = [];
+        //var supplierOpt = [];
         var loadItems = $.ajax({
                     url : post_url,
                     type: request_method,
@@ -438,13 +439,43 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                         if (response.redirect !== undefined && response.redirect) {
                         window.location.href = response.redirect_url;
                         }else{
+                            //var optgroup = '';
+                            //var removed = false;
                             var itemsNameRes = response.itemsNameRes;
+                            /*for(var x = 0; x < supplierOpt.length; x++ ){
+                            if(supplierOpt[x] == response.last_element){
+                                supplierOpt.splice(x, 1);
+                                removed = true;
+                            }
+                            }
+
+                            if(removed == false){
+                                supplierOpt = response.last_element;
+                                itemsNameResNew = response.itemsNameRes;
+                            }*/
+
                             var selectItem = document.getElementById("itemNameSelect");
-                            selectItem.options.length = 0;
+                            //selectItem.options.length = 0;
+
+                            /*var createItem = document.createElement("OPTGROUP");
+                            createItem.setAttribute("label", response.last_element);
+                            createItem.appendChild(selectItem.options[selectItem.options.length])
+                            selectItem.insertBefore(createItem, selectItem.options[selectItem.options.length]);*/
+
+                            optgroup = "<optgroup label='" + response.last_element + "'>" + response.last_element + "</optgroup>"
+                            $("#itemNameSelect").append(optgroup);
                             for(index in itemsNameRes) {
                                 selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
+                                $("#itemNameSelect").selectpicker("refresh");
                             }
-                            $("#itemNameSelect").selectpicker("refresh");
+                            
+                            
+                            $("#itemNameSelect").change(function(e) {
+                                var count = $("#itemNameSelect :selected").length;
+                                $('#insertInput').append('<input type="number" placeholder="How many were sold from item '+count+'?" name="qtySold" value="qtySold'+count+'" min="1" />');
+                                e.stopImmediatePropagation();
+                                //$('<input type="number" placeholder="Quantity sold" name="qtySold" min="1" />').appendTo('#insertInput');
+                            });
                         }
                     });
             })

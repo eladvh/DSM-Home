@@ -14,7 +14,8 @@ var trakeInfo = [];
 var message = '';
 var id = [];
 var arr= [];
-var answer = {sendName, message, itemsNameRes, supplierNameRes, ordersListRes, trakeInfo}
+var last_element = '';
+var answer = {sendName, message, last_element, itemsNameRes, supplierNameRes, ordersListRes, trakeInfo}
 
 var userId = req.session.userId;
   
@@ -27,6 +28,7 @@ if(userId == null){
 if(req.method == "POST"){
 
     var post  = req.body;
+    console.log(post);
     var supplierName = post.supplierName
     var itemName = post.itemName;
     var itemPrice = post.itemPrice;
@@ -45,10 +47,18 @@ if(req.method == "POST"){
         return new Promise(
           function (resolve, reject) { 
             console.log('Get Item Details');
-            db.query("Call Get_itemName_By_SupplierName('"+ supplierName +"')", function(err, results, fields)
+                if(supplierName.constructor === Array){
+                last_element = supplierName[supplierName.length - 1];
+                console.log(last_element);
+                }else{
+                  last_element = supplierName;
+                  console.log(last_element); 
+                }
+            db.query("Call Get_itemName_By_SupplierName('"+ last_element +"')", function(err, results, fields)
             {
                  if(results.length){
-                for(var i = 0; i<results[0].length; i++ ){     
+                for(var i = 0; i<results[0].length; i++ ){
+                    console.log(results[0][i])     
                           itemsNameRes.push(results[0][i].itemName);
                     }
                  }
@@ -65,6 +75,7 @@ if(req.method == "POST"){
                 if(results.length){
                     db.query("SELECT supItemPrice FROM `tblsupplieritem` WHERE `itemCode`='"+results[0].itemCode+"'", function(err, results1, fields){
                     if(results.length){
+                    //for(var i = 0 ; i< itemName.length; i++){
                     var sql = "INSERT INTO `tblorders`(`supplierName`,`itemName`,`itemPrice`,`supItemPrice`,`orderDate`, `qtySold`,`statusOfOrder`,`awShip`) VALUES ('" + supplierName + "','" + itemName + "','" + results[0].itemPrice + "','" + results1[0].supItemPrice + "','" + orderDate + "','" + qtySold + "' ,'Pending','No')";
                     var query = db.query(sql, function(err, result) {
                     if(result.length){
@@ -72,6 +83,7 @@ if(req.method == "POST"){
                     console.log(result);
                     }
                     })
+                    //}
                     }
                     })
                 }    
@@ -126,6 +138,8 @@ if(req.method == "POST"){
     function loadItems() {
         asyncFunc()
         .then(result => {
+            console.log('sup: ' + last_element);
+            console.log('the array: ' + answer.itemsNameRes);
             res.send(answer);
         })
         .catch(error => {});
@@ -165,7 +179,7 @@ if(req.method == "POST"){
     }
 
     if(supplierName && !itemName)loadItems();
-    if(supplierName && itemName && !orderNum)updateDB();
+    if(supplierName && itemName && qtySold && !orderNum)updateDB();
     if(trackNum && orderNum)editTrack();
     if(orderNum && !trackNum && !supplierName)deleteRecord();
     if(orderNum && supplierName && itemName && itemPrice)insertRefund();
@@ -216,7 +230,7 @@ function asyncFunc2() {
                     }
 
                     function delay() {
-                        return new Promise(resolve => setTimeout(resolve, 200));
+                        return new Promise(resolve => setTimeout(resolve, 300));
                        }
                       async function delayedLog(tracking) {
                           if(tracking != null){
@@ -259,6 +273,8 @@ function asyncFunc2() {
                  }
             })
             resolve(trakeInfo);
+
+            //resolve();
           });
   }
 
@@ -273,8 +289,10 @@ function main() {
         return asyncFunc3();
     })
     .then(async result3 => {
-        answer.trakeInfo = trakeInfo;
-        setTimeout(function(){ res.render('orders_page',{answer:answer});  }, 2500);
+        //setTimeout(function(){
+            answer.trakeInfo = trakeInfo;
+            res.render('orders_page',{answer:answer});
+        //}, 1000);
         //res.render('orders_page',{answer:answer}); 
     })
     .catch(error => {});
