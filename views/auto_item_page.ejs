@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta    http-equiv="Content-Type" content="text/html; charset=windows-1252">
+</head>
+<body>
+        <%- include sidebar %>
+<title>Items</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<style>
+.wrapper { 
+    display: grid; 
+    grid-gap: 10px;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-auto-rows: 140px;
+    max-width: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+} 
+* {box-sizing: border-box;}
+
+.wrapper {
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.wrapper > div {
+    grid-row-end: span 2;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    height: 200px;
+    padding: 1em;
+    color:black;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+* {
+    box-sizing: border-box;
+}
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+}
+.header nav{
+    width: 100%;
+    background: DarkOrange;
+    padding: 20px;
+    box-shadow: 0 4px darkgrey; 
+    }
+
+#logshistory{
+    width:100%;
+    border: none;
+    text-decoration-line: underline; 
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align:left;
+}
+.card1{
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
+    text-align: center;
+}
+/*
+.card1 {
+float: left;
+width:50%;
+height: 450px;
+max-width:600px ;
+box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+margin:auto;
+font-family: arial;
+}*/
+
+.card2{
+    grid-column-start: 2;
+    grid-column-end: 2; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
+    text-align: center;
+}
+/*
+.card2 {
+float:right;
+width:50%;
+height: 450px;
+margin:auto;
+max-width:600px ;
+padding-left: 20px;
+box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+max-width: 600px;
+text-align: center;
+font-family: arial;
+}*/
+
+.NewItem {
+    border:none;
+    color: black;
+    background-color: white; 
+    padding: 8px 20px;
+    border-radius: none;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration-line: underline; 
+    position:relative;
+}
+
+.checkButton{
+    padding: 8px 20px;
+}
+
+::-webkit-input-placeholder {
+    text-align: center;
+}
+
+.wrapper > div input ,.wrapper > div select{
+    border: 1px solid black;
+    color: black;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    width:100%;
+    box-shadow: 0 3px; 
+    cursor: pointer;
+}
+
+#sub {
+    border: none;
+    border-radius: 8px;
+    outline: 0;
+    color: white;
+    background-color: darkorange;
+    cursor: pointer;
+    width:200px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 4px darkgray; 
+}
+
+#sub:hover {
+    opacity: 0.7;
+}
+
+.alignImg{
+    position:absolute;
+    text-align:center;
+    padding:20px;
+}
+
+.box {
+    width:300px;
+    background:white;
+    padding:1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    display:inline-block;
+    text-align: center;  
+}
+
+.products {
+    display:flex;
+    flex-wrap: wrap;
+}
+
+.product-card {
+    display:table-column;
+    flex-direction:column;
+    padding: 2%;
+    flex: 1 16%;
+    background-color: #FFF;
+    box-shadow: none;
+}
+
+.product-image img {
+    width: 80%;
+}
+
+.product-info {
+    margin-top: auto;
+    padding-top: 20px;
+    text-align: left;
+    font-size: 13px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* The grid: Three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 31%;
+    text-align: center;
+    font-size: 17px;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    border:none;
+    margin: 1%;
+}
+
+.containerTab {
+    padding-top: 10px;
+    -webkit-text-fill-color: black;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Closable button inside the container tab */
+.closebtn {
+    float: right;
+    color: black;
+    font-size: 35px;
+    cursor: pointer;
+}
+    </style>
+
+
+<div class="padding">
+    <div class="header">
+        <h2><nav class="header"> + New Item</nav></h2>
+    </div>
+
+    <div class="wrapper">
+    <div class="card1">
+            <div class="NewItem">Upload Item</div><br>
+            <form id="addNewItem" action="/home/suppliers/addItemAuto" method="POST">
+            <input type="text" placeholder="Insert item url / eBay item number" name="eBayItemNumber"><br><br>
+            <div style="text-align:center"><button id="sub" type="submit">List item</button></div>
+    </form></div>
+
+    <div class="card2">
+        <form id="associateItem" method="POST" action="/home/suppliers/addItemAuto">
+            <div class="NewItem">Upload item to supplier tab</div><br>
+            <input type="text" placeholder="Insert item url / Aliexpress item number" name="aliexpressItemNumber"><br><br>
+            <button id="sub" type="submit">Associate Item</button>
+        </form></div>
+    </div>
+    
+    <div style="text-align:center"><h1 id="message"></h1></div>
+
+    <div class="header">
+            <h2><nav class="header">Supplier items</nav></h2>
+    </div>
+
+
+    <span style="text-align:center" id="createNewAccosiatedItem"></span>
+
+    <div class="header">
+            <h2><nav class="header">Non associated items</nav></h2>
+    </div>
+    <span style="text-align:center" id="createNewItem"></span>
+
+</div>  

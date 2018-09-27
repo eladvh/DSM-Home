@@ -30,8 +30,10 @@ app.get('/home/suppliers/addsup', addSups.addsup);//call for addsup_page page
 app.post('/home/suppliers/addsup', addSups.addsup);//call for addsup_page post
 app.get('/home/suppliers/searchsup', addSups.searchsup);//call for searchsup_page page 
 app.post('/home/suppliers/searchsup', addSups.searchsup);//call for searchsup post
-app.get('/home/suppliers/addItem', addItems.addItem);//call for products_page page 
-app.post('/home/suppliers/addItem', addItems.addItem);//call for orders_page post
+app.get('/home/suppliers/addItem', addItems.addItem);//call for item page 
+app.post('/home/suppliers/addItem', addItems.addItem);//call for item page post
+app.get('/home/suppliers/addItemAuto', addItems.addItemAuto);//call for auto item page 
+app.post('/home/suppliers/addItemAuto', addItems.addItemAuto);//call for auto item page post
 app.get('/home/suppliers/addOrder', addOrders.addOrder);//call for orders_page page 
 app.post('/home/suppliers/addOrder', addOrders.addOrder);//call for products_page post
 app.get('/home/analitics', analytics.analytics);//call for analitics page 

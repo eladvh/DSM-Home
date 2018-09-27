@@ -213,3 +213,55 @@ if(itemName && supplierName)callInsertSupFunc();
       main();
     }
   }
+
+
+//-----------------------------------------------API items page----------------------------------------------------------------
+var url = require('url');
+exports.addItemAuto = function(req, res){
+console.log('Items page');
+var user =  req.session.user;
+var sendName = user.first_name + ' ' + user.last_name;
+var answer = {sendName};
+var userId = req.session.userId;
+  
+if(userId == null){
+res.redirect("/login");
+return;
+}
+
+if(req.method == "POST"){
+var post  = req.body;
+//console.log(post);
+var eBayItemNumber = post.eBayItemNumber;
+var aliexpressItemNumber = post.aliexpressItemNumber;
+
+  if(eBayItemNumber){
+  var adr = eBayItemNumber;
+  var q = url.parse(adr, true);
+  if(q.host == 'www.ebay.com'){
+  eBayItemNumber = q.pathname.split('/')[2];
+  }else{
+  eBayItemNumber = adr;
+  }
+  console.log(eBayItemNumber);
+  }
+
+  if(aliexpressItemNumber){
+  var adr2 = aliexpressItemNumber;
+  var q2 = url.parse(adr2, true);
+  if(q2.host == 'www.aliexpress.com'){
+    if(q2.pathname.split('/')[1] == 'item'){
+      aliexpressItemNumber = q2.pathname.split(/[/.]/)[3];
+    }else if(q2.pathname.split('/')[1] == 'store'){
+      aliexpressItemNumber = q2.pathname.split(/[/._]/)[5];
+    }
+  }else{
+    aliexpressItemNumber = adr2;
+  }
+  console.log(aliexpressItemNumber)
+  }
+
+}
+
+  res.render('auto_item_page',{answer:answer});
+}
