@@ -240,8 +240,10 @@ var aliexpressItemNumber = post.aliexpressItemNumber;
   var q = url.parse(adr, true);
   if(q.host == 'www.ebay.com'){
   eBayItemNumber = q.pathname.split('/')[2];
-  }else{
+  }else if(!isNaN(eBayItemNumber)){
   eBayItemNumber = adr;
+  }else{
+    console.log('error!')
   }
   console.log(eBayItemNumber);
   }
@@ -255,8 +257,10 @@ var aliexpressItemNumber = post.aliexpressItemNumber;
     }else if(q2.pathname.split('/')[1] == 'store'){
       aliexpressItemNumber = q2.pathname.split(/[/._]/)[5];
     }
-  }else{
+  }else if(!isNaN(aliexpressItemNumber)){
     aliexpressItemNumber = adr2;
+  }else{
+    console.log('error!')
   }
   console.log(aliexpressItemNumber)
   }
