@@ -32,6 +32,7 @@
       var storeNum = post.storeNum;
       var supItemLink = post.supItemLink;
       var supItemPrice = post.supItemPrice;
+console.log(storeItemLink);
 
       function asyncFunc() {
         return new Promise(
@@ -69,25 +70,64 @@
     return new Promise(
       function (resolve, reject) {
         console.log('Update supplierItem table'); 
-        db.query("SELECT itemCode FROM `tblItems` WHERE `itemName`='"+itemName+"'", function(err, results, fields){
-          //console.log(results);
-          if(results.length){
-            db.query("SELECT itemCode FROM `tblsupplieritem` WHERE `itemCode`='"+results[0].itemCode+"'", function(err, results1, fields){
-            if(results1.length){
-              var sql = "update tblsupplieritem SET altSupplierName = ? ,altSupItemLink = ?, altSupItemPrice = ? WHERE itemCode = ?";
-              db.query(sql, [supplierName, supItemLink, supItemPrice, results[0].itemCode], function(err, result) {
-              })
-            }else{
-        var sql = "INSERT INTO `tblsupplieritem`(`supplierName`,`storeNum`, `itemCode`,`supItemPrice`, `supItemLink`) VALUES ('" + supplierName + "','" + storeNum + "','" + results[0].itemCode + "','" + supItemPrice + "','" + supItemLink + "')";
-        db.query(sql, function(err, result) {
-          //console.log(result);
-          console.log('Successed to insert supplier item');
+        var aliexpressItemNumber = supItemLink;
+        if(aliexpressItemNumber){
+          var adr2 = aliexpressItemNumber;
+          var q2 = url.parse(adr2, true);
+          if(q2.host == 'www.aliexpress.com'){
+            if(q2.pathname.split('/')[1] == 'item'){
+              aliexpressItemNumber = q2.pathname.split(/[/.]/)[3];
+            }else if(q2.pathname.split('/')[1] == 'store'){
+              aliexpressItemNumber = q2.pathname.split(/[/._]/)[5];
+            }
+          }else if(!isNaN(aliexpressItemNumber)){
+            aliexpressItemNumber = adr2;
+          }else{
+            console.log('error!')
+          }
+          console.log(aliexpressItemNumber)
+          }
+          db.query("SELECT supItemCode FROM `tblsupplieritem` WHERE `supItemCode`='"+aliexpressItemNumber+"'", function(err, result, fields){
+            if(!result.length){
+          var sql = "INSERT INTO `tblsupplieritem`(`supItemCode`,`supplierName`,`storeNum`,`itemName`, `supItemLink`,`supItemPrice`) VALUES ('" + aliexpressItemNumber + "','" + supplierName + "','" + storeNum + "','" + itemName + "','" + supItemLink + "','" + supItemPrice + "')";
+          db.query(sql, function(err, result1) {
+            if(result1.length){
+            console.log('success');
+            }
         })
-      }})
-      }
+        db.query("SELECT itemCode FROM `tblItems` WHERE `itemName`='"+itemName+"'", function(err, result2, fields){
+        if(result2.length){
+          console.log('here')
+          db.query("SELECT IFNULL(supItemCode,sup2ItemCode) AS supItemCode FROM `tblitemref` where itemCode = '"+result2[0].itemCode+"'", function(err, result3, fields){
+            if(!result3[0].supItemCode){
+              var sql1 = "update tblitemref SET supItemCode = ? WHERE itemCode = ?";
+              db.query(sql1, [aliexpressItemNumber, result2[0].itemCode], function(err, result) {
+              })
+            }else if(result3[0].supItemCode){
+              db.query("SELECT IFNULL(sup2ItemCode,sup3ItemCode) AS sup2ItemCode FROM `tblitemref` where itemCode = '"+result2[0].itemCode+"'", function(err, result4, fields){
+                if(!result4[0].sup2ItemCode){
+                  var sql2 = "update tblitemref SET sup2ItemCode = ? WHERE itemCode = ?";
+                  db.query(sql2, [aliexpressItemNumber, result2[0].itemCode], function(err, result) {
+                  })
+                }else{
+                  var sql3 = "update tblitemref SET sup3ItemCode = ? WHERE itemCode = ?";
+                  db.query(sql3, [aliexpressItemNumber, result2[0].itemCode], function(err, result) {
+                  })
+                }
+              })
+            }
+          })
+
+          }
       })
       answer.message = "Succesfully! item has been associated to supplier.";
       resolve(message); 
+    }else{
+      answer.message = "Duplicate! this item already associated.";
+      resolve(message); 
+    }
+  })
+
   })
 }
 
@@ -95,15 +135,44 @@
       return new Promise(
         function (resolve, reject) {
               console.log('Update DB'); 
-              var sql1 = "INSERT INTO `tblItems`(`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + itemName + "','" + storeItemLink + "','" + itemPic + "' ,'" + category + "','" + itemPrice + "')";
-              var query = db.query(sql1, function(err, result) {
+              var eBayItemNumber = storeItemLink
+              if(eBayItemNumber){
+                var adr = eBayItemNumber;
+                var q = url.parse(adr, true);
+                if(q.host == 'www.ebay.com'){
+                  if(!isNaN(q.pathname.split('/')[2])){
+                    eBayItemNumber = q.pathname.split('/')[2];
+                  }else if(!isNaN(q.pathname.split('/')[3])){
+                    eBayItemNumber = q.pathname.split('/')[3];
+                    }
+                }else if(!isNaN(eBayItemNumber)){
+                eBayItemNumber = adr;
+                }else{
+                  console.log('error!')
+                }
+                console.log(eBayItemNumber);
+                }
+                db.query("SELECT itemCode FROM `tblitems` WHERE `ItemCode`='"+eBayItemNumber+"'", function(err, result, fields){
+                  if(!result.length){
+              var sql = "INSERT INTO `tblItems`(`itemCode`,`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + eBayItemNumber + "','" + itemName + "','" + storeItemLink + "','" + itemPic + "' ,'" + category + "','" + itemPrice + "')";
+              db.query(sql, function(err, result) {
                 if(result.length){
                 console.log('success');
-                console.log(result);
                 }     
-                answer.message = "Succesfully! New item has been listed.";
-                resolve(message); 
               })
+              var sql1 = "INSERT INTO `tblitemref`(`itemCode`) VALUES ('" + eBayItemNumber + "')";
+              db.query(sql1, function(err, result2) {
+                if(result2.length){
+                console.log('success');
+                }     
+              })
+              answer.message = "Succesfully! New item has been listed.";
+              resolve(message); 
+            }else{
+              answer.message = "Duplicate! item already exist in your store.";
+              resolve(message); 
+            }
+          })
     })
   }
 
@@ -239,7 +308,11 @@ var aliexpressItemNumber = post.aliexpressItemNumber;
   var adr = eBayItemNumber;
   var q = url.parse(adr, true);
   if(q.host == 'www.ebay.com'){
-  eBayItemNumber = q.pathname.split('/')[2];
+    if(!isNaN(q.pathname.split('/')[2])){
+      eBayItemNumber = q.pathname.split('/')[2];
+    }else if(!isNaN(q.pathname.split('/')[3])){
+      eBayItemNumber = q.pathname.split('/')[3];
+      }
   }else if(!isNaN(eBayItemNumber)){
   eBayItemNumber = adr;
   }else{

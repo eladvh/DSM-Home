@@ -29,6 +29,7 @@ exports.suppliers = function(req, res){
   var logsListRes= [];
   var supplierNameRes= [];
   var itemListRes = [];
+  var ordersListRes = [];
   var post = [];
   var answer = {itemListRes, post ,logsListRes, message: '',sendName};
 
@@ -88,6 +89,21 @@ exports.suppliers = function(req, res){
     })
   }
 
+  function asyncFunc4() {
+    return new Promise(
+        function (resolve, reject) {
+          console.log('Get Filtered Logs List');
+          db.query("SELECT * FROM `tblOrders` WHERE `supplierName`='"+supplierName+"' ORDER BY orderNum DESC", function(err, results, fields){
+               if(results.length){
+              for(var i = 0; i<results.length; i++ ){     
+                       ordersListRes.push(results[i]);
+                  }
+               }
+               resolve(ordersListRes);
+          });
+        });
+  }
+
     function mainPost() {
     asyncFunc()
     .then(result => {
@@ -98,6 +114,9 @@ exports.suppliers = function(req, res){
       return asyncFunc3();
     }).then(result3 => {
       answer.itemListRes = itemListRes;
+      return asyncFunc4();
+    }).then(result4 => {
+      answer.ordersListRes = ordersListRes;
       res.send(answer);
     })
     .catch(error => {});

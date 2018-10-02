@@ -71,12 +71,17 @@ if(req.method == "POST"){
         return new Promise(
           function (resolve, reject) {
                 console.log('Update DB'); 
-                db.query("SELECT itemCode, itemPrice FROM `tblItems` WHERE `itemName`='"+itemName+"'", function(err, results, fields){
+                db.query("CALL get_itemPrice_and_supItemPrice_by_supplier('"+ supplierName +"')", function(err, results, fields){
                 if(results.length){
-                    db.query("SELECT supItemPrice FROM `tblsupplieritem` WHERE `itemCode`='"+results[0].itemCode+"'", function(err, results1, fields){
-                    if(results.length){
+                    if(supplierName == results[0][0].supplierName){
+                        var supItemPrice = results[0][0].supItemPrice;
+                    }else if(supplierName == results[0][0].supplierName2){
+                        var supItemPrice = results[0][0].supItemPrice2;
+                    }else if(supplierName == results[0][0].supplierName3){
+                        var supItemPrice = results[0][0].supItemPrice3;
+                    }
                     //for(var i = 0 ; i< itemName.length; i++){
-                    var sql = "INSERT INTO `tblorders`(`supplierName`,`itemName`,`itemPrice`,`supItemPrice`,`orderDate`, `qtySold`,`statusOfOrder`,`awShip`) VALUES ('" + supplierName + "','" + itemName + "','" + results[0].itemPrice + "','" + results1[0].supItemPrice + "','" + orderDate + "','" + qtySold + "' ,'Pending','No')";
+                    var sql = "INSERT INTO `tblorders`(`supplierName`,`itemName`,`supItemPrice`,`itemPrice`,`orderDate`,`qtySold`,`statusOfOrder`,`awShip`) VALUES ('" + supplierName + "','" + itemName + "','" + supItemPrice + "','" + results[0][0].itemPrice + "','" + orderDate + "','" + qtySold + "' ,'Pending','No')";
                     var query = db.query(sql, function(err, result) {
                     if(result.length){
                     console.log('success');
@@ -84,8 +89,6 @@ if(req.method == "POST"){
                     }
                     })
                     //}
-                    }
-                    })
                 }    
                   answer.message = "Succesfully! New order has been added.";
                   resolve(message); 

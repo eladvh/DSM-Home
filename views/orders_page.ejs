@@ -131,7 +131,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
             </tr>
         <tr>
             <td rowspan="3">
-                <select id="supNameSelect" data-live-search="true" class="selectpicker" multiple="multiple" name="supplierName"  method="POST" action="/home/suppliers/addOrder">
+                <select id="supNameSelect" data-live-search="true" class="selectpicker" name="supplierName"  method="POST" action="/home/suppliers/addOrder">
                 </select>
             </td rowspan="3">
             <td>
@@ -455,7 +455,7 @@ $(document).ready(function(){
                             }*/
 
                             var selectItem = document.getElementById("itemNameSelect");
-                            //selectItem.options.length = 0;
+                            selectItem.options.length = 0;
 
                             /*var createItem = document.createElement("OPTGROUP");
                             createItem.setAttribute("label", response.last_element);

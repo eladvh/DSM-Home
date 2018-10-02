@@ -392,9 +392,15 @@ body {
             //itemListRes[0].altSupItemLink = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
             
             for (var j = 0; j < itemListRes.length; j++) { 
-            if(itemListRes[j].altSupplierName == null)itemListRes[j].altSupplierName = 'Associate supplier';
-            if(itemListRes[j].altSupItemLink == null)itemListRes[j].altSupItemLink = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
-            if(itemListRes[j].altSupItemPrice == null)itemListRes[j].altSupItemPrice = '';
+            if(itemListRes[j].supplierName2 == null)itemListRes[j].supplierName2 = 'Associate supplier';
+            if(itemListRes[j].supItemLink2 == null)itemListRes[j].supItemLink2 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
+            if(itemListRes[j].supItemPrice2 == null)itemListRes[j].supItemPrice2 = '';
+            }
+
+            for (var j = 0; j < itemListRes.length; j++) { 
+            if(itemListRes[j].supplierName3 == null)itemListRes[j].supplierName3 = 'Associate supplier';
+            if(itemListRes[j].supItemLink3 == null)itemListRes[j].supItemLink3 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
+            if(itemListRes[j].supItemPrice3 == null)itemListRes[j].supItemPrice3 = '';
             }
             
 
@@ -425,17 +431,19 @@ body {
                                     <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
                                     <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
                                     <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
-                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$<br><br> \
+                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$ \
                                 </div> \
                                 <div id="'+[i]+'b2" class="containerTab" style="display:none;"> \
                                     <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].altSupplierName +'<br> \
-                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].altSupItemLink +'" target="_blank">Go</a><br> \
-                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].altSupItemPrice +'$</div> \
+                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName2 +'<br> \
+                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink2 +'" target="_blank">Go</a><br> \
+                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice2 +'$ \
                                 </div> \
                                 <div id="'+[i]+'b3" class="containerTab" style="display:none;"> \
                                     <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <p></p> \
+                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName3 +'<br> \
+                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink3 +'" target="_blank">Go</a><br> \
+                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice3 +'$</div> \
                                 </div> \
                             </section> \
                             </div> \
