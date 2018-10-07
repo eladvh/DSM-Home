@@ -4,100 +4,124 @@
 <%- include sidebar %> 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 </head>
-<body>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Suppliers</title>
 <style>
 
-.wrapper { 
-  display: grid; 
-  grid-gap: 15px;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-auto-rows: 140px; 
-  max-width: auto;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-} 
 * {box-sizing: border-box;}
 
-.wrapper {
-  border: 2px solid white;
-  border-radius: 5px;
-  background-color: white;
-}
+.wrapper { 
+    width: 100%;
+    display: grid; 
+    grid-gap: 15px;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-auto-rows: 140px; 
+    max-width: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: white;
+} 
 
 .wrapper > div {
-  grid-row-end: span 2;
-  border: 1px solid black;
-  border-radius: 5px;
-  background-color: white;
-  padding: 1em;
-  color:black;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    grid-row-end: span 2;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    padding: 1em;
+    color:black;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-.link a {
-  color: rgba(29, 6, 155, 0.877);
-  font-size: 12;
-  float: right;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+.boxsize {
+    max-height: 600px;
+    max-width: 600px;
+}
+
+.box {
+    width:300px;
+    background:white;
+    padding:1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    display:inline-block;
+    text-align: center;  
 }
 /*Supplier Details*/
 .box1 { 
-  grid-column-start: 1;
-  grid-column-end: 1; 
-  grid-row-start: 1; 
-  grid-row-end: 3; 
-  font-size:14px;
-  text-indent: 20px;
-  line-height: 15px;
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
+    font-size:14px;
+    text-indent: 20px;
+    line-height: 15px;
+    min-width:500px;
 }
-/*products*/
-.box2 { 
-  grid-column-start: 1; 
-  grid-column-end: 3; 
-  grid-row-start: 5; 
-  grid-row-end:span;
-  display:table; 
-  font-size:15px;   
-}
+
 /*logs*/
-.box3 { 
-  grid-column-start: 2;
-  grid-column-end: 2; 
-  grid-row-start: 1; 
-  grid-row-end: 3;
-  font-size:14px;    
+.box2 { 
+    grid-column-start: 2;
+    grid-column-end: 2; 
+    grid-row-start: 1; 
+    grid-row-end: 3;
+    min-width:800px;
 }
+
 /*analystics*/
-.box4 { 
-  grid-column-start: 2; 
-  grid-column-end: 2; 
-  grid-row-start:3;
-  grid-row-end:5;
+.box3 { 
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 3; 
+    grid-row-end: 5; 
+    font-size:14px;
 }
+
 /*orders*/
+.box4 { 
+    grid-column-start: 2; 
+    grid-column-end: 2; 
+    grid-row-start:3;
+    grid-row-end:5;
+    min-width:800px
+}
+
+/*products*/
 .box5{
-  grid-column-start: 1;
-  grid-column-end: 1; 
-  grid-row-start: 3; 
-  grid-row-end: 5; 
-  font-size:14px;
+    grid-column-start: 1; 
+    grid-column-end: 3; 
+    grid-row-start: 5; 
+    grid-row-end:span;
+    display:table; 
+    font-size:15px;   
+}
+
+.link a {
+    color: rgba(29, 6, 155, 0.877);
+    font-size: 12;
+    float: right;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .button {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  text-transform: uppercase;
-  background: rgba(3, 34, 134, 0.842);
-  border-color:black;
-  border-radius: 5px; 
-  border-width: 1px;
-  width: 120px;
-  padding: 6px;
-  color: #FFFFFF;
-  font-size: 12px;
-  cursor: pointer;
-  text-align: center;  
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-transform: uppercase;
+    background: rgba(3, 34, 134, 0.842);
+    border-color:black;
+    border-radius: 5px; 
+    border-width: 1px;
+    width: 120px;
+    padding: 6px;
+    color: #FFFFFF;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
 }
 .button:hover,.form button:active,.form button:focus {
   background:goldenrod;
@@ -123,21 +147,13 @@ table{
     border-collapse:collapse;
     border-spacing:0;
     table-layout:fixed;
-}
-
-.box {
-    width:300px;
-    background:white;
-    padding:1%;
-    border: 1px solid black;
-    border-radius: 5px;
-    display:inline-block;
-    text-align: center;  
+    width:100%;
 }
 
 .products {
 display:flex;
 flex-wrap: wrap;
+min-height: 500px
 }
 
 .product-card {
@@ -154,7 +170,7 @@ flex-wrap: wrap;
 }
 
 .product-info {
-    
+    line-height: 1.6;
 	margin-top: auto;
 	padding-top: 20px;
 	text-align: left;
@@ -171,7 +187,9 @@ flex-wrap: wrap;
  
 h3 {
     text-align: center;
-    font-size: 18px;
+    font-size: 22px;
+    font-family: 'Times New Roman', Times, serif;
+    text-transform: uppercase;
 }
 
 .b{
@@ -179,34 +197,27 @@ h3 {
 }
 
 #logshistory{
-    width:100%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align:center;
     font-size: 13px;
+    
 }
 #logshistory th{
-  font-size: 14px;
-  text-decoration-line: underline;
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+#ordershistory th{
+    text-align: center;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
 }
 
 #ordershistory{
-    width:100%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align:center;
     font-size: 12px;
-}
-#ordershistory th{
-  font-size: 14px;
-  text-decoration-line: underline;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* The grid: Three equal columns that floats next to each other */
@@ -243,147 +254,159 @@ body {
 }
 
 </style>
-
+<body>
 
 <div class="padding">
-  <div style="text-align:center">
-  <form id="supNameForm" method="POST" action="/home/suppliers">
-    <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers">
-      <option selected="" disabled="">Selecet Supplier</option>
-    </select>
-  </form>
-</div><br>
-<div class="wrapper">
-
-<div class="box1"> 
-    <div class="link">
-
-    <p class="link"><a href="#" target="_blank" id="storeLink"><i class=" fa fa-cart-arrow-down"></i> go to store</a></p></div>
-    <h3><i style="font-size: 20px" class="fa fa-vcard"></i> Supplier Details</h3>
-    <img style="float: right" width:="200px" height="200px" src="https://png.icons8.com/color/1600/supplier.png" alt="No Picture">
-    <span style="text-align:left">
-    <div><br>
-    <i class="fa fa-user-secret"></i><span class="b"> Supplier Name: </span><span id="supplierName"></span><br><br>
-    <i class="fa fa-home"></i><span class="b"> Store Number: </span><span id="storeNum"></span><br><br>
-    <i class="fa fa-wrench"></i><span class="b"> Establish Year: </span><span id="establishYear"></span><br><br>
-    <i class="fa fa-phone"></i><span class="b"> Phone Num: </span><span id="phoneNum"></span><br><br>
-    <i class="fa fa-envelope-o"></i><span class="b"> E-mail: </span><span id="email"></span><br><br>
-    <i class="fa fa-wechat"></i><span class="b"> We-Chat: </span><span id="wechat"></span><br><br>
-    <i class="fa fa-skype"></i><span class="b"> Skype: </span><span id="skypeID"></span><br><br>
-  </div>
-    </span>
-
+    <div style="text-align:center">
+    <h3>Select Supplier</h3>
+    <form id="supNameForm" method="POST" action="/home/suppliers">
+        <select id="supNameSelect" data-live-search="true" class="selectpicker" name="supplierName"  method="POST" action="/home/suppliers">
+            <option selected="disabled"></option>
+        </select>
+    </form>
     </div>
+    <br>
+
+    <div class="wrapper">
+        <div class="box1"> 
+            <div class="link">
+            <a href="#" target="_blank" id="storeLink"><i class=" fa fa-cart-arrow-down"></i> go to store</a>
+            </div>
+            <h3><i style="font-size: 20px" class="fa fa-vcard"></i> Supplier Details</h3>
+            <img style="float: right" width:="200px" height="200px" src="https://png.icons8.com/color/1600/supplier.png" alt="No Picture">
+            <span style="text-align:left">
+            <div><br>
+            <i class="fa fa-user-secret"></i><span class="b"> Supplier Name: </span><span id="supplierName"></span><br><br>
+            <i class="fa fa-home"></i><span class="b"> Store Number: </span><span id="storeNum"></span><br><br>
+            <i class="fa fa-wrench"></i><span class="b"> Establish Year: </span><span id="establishYear"></span><br><br>
+            <i class="fa fa-phone"></i><span class="b"> Phone Num: </span><span id="phoneNum"></span><br><br>
+            <i class="fa fa-envelope-o"></i><span class="b"> E-mail: </span><span id="email"></span><br><br>
+            <i class="fa fa-wechat"></i><span class="b"> We-Chat: </span><span id="wechat"></span><br><br>
+            <i class="fa fa-skype"></i><span class="b"> Skype: </span><span id="skypeID"></span><br><br>
+            </div>
+            </span>
+        </div>
+
+        <div class="box2">
+            <h3>Logs history</h3>
+            <form action="/home/suppliers/logs" method="get">
+                <button class="button" type="submit">+ New log</button>
+            </form>
+            <br>
+            <table id="logshistory">
+                <tr>
+                    <th> Date of conversion</th>
+                    <th> Subject</th>
+                    <th> communication method</th>
+                    <th colspan="2"> Content</th>
+                </tr>
+                <tr>
+                    <td id="dateOfConversionLogs"> </td>
+                    <td id="titleLogs"> </td>
+                    <td id="communicationMethodLogs"> </td>
+                    <td id="contentLogs" colspan="2"> </td>
+                </tr>
+            </table>
+        </div>
     
-    <div class="box2">
-      <h3>product</h3>
-      <form action="/home/suppliers/addItem" method="get">
-      <button class="button" type="submit">+ New product</button><br><br> 
-      </form>
-      <span style="text-align:center" id="createNewAccosiatedItem"></span>
-    </div>
-
-        <div class="box3"><h3>Logs history</h3>
-          <form action="/home/suppliers/logs" method="get">
-          <button class="button" type="submit">+ New log</button><br>
-        </form>
-          <table id="logshistory">
-              <tbody><tr>
-                  <th> Date of conversion</th>
-                  <th> Subject</th>
-                  <th> communication method</th>
-                  <th> Content</th>
-              </tr>
-
-                  <tr><td id="dateOfConversionLogs"> </td>
-                  <td id="titleLogs"> </td>
-                  <td id="communicationMethodLogs"> </td>
-                  <td id="contentLogs"> </td>
-              </tr>
-
-      </tbody></table>
-    </div>
+        <div class="box3">
+                <h3>Analytics Performance</h3> 
+                <form action="/home/analitics" method="get">
+                    <button class="button" type="submit">Analytics Page</button>
+                </form>
+                <div class="boxsize"><canvas id="line-chart" height="95px"></canvas></div>
+        </div>
                 
-<div class="box4">
-   <h3>Orders</h3>
-   <form action="/home/suppliers/addOrder" method="get">
-   <button class="button" type="submit">+ New order</button><br>
-   <table id="ordershistory">
-        <tr>
-            <th>Item Name</th>
-            <th>Sold For</th>
-            <th>Order/Refund Date</th>
-            <th>Qty</th>
-            <th>Order Status</th>
-            <th>Tracking Number</th>
-        </tr>
-        <tr>
-            <td id="itemNameRecord"></td>
-            <td id="itemPriceRecord"></td>
-            <td id="orderDateRecord"></td>
-            <td id="qtySoldRecord"></td>
-            <td id="statusOfOrderRecord"></td>
-            <td id="trackNumRecord"></td>
-        </tr>
+        <div class="box4">
+            <h3>Orders</h3>
+            <form action="/home/suppliers/addOrder" method="get">
+                <button class="button" type="submit">+ New order</button>
+            </form>
+            <table id="ordershistory">
+                <tr>
+                    <th colspan="2">Item Name</th>
+                    <th>Sold For</th>
+                    <th>Order Date</th>
+                    <th>Qty</th>
+                    <th>Order Status</th>
+                    <th>Tracking Number</th>
+                </tr>
+                <tr>
+                    <td id="itemNameRecord" colspan="2"></td>
+                    <td id="itemPriceRecord"></td>
+                    <td id="orderDateRecord"></td>
+                    <td id="qtySoldRecord"></td>
+                    <td id="statusOfOrderRecord"></td>
+                    <td id="trackNumRecord"></td>
+                </tr>
+            </table>
+        </div>   
 
-        </table>
-</form>
-</div>   
 
-<div class="box5">
-        <h3>Analytics Performance</h3> 
-        <form action="/home/analitics" method="get">
-        <button class="button" type="submit">Analytics Page</button>
-        </form>
-                    <div><canvas id="myChart5" height="70%"></canvas></div>
-                    <script>
-                    var ctx = document.getElementById("myChart5").getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'horizontalBar',
-                        data: {
-                            labels: ["ref", "ret"],
-                            datasets: [{
-                                label: '# of Votes',
-                                data: [12, 19],
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)',
-                                   
-                                ],
-                                borderColor: [
-                                    'rgba(255,99,132,1)',
-                                    'rgba(54, 162, 235, 1)',
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero:true
-                                    }
-                                }]
-                            }
-                        }
-                    });
-                    </script>
+        <div class="box5">
+                <h3>Products</h3>
+                <form action="/home/suppliers/addItem" method="get">
+                    <button class="button" type="submit">+ New product</button>
+                </form>
+                <br>
+                <span style="text-align:center" id="createNewAccosiatedItem"></span>
+        </div>
+
+    </div>
 </div>
-</div>
-</div>
-</body>
-</html>
+
 
 <script>
+
+//Analitics
+new Chart(document.getElementById("line-chart"), {
+  type: 'line',
+  data: {
+    labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+    datasets: [{ 
+        data: [86,114,106,106,107,111,133,221,783,2478],
+        label: "Africa",
+        borderColor: "#3e95cd",
+        fill: false
+      }, { 
+        data: [282,350,411,502,635,809,947,1402,3700,5267],
+        label: "Asia",
+        borderColor: "#8e5ea2",
+        fill: false
+      }, { 
+        data: [168,170,178,190,203,276,408,547,675,734],
+        label: "Europe",
+        borderColor: "#3cba9f",
+        fill: false
+      }, { 
+        data: [40,20,10,16,24,38,74,167,508,784],
+        label: "Latin America",
+        borderColor: "#e8c3b9",
+        fill: false
+      }, { 
+        data: [6,3,2,2,7,26,82,172,312,433],
+        label: "North America",
+        borderColor: "#c45850",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'World population per region (in millions)'
+    }
+  }
+});
 
 //-----------------------------------------------Load Logs List----------------------------------------------------------------
 
 $('#supNameForm').change(function(){
 $('supNameForm').submit();
-event.preventDefault(); //prevent default action 
-var post_url = $(this).attr("action"); //get form action url
-var request_method = $(this).attr("method"); //get form GET/POST method
-var form_data = $(this).serialize(); //Encode form elements for submission
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
         
 var addLog = $.ajax({
             url : post_url,
@@ -530,6 +553,7 @@ var addLog = $.ajax({
                                 <div class="product-card"> \
                                     <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div> \
                                     <div class="product-info"><span style="font-weight: bold">Name: </span>'+ itemListRes[i].itemName +'<br><br> \
+                                    <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
                                     <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br> \
                                     <span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'<br><br> \
                                     <div style="text-align:center"> \
@@ -571,8 +595,8 @@ var addLog = $.ajax({
                 function make() {alert()}
                 document.getElementById("createNewAccosiatedItem").innerHTML = data;
                 }
-            });
-  })
+                });
+})
   
 function openTab(tabName) {
 var i, x;
@@ -588,6 +612,8 @@ var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
 var select = document.getElementById("supNameSelect");
 for(index in supplierNameRes) {
     select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
-    }
+}
 
 </script>  
+</body>
+</html>

@@ -1,4 +1,7 @@
  //-----------------------------------------------items page----------------------------------------------------------------
+ var url = require('url');
+const Ebay = require("ebay-node-api");
+var AliexScrape = require('aliexscrape');
  exports.addItem = function(req, res){
 
     console.log('Items page');
@@ -8,9 +11,10 @@
     var nitemListRes = [];
     var itemListRes = [];
     var itemsNameRes = [];
+    var itemsNameResAuto = [];
     var supplierNameRes = [];
     var storeNumRes = [];
-    var answer = {sendName, message, supplierNameRes, storeNumRes, nitemListRes, itemsNameRes, itemListRes};
+    var answer = {sendName, message, supplierNameRes, storeNumRes, nitemListRes, itemsNameRes, itemsNameResAuto, itemListRes};
   
     var userId = req.session.userId;
   
@@ -32,7 +36,8 @@
       var storeNum = post.storeNum;
       var supItemLink = post.supItemLink;
       var supItemPrice = post.supItemPrice;
-console.log(storeItemLink);
+      var eBayItemNumberAuto = post.eBayItemNumberAuto;
+      var aliexpressItemNumberAuto = post.aliexpressItemNumberAuto;
 
       function asyncFunc() {
         return new Promise(
@@ -176,6 +181,111 @@ console.log(storeItemLink);
     })
   }
 
+    function asyncFunc5() {
+      return new Promise(
+         function (resolve, reject) { 
+          console.log('Insert Auto Item');
+          if(eBayItemNumberAuto){
+            var adr = eBayItemNumberAuto;
+            var q = url.parse(adr, true);
+            if(q.host == 'www.ebay.com'){
+              if(!isNaN(q.pathname.split('/')[2])){
+                eBayItemNumberAuto = q.pathname.split('/')[2];
+              }else if(!isNaN(q.pathname.split('/')[3])){
+                eBayItemNumberAuto = q.pathname.split('/')[3];
+                }
+            }else if(!isNaN(eBayItemNumberAuto)){
+              eBayItemNumberAuto = adr;
+            }else{
+              console.log('error!')
+            }
+            console.log(eBayItemNumberAuto);
+            }
+          
+            let ebay = new Ebay({
+              clientID: "EladPint-DSMHome-PRD-0820665a8-01939c18",
+              clientSecret: 'PRD-820665a8505f-4612-4733-8f5a-52eb',
+              body: {
+                  grant_type: "client_credentials",
+                  scope: "https://api.ebay.com/oauth/api_scope"
+              }
+            });
+          
+             ebay.getAccessToken().then((data) => {
+               ebay.getItemByItemGroup(eBayItemNumberAuto).then((data) => {
+                  var obj = JSON.parse(data);
+                  //console.log(obj)
+                  var title = obj.items[0].title;
+                  var itemWebUrl = obj.items[0].itemWebUrl;
+                  var imageUrl = obj.items[0].image.imageUrl;
+                  var categoryPath = obj.items[0].categoryPath.split('|').slice(-1)[0];
+                  var value = obj.items[0].price.value;
+                  var sql = "INSERT INTO `tblItems`(`itemCode`,`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + eBayItemNumberAuto + "','" + title + "','" + itemWebUrl + "','" + imageUrl + "' ,'" +categoryPath + "','" + value + "')";
+                  db.query(sql, function(err, result) {
+                    if(result.length){
+                    console.log('success');
+                    }     
+                  })
+                  var sql1 = "INSERT INTO `tblitemref`(`itemCode`) VALUES ('" + eBayItemNumberAuto + "')";
+                  db.query(sql1, function(err, result2) {
+                    if(result2.length){
+                    console.log('success');
+                    }     
+                  })
+              })
+          }, (error) => {
+              console.log(error);
+          });
+          
+          answer.message = "Succesfully! New item has been listed.";
+          resolve(message); 
+    })
+  }
+
+  function asyncFunc6() {
+    return new Promise(
+      function (resolve, reject) { 
+        console.log('Associate Auto Item');
+        if(aliexpressItemNumberAuto){
+          var adr2 = aliexpressItemNumberAuto;
+          var q2 = url.parse(adr2, true);
+          if(q2.host == 'www.aliexpress.com'){
+            if(q2.pathname.split('/')[1] == 'item'){
+              aliexpressItemNumberAuto = q2.pathname.split(/[/.]/)[3];
+            }else if(q2.pathname.split('/')[1] == 'store'){
+              aliexpressItemNumberAuto = q2.pathname.split(/[/._]/)[5];
+            }
+          }else if(!isNaN(aliexpressItemNumberAuto)){
+            aliexpressItemNumberAuto = adr2;
+          }else{
+            console.log('error!')
+          }
+          console.log(aliexpressItemNumberAuto)
+          }
+        
+          AliexScrape(aliexpressItemNumberAuto)
+          .then(response => {
+            var obj = JSON.parse(response);
+            //console.log(obj)
+            console.log(obj.store.name)
+            console.log(obj.store.id)
+            console.log(adr2)
+            console.log(obj.variations[0].pricing)
+            var sql = "INSERT INTO `tblsupplieritem`(`supItemCode`,`supplierName`,`storeNum`,`itemName`, `supItemLink`,`supItemPrice`) VALUES ('" + aliexpressItemNumberAuto + "','" + obj.store.name + "','" + obj.store.id + "','" + adr2 + "','" + adr2 + "','" + obj.variations[0].pricing + "')";
+            db.query(sql, function(err, result) {
+              if(result.length){
+              console.log('success');
+              }     
+            })
+          })
+          .catch(error => console.log(error));
+
+          answer.message = "Succesfully! item has been associated to supplier.";
+          resolve(message); 
+  })
+  }
+
+
        function callSupFunc() {
          asyncFunc()
         .then(result => {
@@ -202,10 +312,28 @@ console.log(storeItemLink);
         })
         .catch(error => {});
       }
+
+      function callAutoInsertFunc(){
+        asyncFunc5()
+        .then(result => {
+          res.send(answer);
+        })
+        .catch(error => {});
+      }
+
+      function callAutoInsertSupFunc(){
+        asyncFunc6()
+        .then(result => {
+          res.send(answer);
+        })
+        .catch(error => {});
+      }
     
 if(supplierName && ! itemName)callSupFunc();
 if(itemName && !supplierName)callInsertFunc();
 if(itemName && supplierName)callInsertSupFunc();
+if(eBayItemNumberAuto)callAutoInsertFunc();
+if(aliexpressItemNumberAuto)callAutoInsertSupFunc();
 
     }else{
   
@@ -219,7 +347,6 @@ if(itemName && supplierName)callInsertSupFunc();
                     for(var i = 0; i<results[0].length; i++){   
                             itemListRes.push(results[0][i]);
                     }
-                    console.log(itemListRes)
                    }
                    resolve(itemListRes);
               });
@@ -241,32 +368,43 @@ if(itemName && supplierName)callInsertSupFunc();
               });
             });
       }
-    
 
       function asyncFunc3() {
         return new Promise(
-            function (resolve, reject) {
-              console.log('Get Suppliers Names List');
-              db.query("SELECT DISTINCT supplierName FROM `tblSuppliers`", function(err, results, fields)
-              {
-                   if(results.length){
-                  for(var i = 0; i<results.length; i++ ){     
-                            supplierNameRes.push(results[i].supplierName);
-                      }
-                   }
-                   resolve(supplierNameRes);
-              });
+          function (resolve, reject) { 
+            console.log('Get Items Names');
+            db.query("SELECT itemName FROM `tblItems` ORDER BY itemCode DESC", function(err, results, fields)
+            {
+                 if(results.length){
+                for(var i = 0; i<results.length; i++ ){     
+                          itemsNameResAuto.push(results[i].itemName);
+                    }
+                 }
+                 resolve(itemsNameResAuto);
             });
-      }
+      })
+    }
 
-
-
+    function asyncFunc4() {
+      return new Promise(
+          function (resolve, reject) {
+            console.log('Get Suppliers Names List');
+            db.query("SELECT DISTINCT supplierName FROM `tblSuppliers`", function(err, results, fields)
+            {
+                 if(results.length){
+                for(var i = 0; i<results.length; i++ ){     
+                          supplierNameRes.push(results[i].supplierName);
+                    }
+                 }
+                 resolve(supplierNameRes);
+            });
+          });
+    }
     
       function main() {
         asyncFunc()
         .then(result => {
           answer.itemListRes = itemListRes;
-          console.log(itemListRes);
           return asyncFunc2();
         })
         .then(result2 => {
@@ -274,6 +412,10 @@ if(itemName && supplierName)callInsertSupFunc();
           return asyncFunc3();
         })
         .then(result3 => {
+          answer.itemsNameResAuto = itemsNameResAuto;
+          return asyncFunc4();
+        })
+        .then(result4 => {
           answer.supplierNameRes = supplierNameRes;
           res.render('item_page',{answer:answer});
         })
@@ -285,7 +427,7 @@ if(itemName && supplierName)callInsertSupFunc();
 
 
 //-----------------------------------------------API items page----------------------------------------------------------------
-var url = require('url');
+var ebay1 = require('ebay-api');
 exports.addItemAuto = function(req, res){
 console.log('Items page');
 var user =  req.session.user;
@@ -321,7 +463,81 @@ var aliexpressItemNumber = post.aliexpressItemNumber;
   console.log(eBayItemNumber);
   }
 
-  if(aliexpressItemNumber){
+/**
+ * example ebay API request to Trading:GetOrders
+ */
+
+
+ebay1.xmlRequest({
+  serviceName : 'Trading',
+  opType : 'GetOrders',
+
+  // app/environment
+  devId: 'eb8b69b0-20b1-4d00-a512-25967c635f94',
+  certId: 'SBX-820bcb7d24ca-87fa-4455-9bf2-2560',
+  appId: 'EladPint-DSMHome-SBX-5820bcb7d-1513f769',
+  sandbox: false,
+
+  // per user
+  authToken: 'AgAAAA**AQAAAA**aAAAAA**BTC6Ww**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6AFlICgDZOBpwudj6x9nY+seQ**q5YEAA**AAMAAA**d3eAFeQzbDT4IWYMEjcWjuYexBoBI2RIubSk1eBNEdTq9QcYcDmNnX9xcm9gj+C6rZINUjpEx9i7LPLZTW6AXK3IvbAyQQd862jY54mzEqpXX85l+PtjumPpmMHsV9ovzdA58JR+uvfejhb5gcaDhImXi8szbK4un9oxp4wDJ83LuVWvcOuoq/DCuHMIeLr8eDONdJKjLWBDPnCJNQLV0JPQdn8Uc8ji9QQKP+M+8NQx4svJmHqj5TMcinGBJaEjdREbjuacmxBK80ex1+6TaP3LPkh2CWAP1gNzcrHrTqEYKWMe+aMtXPfqquHiUrFMclOYKpXieaX652rjOkYg6Gq4LVVkBKi3bR2XQo/v/rIMBB9XC1bYAn8wBeMeLr2PySRElQsNq9ojrbTnpqDQsWYVf/bDwx20uNfhEqKEEPOt0wzRdji8pX/urK/KCqV9Af/9qN1JtgJ0C22BHXNDjvptklylOGEKb/OPEYX/WGH34BwVM3VBAyxGAbKVVDkr8IqqNH6ewccIfKu91lrPkGa7XHG01tr6I6OWF0HIsEPzJl4+RrOROUoCBLOB9LL/nSWcaZCysP7XC9jpX5bKi+5P9q36MePY7YKegKabrpK6km78U4+yoe4fiwYu/vltYiaiK8yHCmQivWs353niNSUvYCB4jZvn3sMX6ZVDGyoSCVHyOIxVPqd9mYFbCrfAhEGSgDETWaXuMriFpbIKRsv9RAYMLw2wll/ywNeCPxY0ZY+C3VtTG0VRFyevbUTk',
+
+  params: {
+    'OrderStatus': 'Completed',
+    'NumberOfDays': 2
+  }
+}, function(error, results) {
+  //console.log(results[0])
+  var obj = JSON.parse(JSON.stringify(results))
+  //console.log(obj.Orders[0].Transactions[0])
+  console.log(obj.Orders[0].Transactions[0].Item.Title)
+  console.log(obj.Orders[0].Transactions[0].CreatedDate)
+  console.log(obj.Orders[0].Transactions[0].QuantityPurchased)
+  console.log(obj.Orders[0].Transactions[0].ShippingDetails.ShipmentTrackingDetails[0].ShipmentTrackingNumber)
+});
+
+  /*let ebay = new Ebay({
+    clientID: "EladPint-DSMHome-PRD-0820665a8-01939c18",
+    clientSecret: 'PRD-820665a8505f-4612-4733-8f5a-52eb',
+    body: {
+        grant_type: "client_credentials",
+        scope: "https://api.ebay.com/oauth/api_scope"
+    }
+  });*/
+
+  // Get access token and pass it to this method
+/*ebay.getAccessToken()
+.then((data) => {
+    ebay.getItem(`v1|${eBayItemNumber}|0`).then((data) => {
+        //console.log(data);
+        console.log(data.title);
+        console.log(data.itemWebUrl);
+        console.log(data.image.imageUrl)
+        console.log(data.categoryPath.split('|').slice(-1)[0])
+        console.log(data.price.value)
+    })
+}, (error) => {
+  console.log(error);
+});*/
+
+
+  /*ebay.getAccessToken().then((data) => {
+    var e = eBayItemNumber;
+    //for(var i=0; i<2; i++){
+    ebay.getItemByItemGroup(e).then((data) => {
+        var obj = JSON.parse(data);
+        console.log(obj)
+        console.log(obj.items[0].title)
+        console.log(obj.items[0].itemWebUrl)
+        console.log(obj.items[0].image.imageUrl)
+        console.log(obj.items[0].categoryPath.split('|').slice(-1)[0])
+        console.log(obj.items[0].price.value)
+    })
+  //}
+}, (error) => {
+    console.log(error);
+});/*
+
+ /* if(aliexpressItemNumber){
   var adr2 = aliexpressItemNumber;
   var q2 = url.parse(adr2, true);
   if(q2.host == 'www.aliexpress.com'){
@@ -338,6 +554,17 @@ var aliexpressItemNumber = post.aliexpressItemNumber;
   console.log(aliexpressItemNumber)
   }
 
+  AliexScrape(aliexpressItemNumber)
+  .then(response => {
+    var obj = JSON.parse(response);
+    //console.log(obj)
+    console.log(obj.store.name)
+    console.log(obj.store.id)
+    console.log(adr2)
+    console.log(obj.variations[0].pricing)
+  })
+  .catch(error => console.log(error));
+*/
 }
 
   res.render('auto_item_page',{answer:answer});

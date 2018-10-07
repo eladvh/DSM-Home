@@ -11,171 +11,163 @@
 
 <style>
 .wrapper { 
-  display: grid; 
-  grid-gap: 10px;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-auto-rows: 140px;
-  max-width: auto;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: grid; 
+    grid-gap: 15px;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-auto-rows: 140px;
+    max-width: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 } 
 * {box-sizing: border-box;}
 
 .wrapper {
-  border: 2px solid white;
-  border-radius: 5px;
-  background-color: white;
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: white;
 }
 
 .wrapper > div {
-  grid-row-end: span 2;
-  border: 1px solid black;
-  border-radius: 5px;
-  background-color: white;
-  height: 450px;
-  padding: 1em;
-  color:black;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    grid-row-end: span 2;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    padding: 1em;
+    color:black;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-* {
-    box-sizing: border-box;
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
 }
-    h2{
-        text-align:left;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        color: white;
-        font-weight: bold;
-    }
 .header nav{
-        width: 100%;
-        background: DarkOrange;
-        padding: 20px;
-        box-shadow: 0 4px darkgrey; 
-    }
+    width: 100%;
+    background: DarkOrange;
+    padding: 20px;
+    box-shadow: 0 4px darkgrey; 
+}
 
 #logshistory{
-       width:100%;
-       border: none;
-       text-decoration-line: underline; 
-       font-family: Verdana, Geneva, Tahoma, sans-serif;
-       text-align:left;
+    width:100%;
+    border: none;
+    text-decoration-line: underline; 
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align:left;
 }
 .card1{
-  grid-column-start: 1;
-  grid-column-end: 1; 
-  grid-row-start: 1; 
-  grid-row-end: 3; 
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
+    height: 450px;
 }
-/*
-.card1 {
-float: left;
-width:50%;
-height: 450px;
-max-width:600px ;
-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-margin:auto;
-font-family: arial;
-}*/
 
 .card2{
-  grid-column-start: 2;
-  grid-column-end: 2; 
-  grid-row-start: 1; 
-  grid-row-end: 3; 
-  text-align: center;
+    grid-column-start: 2;
+    grid-column-end: 2; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
+    height: 450px;
+    text-align: center;
 }
-/*
-.card2 {
-float:right;
-width:50%;
-height: 450px;
-margin:auto;
-max-width:600px ;
-padding-left: 20px;
-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-max-width: 600px;
-text-align: center;
-font-family: arial;
-}*/
 
+.card3{
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 4; 
+    grid-row-end: 4; 
+    text-align: center;
+    height: 200px;
+}
+
+.card4{
+    grid-column-start: 2; 
+    grid-column-end: 2; 
+    grid-row-start:4;
+    grid-row-end:4;
+    text-align: center;
+    height: 200px;
+}
 .NewItem {
-  border:none;
-  color: black;
-  background-color: white; 
-  padding: 8px 20px;
-  border-radius: none;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration-line: underline; 
-  position:relative;
+    border:none;
+    color: black;
+    background-color: white; 
+    padding: 8px 20px;
+    border-radius: none;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration-line: underline; 
+    position:relative;
 }
 
 .inp {
-  border: 2px solid black;
-  color: black;
-  background-image:url("images/home_pic.jpg");
-  background-color: white;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: bold;
-  width:80%
+    border: 2px solid black;
+    color: black;
+    background-image:url("images/home_pic.jpg");
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    width:80%
 }
 
 .checkButton{
-padding: 8px 20px;
+    padding: 8px 20px;
 }
 
 ::-webkit-input-placeholder {
-   text-align: center;
+    text-align: center;
 }
 
 .inspicd {
-  /* This bit sets up the horizontal layout */
-  display:flex;
-  flex-direction:row;
-  margin:auto;
-  border-radius: 8px;
-  width:100%;
-  /* This bit draws the box around it */
-  border: 2px solid black;
-  padding:3px;
+    /* This bit sets up the horizontal layout */
+    display:flex;
+    flex-direction:row;
+    margin:auto;
+    border-radius: 8px;
+    width:100%;
+    /* This bit draws the box around it */
+    border: 2px solid black;
+    padding:3px;
 }
 
 .inspici {
-  display:flex;
-  flex-direction:row;
-  margin:auto;
-  border-radius: 8px;
-  /* This bit draws the box around it */
-  border: 2px solid black;
-  /* Tell the input to use all the available space */
-  flex-grow:2;
-  /* And hide the input's outline, so the form looks like the outline */
-  border:none;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 3px;
+    display:flex;
+    flex-direction:row;
+    margin:auto;
+    border-radius: 8px;
+    /* This bit draws the box around it */
+    border: 2px solid black;
+    /* Tell the input to use all the available space */
+    flex-grow:2;
+    /* And hide the input's outline, so the form looks like the outline */
+    border:none;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 3px;
 }
 
 .inspicb {
-  /* Just a little styling to make it pretty */
-  border: none;
-  outline: 0;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 5px
+    /* Just a little styling to make it pretty */
+    border: none;
+    outline: 0;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px
 }
 
 #NewItemImage{
     display:flex;
     margin:15px;
-    
 }
+
 .wrapper > div input ,.wrapper > div select{
     border: 1px solid black;
     color: black;
@@ -191,109 +183,117 @@ padding: 8px 20px;
 }
 
 #sub {
-  border: none;
-  border-radius: 8px;
-  outline: 0;
-  color: white;
-  background-color: darkorange;
-  cursor: pointer;
-  width:200px;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 10px;
-  margin-bottom: 5px;
-  box-shadow: 0 4px darkgray; 
+    border: none;
+    border-radius: 8px;
+    outline: 0;
+    color: white;
+    background-color: darkorange;
+    cursor: pointer;
+    width:200px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 4px darkgray; 
 }
 
 #sub:hover {
-  opacity: 0.7;
+    opacity: 0.7;
 }
 
 .alignImg{
-position:absolute;
-text-align:center;
-padding:20px;
+    position:absolute;
+    text-align:center;
+    padding:20px;
 }
 
 .box {
-        width:300px;
-        background:white;
-        padding:1%;
-        border: 1px solid black;
-        border-radius: 5px;
-        display:inline-block;
-        text-align: center;  
-    }
+    min-height: 360px;
+    width:300px;
+    background:white;
+    padding:1%;
+    border: 1px solid black;
+    border-radius: 5px;
+    display:inline-block;
+    text-align: center;  
+}
 
 .products {
+    display:flex;
+    flex-wrap: wrap;
+    min-height: 380px
+}
+
+.products-a {
 display:flex;
 flex-wrap: wrap;
+min-height: 500px
 }
 
 .product-card {
-	display:table-column;
-	flex-direction:column;
-	padding: 2%;
-	flex: 1 16%;
-	background-color: #FFF;
-	box-shadow: none;
+display:table-column;
+flex-direction:column;
+padding: 2%;
+flex: 1 16%;
+background-color: #FFF;
+box-shadow: none;
 }
 
 .product-image img {
-	width: 80%;
+width: 80%;
 }
 
 .product-info {
-    
-	margin-top: auto;
-	padding-top: 20px;
-	text-align: left;
-    font-size: 13px;
-    font-family:Arial, Helvetica, sans-serif;
+line-height: 1.6;
+margin-top: auto;
+padding-top: 20px;
+text-align: left;
+font-size: 13px;
+font-family:Arial, Helvetica, sans-serif;
 }
 
 
 
 * {
-    box-sizing: border-box;
+box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+margin: 0;
+font-family: Arial, Helvetica, sans-serif;
 }
 
 /* The grid: Three equal columns that floats next to each other */
 .column {
-    float: left;
-    width: 31%;
-    text-align: center;
-    font-size: 17px;
-    cursor: pointer;
-    color: white;
-    border-radius: 20px;
-    border:none;
-    margin: 1%;
+float: left;
+width: 31%;
+text-align: center;
+font-size: 17px;
+cursor: pointer;
+color: white;
+border-radius: 20px;
+border:none;
+margin: 1%;
 }
 
 .containerTab {
-    padding-top: 10px;
-    -webkit-text-fill-color: black;
+padding-top: 10px;
+-webkit-text-fill-color: black;
 }
 
 /* Clear floats after the columns */
 .row:after {
-    content: "";
-    display: table;
-    clear: both;
+content: "";
+display: table;
+clear: both;
 }
 
 /* Closable button inside the container tab */
 .closebtn {
-    float: right;
-    color: black;
-    font-size: 35px;
-    cursor: pointer;
+float: right;
+color: black;
+font-size: 35px;
+cursor: pointer;
 }
     </style>
 
@@ -304,49 +304,70 @@ body {
 </div>
 
     <div class="wrapper">
-    <div class="card1">
-            <div class="NewItem">Upload Item</div><br>
-            <form id="addNewItem" action="/home/suppliers/addItem" method="POST">
-            <img id="NewItemImage" style="display: inline-block" src="/images/img-icon.png" alt="No Pic" width:"300px"="" height="270px">
-            <span class="alignImg">
-            <div class="inspicd">
-                <input id="itemImg" class="inspici" style="box-shadow:unset" placeholder="Insert Item URL Picture" name="itemPic">
-                <button class="inspicb" type="button" onclick="insertPic()"><i class="fa fa-check"></i></button>
-            </div><br>
-            <input type="text" placeholder="Item Name" name="itemName"><br><br>
-            <input type="text" placeholder="Item Link" name="storeItemLink"><br><br>
-            <input type="text" placeholder="Item Category" name="category"><br><br>
-            <input type="text" placeholder="Price" name="itemPrice"><br><br>
-        </span>
-    
-            <div style="text-align:center"><button id="sub" type="submit">List item</button></div>
-    </form></div>
+        <div class="card1">
+                <div class="NewItem">Upload Item</div><br>
+                <form id="addNewItem" action="/home/suppliers/addItem" method="POST">
+                <img id="NewItemImage" style="display: inline-block" src="/images/img-icon.png" alt="No Pic" width:"300px"="" height="270px">
+                <span class="alignImg">
+                <div class="inspicd">
+                    <input id="itemImg" class="inspici" style="box-shadow:unset" placeholder="Insert Item URL Picture" name="itemPic">
+                    <button class="inspicb" type="button" onclick="insertPic()"><i class="fa fa-check"></i></button>
+                </div><br>
+                <input type="text" placeholder="Item Name" name="itemName"><br><br>
+                <input type="text" placeholder="Item Link" name="storeItemLink"><br><br>
+                <input type="text" placeholder="Item Category" name="category"><br><br>
+                <input type="text" placeholder="Price" name="itemPrice"><br><br>
+                </span>
+        
+                <div style="text-align:center"><button id="sub" type="submit">List item</button></div>
+                </form>
+        </div>
 
 
-    <div class="card2">
-        <form id="associateItem" method="POST" action="/home/suppliers/addItem">
-        <div>
-            <div class="NewItem">Upload item to supplier tab</div><br><br>
-            
-                <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers/addItem">
-                  <option selected="" disabled="">Selecet Supplier</option>
+        <div class="card2">
+            <form id="associateItem" method="POST" action="/home/suppliers/addItem">
+            <div>
+                <div class="NewItem">Upload item to supplier tab</div><br><br>
+                
+                    <select id="supNameSelect" name="supplierName" method="POST" action="/home/suppliers/addItem">
+                    <option selected="" disabled="">Selecet Supplier</option>
+                    </select>
+                <br><br>
+                    <select id="storeNumSelect" name="storeNum">
+                    <option selected="" disabled="">Selecet Store Num</option>
+                    </select><br><br> 
+                    <select id="itemNameSelect" name="itemName">
+                            <option selected="" disabled="">Selecet Item Name</option>
+                    </select><br><br>
+                <input type="text" placeholder="Supplier Item Link" name="supItemLink"><br><br>
+                <input type="text" placeholder="Supplier Item Price" name="supItemPrice"><br><br><br>
+                <button id="sub" type="submit">Associate Item</button>
+            </div>
+            </form>
+        </div> 
+
+        <div class="card3">
+                <div class="NewItem">Automatic item upload</div><br>
+                <form id="addNewAutoItem" action="/home/suppliers/addItem" method="POST">
+                <input type="text" placeholder="Insert item url / eBay item number" name="eBayItemNumberAuto"><br><br>
+                <div style="text-align:center"><button id="sub" type="submit">List item</button></div>
+        </form></div>
+
+        <div class="card4">
+            <form id="associateAutoItem" method="POST" action="/home/suppliers/addItem">
+                <div class="NewItem">Automatic Item upload to supplier tab</div><br>
+                <span>
+                <select id="itemNameSelectAuto" name="itemName">
+                    <option selected="" disabled="">Selecet Item Name</option>
                 </select>
-            <br><br>
-                <select id="storeNumSelect" name="storeNum">
-                  <option selected="" disabled="">Selecet Store Num</option>
-                </select><br><br> 
-                <select id="itemNameSelect" name="itemName">
-                        <option selected="" disabled="">Selecet Item Name</option>
-                </select><br><br>
-            <input type="text" placeholder="Supplier Item Link" name="supItemLink"><br><br>
-            <input type="text" placeholder="Supplier Item Price" name="supItemPrice"><br><br><br>
-            <button id="sub" type="submit">Associate Item</button>
-        </div></form>
-
-            </div><br> 
-    </div><br>
+                </span>
+                <input type="text" placeholder="Insert item url" name="aliexpressItemNumberAuto"><br><br>
+                <button id="sub" type="submit">Associate Item</button>
+            </form>
+        </div>
+    </div>
     
-    <div style="text-align:center"><h1 id="message"></h1></div><br>
+    <div style="text-align:center"><h1 id="message"></h1></div>
    
 
 
@@ -408,10 +429,11 @@ body {
             for (i = 0; i < itemListRes.length; i++) { 
             data +=  '<div class="box"> \
                             <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div> \
-                            <section class="products"> \
+                            <section class="products-a"> \
                               <div class="product-card"> \
                                 <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div> \
                                 <div class="product-info"><span style="font-weight: bold">Name: </span>'+ itemListRes[i].itemName +'<br><br> \
+                                <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
                                 <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br> \
                                 <span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'<br><br> \
                                 <div style="text-align:center"> \
@@ -477,7 +499,20 @@ body {
 
             var i = ''
             for (i = 0; i < itemListRes.length; i++) { 
-            data += '<div class="box"><div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div><section class="products"><div class="product-card"><div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div><div class="product-info"><span style="font-weight: bold">Name: </span> '+ itemListRes[i].itemName +'<br><br><span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br><span style="font-weight: bold">Price: </span><span>'+ itemListRes[i].itemPrice + '$</span></div></div></div>'
+            data += '<div class="box">\
+                        <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>\
+                        <section class="products">\
+                            <div class="product-card">\
+                                <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div>\
+                                <div class="product-info">\
+                                        <span style="font-weight: bold">Name: </span> '+ itemListRes[i].itemName +'<br><br>\
+                                        <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
+                                        <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br>\
+                                        <span style="font-weight: bold">Price: </span><span>'+ itemListRes[i].itemPrice + '$</span>\
+                                </div>\
+                            </div>\
+                        </section>\
+                    </div>'
             }
             function make(e) {alert()}
             document.getElementById("createNewItem").innerHTML = data;
@@ -548,6 +583,71 @@ body {
                         });
              })
 
+//-----------------------------------------------Add New Auto Item----------------------------------------------------------------
+
+            $('#addNewAutoItem').submit(function(event){
+            event.preventDefault();
+            var post_url = $(this).attr("action");
+            var request_method = $(this).attr("method");
+            var form_data = $(this).serialize();
+                    
+            var addNewAutoItem = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        addNewAutoItem.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        addNewAutoItem.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var delayInMilliseconds = 5000;
+                                
+                                setTimeout(function() {
+                                    location.reload();
+                                }, delayInMilliseconds);
+                                
+                                $("#message").html(response.message);
+                            }
+                        });
+             })
+
+//-----------------------------------------------Auto Item Association To Suppliers----------------------------------------------------------------
+
+            $('#associateAutoItem').submit(function(){
+            event.preventDefault();
+            var post_url = $(this).attr("action");
+            var request_method = $(this).attr("method");
+            var form_data = $(this).serialize();
+                    
+            var associateAutoItem = $.ajax({
+                        url : post_url,
+                        type: request_method,
+                        data : form_data,
+                        });
+                        
+                        associateAutoItem.fail( function() {
+                        window.alert("Fail!");
+                        });
+
+                        associateAutoItem.done( function(response) {
+                            if (response.redirect !== undefined && response.redirect) {
+                            window.location.href = response.redirect_url;
+                            }else{
+                                var delayInMilliseconds = 2000;
+                                
+                                setTimeout(function() {
+                                    location.reload();
+                                }, delayInMilliseconds);
+                                
+                                $("#message").html(response.message);
+                            }
+                        });
+             })
 
 //-----------------------------------------------Load Suppliers Options----------------------------------------------------------------
 
@@ -596,6 +696,12 @@ body {
             for(index in supplierNameRes) {
                 select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
              }
+
+            var itemsNameResAuto = JSON.parse('<%-JSON.stringify(answer.itemsNameResAuto)%>');
+            var selectItemAuto = document.getElementById("itemNameSelectAuto");
+            for(index in itemsNameResAuto) {
+                selectItemAuto.options[selectItemAuto.options.length] = new Option(itemsNameResAuto[index], itemsNameResAuto[index]);
+            }
 
 
 </script>

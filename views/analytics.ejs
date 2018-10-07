@@ -2,312 +2,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Bootstrap Example</title>
 <%- include sidebar %>
+<title>Analytics</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>  
 </head>
 <style>
-  .wrapper { 
-  display: grid; 
-  grid-gap: 10px;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-auto-rows: 140px;
-  max-width: auto;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-} 
+
 * {box-sizing: border-box;}
 
-.wrapper {
-  border: 2px solid white;
-  border-radius: 5px;
-  background-color: white;
-}
+.wrapper { 
+    width: 100%;
+    display: grid; 
+    grid-gap: 15px;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-auto-rows: 140px;
+    max-width: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: white;
+} 
 
 .wrapper > div {
-  grid-row-end: span 2;
-  border: 1px solid black;
-  border-radius: 5px;
-  background-color: white;
-  height: 450px;
-  padding: 1em;
-  color:black;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    grid-row-end: span 3;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    padding: 1em;
+    color:black;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.boxsize {
+    max-height: 800px;
+    max-width: 800px;
 }
 .box1{
-  grid-column-start: 1;
-  grid-column-end: 3; 
-  grid-row-start: 1; 
-  grid-row-end: span;
-  display:table; 
-}          
-    .dropdown-submenu {
-    position:relative;
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
 }
 
-.dropdown-submenu .dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -1px;
+.box2{
+    grid-column-start: 2;
+    grid-column-end: 2; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
 }
-  
-   /* #sup{
-        width: 150px;
-        margin: auto;
-        color: white;
-        background-color: darkred;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        border-radius:5px; 
-    }
-    #prd{
-        width: 150px;
-        margin: auto;
-        color: white;
-        background-color: DarkOrange;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        border-radius:5px;
-    }
-    #logs{
-        width: 150px;
-        margin: auto;
-        color: white;
-        background-color: Indigo;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        border-radius:5px;
-    }
-    #ord{
-        width: 150px;
-        margin: auto;
-        color: white;
-        background-color: darkgreen;
-        font-size: 18px;
-        font-weight: bold;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        border-radius:5px;
-    }*/
-.box {
-  width:50%;
-  background:white;
-  padding:1%;
-  border: 1px solid black;
-  border-radius: 5px;
-  display:inline-block;
-  text-align: center;       
-    }
-table{
-  border-collapse:collapse;
-  border-spacing:1;
-  table-layout:fixed;
-}
-.charts {
-	display:flex;
-	flex-wrap: wrap;
-}
-.chart-card {
-	display:table-column;
-	flex-direction:column;
-	padding: 2%;
-	flex: 1 20%;
-	background-color: #FFF;
-	box-shadow: none;
-}
-.chart-info {
-	margin-top: auto;
-	padding-top: 10px;
-	text-align: left;
-    width:100%;
-}
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
 
-      }
-      .row.content {height:auto; } 
+.box3{
+    grid-column-start: 1;
+    grid-column-end: 1; 
+    grid-row-start: 4; 
+    grid-row-end: 4; 
+}
+
+.box4{
+    grid-column-start: 2; 
+    grid-column-end: 2; 
+    grid-row-start:4;
+    grid-row-end:4;
+}
+
+h1{
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Times New Roman', Times, serif;
+    text-transform: uppercase;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+}
+.row.content {height:auto; } 
   
-  </style>
-</head>
+</style>
 <body>
-    <div class="padding">
-    <h1>Charts preformance</h1>
-    <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Chart type
-        <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li><a tabindex="-1" href="#">Radar</a></li>
-          <li><a tabindex="-1" href="#">bar</a></li>
-          <li><a tabindex="-1" href="#">line</a></li>
-    </div><br>
-    
-<div class="wrapper"> 
-<div class="box1">
-<div class="box">   
-<section class="charts">
-<div class="chart-card">
-<div class="chart-info"> 
-<canvas id="myChart"></canvas>
+<div class="padding">
+    <h1>DSM-Home Analytics</h1>
+    <div class="wrapper">
+        <div class="card1">
+            <div class="boxsize"><canvas id="bar-chart"></canvas></div>
+        </div>
+        <div class="card2">
+            <div class="boxsize"><canvas id="line-chart"></canvas></div>
+        </div>
+        <div class="card3">
+            <div class="boxsize"><canvas id="pie-chart"></canvas></div>
+        </div>
+        <div class="card4">
+            <div class="boxsize"><canvas id="radar-chart"></canvas></div>
+        </div>
+    </div>
 </div>
+
 <script>
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'pie',
+//chart1
+new Chart(document.getElementById("bar-chart"), { 
+    type: 'bar',
     data: {
-        labels: ["ref", "ret"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-               
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-            ],
-            borderWidth: 1
-        }]
+      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      datasets: [
+        {
+          label: "Population (millions)",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: [2478,5267,734,784,433]
+        }
+      ]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Predicted world population (millions) in 2050'
+      }
+    }
+});
+
+//chart2
+new Chart(document.getElementById("line-chart"), {
+  type: 'line',
+  data: {
+    labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+    datasets: [{ 
+        data: [86,114,106,106,107,111,133,221,783,2478],
+        label: "Africa",
+        borderColor: "#3e95cd",
+        fill: false
+      }, { 
+        data: [282,350,411,502,635,809,947,1402,3700,5267],
+        label: "Asia",
+        borderColor: "#8e5ea2",
+        fill: false
+      }, { 
+        data: [168,170,178,190,203,276,408,547,675,734],
+        label: "Europe",
+        borderColor: "#3cba9f",
+        fill: false
+      }, { 
+        data: [40,20,10,16,24,38,74,167,508,784],
+        label: "Latin America",
+        borderColor: "#e8c3b9",
+        fill: false
+      }, { 
+        data: [6,3,2,2,7,26,82,172,312,433],
+        label: "North America",
+        borderColor: "#c45850",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'World population per region (in millions)'
+    }
+  }
+});
+
+//chart3
+new Chart(document.getElementById("pie-chart"), {
+    type: 'pie',
+    data: {
+      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      datasets: [{
+        label: "Population (millions)",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+        data: [2478,5267,734,784,433]
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Predicted world population (millions) in 2050'
+      }
+    }
+});
+
+//chart4
+new Chart(document.getElementById("radar-chart"), {
+    type: 'radar',
+    data: {
+      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      datasets: [
+        {
+          label: "1950",
+          fill: true,
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          data: [8.77,55.61,21.69,6.62,6.82]
+        }, {
+          label: "2050",
+          fill: true,
+          backgroundColor: "rgba(255,99,132,0.2)",
+          borderColor: "rgba(255,99,132,1)",
+          pointBorderColor: "#fff",
+          pointBackgroundColor: "rgba(255,99,132,1)",
+          pointBorderColor: "#fff",
+          data: [25.48,54.16,7.61,8.06,4.45]
         }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Distribution in % of world population'
+      }
     }
 });
 </script>
-</div> 
-</div>
 
-<div class="box">   
-<section class="charts">
-<div class="chart-card">
-<div class="chart-info"> 
-<canvas class="my-4 chartjs-render-monitor" id="myChart1"></canvas>
-</div>
-<script>
-        var ctx = document.getElementById("myChart1");
-        var myChart1 = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            datasets: [{
-              data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-              lineTension: 0,
-              backgroundColor: 'transparent',
-              borderColor: '#007bff',
-              borderWidth: 4,
-              pointBackgroundColor: '#007bff'
-            }]
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: false
-                }
-              }]
-            },
-            legend: {
-              display: false,
-            }
-          }
-        });
-      </script>
-</div>
-</div>
-
-<div class="box">   
-    <section class="charts">
-    <div class="chart-card">
-    <div class="chart-info">    
-    <canvas id="myChart3"></canvas>
-    </div>
-    <script>
-    var ctx = document.getElementById("myChart3").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["ref", "ret"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                   
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
-    });
-    </script>
-    </div> 
-    </div>
- 
-
-    <div class="box">   
-        <section class="charts">
-        <div class="chart-card">
-          
-        <div class="chart-info"> 
-        <canvas class="my-4 chartjs-render-monitor" id="myChart4"></canvas>
-        </div>
-        <script>
-                var ctx = document.getElementById("myChart4");
-                var myChart1 = new Chart(ctx, {
-                  type: 'polarArea',
-                  data: {
-                    labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                    datasets: [{
-                      data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-                      lineTension: 0,
-                      backgroundColor: 'transparent',
-                      borderColor: '#007bff',
-                      borderWidth: 4,
-                      pointBackgroundColor: '#007bff'
-                    }]
-                  },
-                  options: {
-                    scales: {
-                      yAxes: [{
-                        ticks: {
-                          beginAtZero: false
-                        }
-                      }]
-                    },
-                    legend: {
-                      display: false,
-                    }
-                  }
-                });
-              </script>
-        </div>
-        </div>
-
-</div>
+</body>
+</html>
