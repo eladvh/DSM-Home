@@ -199,9 +199,9 @@ exports.signup = function(req, res){
       var lastName= result[0].last_name;
       var currency= result[0].currency;
       var breakEven= result[0].break_even;
-    
+
       let ebay = new Ebay({
-        clientID: "EladPint-DSMHome-PRD-0820665a8-01939c18",
+        clientID: process.env.APPID,
         details: true // To require detailed info or put false
     });
     ebay.getUserDetails(storeName).then((data) => {

@@ -201,10 +201,10 @@ var AliexScrape = require('aliexscrape');
             }
             console.log(eBayItemNumberAuto);
             }
-          
+
             let ebay = new Ebay({
-              clientID: "EladPint-DSMHome-PRD-0820665a8-01939c18",
-              clientSecret: 'PRD-820665a8505f-4612-4733-8f5a-52eb',
+              clientID: process.env.APPID,
+              clientSecret: process.env.CERTID,
               body: {
                   grant_type: "client_credentials",
                   scope: "https://api.ebay.com/oauth/api_scope"
@@ -463,23 +463,16 @@ var aliexpressItemNumber = post.aliexpressItemNumber;
   console.log(eBayItemNumber);
   }
 
-/**
- * example ebay API request to Trading:GetOrders
- */
-
-
 ebay1.xmlRequest({
   serviceName : 'Trading',
   opType : 'GetOrders',
 
-  // app/environment
-  devId: 'eb8b69b0-20b1-4d00-a512-25967c635f94',
-  certId: 'SBX-820bcb7d24ca-87fa-4455-9bf2-2560',
-  appId: 'EladPint-DSMHome-SBX-5820bcb7d-1513f769',
+  devId: process.env.DEVID,
+  certId: process.env.CERTID,
+  appId: process.env.APPID,
   sandbox: false,
 
-  // per user
-  authToken: 'AgAAAA**AQAAAA**aAAAAA**BTC6Ww**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6AFlICgDZOBpwudj6x9nY+seQ**q5YEAA**AAMAAA**d3eAFeQzbDT4IWYMEjcWjuYexBoBI2RIubSk1eBNEdTq9QcYcDmNnX9xcm9gj+C6rZINUjpEx9i7LPLZTW6AXK3IvbAyQQd862jY54mzEqpXX85l+PtjumPpmMHsV9ovzdA58JR+uvfejhb5gcaDhImXi8szbK4un9oxp4wDJ83LuVWvcOuoq/DCuHMIeLr8eDONdJKjLWBDPnCJNQLV0JPQdn8Uc8ji9QQKP+M+8NQx4svJmHqj5TMcinGBJaEjdREbjuacmxBK80ex1+6TaP3LPkh2CWAP1gNzcrHrTqEYKWMe+aMtXPfqquHiUrFMclOYKpXieaX652rjOkYg6Gq4LVVkBKi3bR2XQo/v/rIMBB9XC1bYAn8wBeMeLr2PySRElQsNq9ojrbTnpqDQsWYVf/bDwx20uNfhEqKEEPOt0wzRdji8pX/urK/KCqV9Af/9qN1JtgJ0C22BHXNDjvptklylOGEKb/OPEYX/WGH34BwVM3VBAyxGAbKVVDkr8IqqNH6ewccIfKu91lrPkGa7XHG01tr6I6OWF0HIsEPzJl4+RrOROUoCBLOB9LL/nSWcaZCysP7XC9jpX5bKi+5P9q36MePY7YKegKabrpK6km78U4+yoe4fiwYu/vltYiaiK8yHCmQivWs353niNSUvYCB4jZvn3sMX6ZVDGyoSCVHyOIxVPqd9mYFbCrfAhEGSgDETWaXuMriFpbIKRsv9RAYMLw2wll/ywNeCPxY0ZY+C3VtTG0VRFyevbUTk',
+  authToken: process.env.EBAY_AUTHTOKEN,
 
   params: {
     'OrderStatus': 'Completed',
@@ -496,8 +489,8 @@ ebay1.xmlRequest({
 });
 
   /*let ebay = new Ebay({
-    clientID: "EladPint-DSMHome-PRD-0820665a8-01939c18",
-    clientSecret: 'PRD-820665a8505f-4612-4733-8f5a-52eb',
+    clientID: process.env.APPID,
+    clientSecret: process.env.CERTID,
     body: {
         grant_type: "client_credentials",
         scope: "https://api.ebay.com/oauth/api_scope"
