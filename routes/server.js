@@ -1,17 +1,18 @@
-var express = require('express')
-  , routes = require('../routes')
-  , user = require('../routes/user')
-  , index = require('../routes/index')
-  , addLogs = require('../routes/addLogs')
-  , addSups = require('../routes/addSups')
-  , addItems = require('../routes/addItems')
-  , addOrders = require('../routes/addOrders')
-  , analytics = require('../routes/analytics')
-  , http = require('http')
-  , path = require('path');
-var app = express();
-var db = require('../db');
-
+const express = require('express')
+const routes = require('../routes')
+const user = require('../routes/user')
+const index = require('../routes/index')
+const addLogs = require('../routes/addLogs')
+const addSups = require('../routes/addSups')
+const addItems = require('../routes/addItems')
+const addOrders = require('../routes/addOrders')
+const analytics = require('../routes/analytics')
+const http = require('http')
+const path = require('path');
+const app = express();
+const db = require('../db');
+const multer  = require('multer')
+const upload = multer({ dest: 'public/uploads' })
 
 app.get('/', index.index);//call for main index page
 app.get('/signup', user.signup);//call for signup page
@@ -31,13 +32,13 @@ app.post('/home/suppliers/addsup', addSups.addsup);//call for addsup_page post
 app.get('/home/suppliers/searchsup', addSups.searchsup);//call for searchsup_page page 
 app.post('/home/suppliers/searchsup', addSups.searchsup);//call for searchsup post
 app.get('/home/suppliers/addItem', addItems.addItem);//call for item page 
-app.post('/home/suppliers/addItem', addItems.addItem);//call for item page post
+app.post('/home/suppliers/addItem', upload.single('excel'), addItems.addItem);//call for item page post
 app.get('/home/suppliers/addItemAuto', addItems.addItemAuto);//call for auto item page 
 app.post('/home/suppliers/addItemAuto', addItems.addItemAuto);//call for auto item page post
 app.get('/home/suppliers/addOrder', addOrders.addOrder);//call for orders_page page 
 app.post('/home/suppliers/addOrder', addOrders.addOrder);//call for products_page post
-app.get('/home/analitics', analytics.analytics);//call for analitics page 
-app.post('/home/analitics', analytics.analytics);//call for analitics post page 
+app.get('/home/analitics', analytics.analytics);//call for analytics page 
+app.post('/home/analitics', analytics.analytics);//call for analytics post page 
 
 module.exports = app;
 

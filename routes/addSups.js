@@ -162,9 +162,9 @@
               for(var i = 0; i < suppliersData.length; i++){
               var get = await getContactData()
               }
-              setTimeout(() => {
+              //setTimeout(() => {
                 resolve(get);
-              }, 4000);
+              //}, 4000);
               
             });
       }

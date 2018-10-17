@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <meta    http-equiv="Content-Type" content="text/html; charset=windows-1252">
-</head>
-<body>
-        <%- include sidebar %>
+<head>
+<%- include sidebar %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Items</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+</head>
 <style>
 .wrapper { 
     display: grid; 
@@ -202,14 +200,15 @@ h2{
 }
 
 .alignImg{
-    position:absolute;
+    display:inline-block;
+    position:absolute;;
     text-align:center;
     padding:20px;
 }
 
 .box {
     min-height: 360px;
-    width:300px;
+    width:310px;
     background:white;
     padding:1%;
     border: 1px solid black;
@@ -241,6 +240,7 @@ box-shadow: none;
 
 .product-image img {
 width: 80%;
+height: 200px;
 }
 
 .product-info {
@@ -251,8 +251,6 @@ text-align: left;
 font-size: 13px;
 font-family:Arial, Helvetica, sans-serif;
 }
-
-
 
 * {
 box-sizing: border-box;
@@ -295,17 +293,71 @@ color: black;
 font-size: 35px;
 cursor: pointer;
 }
-    </style>
 
+/*****************************************
+  upload button styles
+******************************************/
+.file-upload {
+	position: relative;
+	display: inline-block;
+    left:80%;
+}
 
+.file-upload__label {
+
+  padding: 1em 2em;
+  color: #fff;
+  background: green;
+  border-radius: .4em;
+  transition: background .3s;
+  font-size: 18px;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+.file-upload__label:hover {
+    cursor: pointer;
+    background: rgb(6, 83, 6);
+}
+
+    
+.file-upload__input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 1;
+    width:0;
+    height: 100%;
+    opacity: 0;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  position: fixed;
+  left: 52%;
+  top: 50%;
+}
+</style>
+<body>
 <div class="padding">
 <div class="header">
-    <h2><nav class="header"> + New Item</nav></h2>
+    <h2><nav class="header"> + New Item 
+        <form class="file-upload" action="/home/suppliers/addItem" method="POST" enctype="multipart/form-data">   
+            <label for="upload" class="file-upload__label"><i class="fa fa-file-excel-o" style="font-size:18px"></i> Excel </label>
+            <input id="upload" class="file-upload__input" type="file" name="excel" >
+        </form>
+        </nav>
+    </h2>
 </div>
-
     <div class="wrapper">
         <div class="card1">
-                <div class="NewItem">Upload Item</div><br>
+                <div class="NewItem">Upload Item </div><br>
                 <form id="addNewItem" action="/home/suppliers/addItem" method="POST">
                 <img id="NewItemImage" style="display: inline-block" src="/images/img-icon.png" alt="No Pic" width:"300px"="" height="270px">
                 <span class="alignImg">
@@ -366,22 +418,19 @@ cursor: pointer;
             </form>
         </div>
     </div>
-    
+    <div class="loader"></div>
     <div style="text-align:center"><h1 id="message"></h1></div>
-   
-
 
     <div class="header">
             <h2><nav class="header">Supplier items</nav></h2>
     </div>
 
+    <span style="text-align:center" id="createNewAccosiatedItem"></span>
 
-        <span style="text-align:center" id="createNewAccosiatedItem"></span>
-    
-        <div class="header">
-                <h2><nav class="header">Non associated items</nav></h2>
-        </div>
-        <span style="text-align:center" id="createNewItem"></span>
+    <div class="header">
+            <h2><nav class="header">Non associated items</nav></h2>
+    </div>
+    <span style="text-align:center" id="createNewItem"></span>
 
     </div>  
 
@@ -389,322 +438,365 @@ cursor: pointer;
 
 //-----------------------------------------------Image preview to item upload section----------------------------------------------------------------
 
-        function insertPic(){
-        var itemImg = document.getElementById("itemImg").value;
-        document.getElementById("NewItemImage").src = itemImg;
-        //document.getElementById("itemImg").value = '';
-        }
+function insertPic(){
+var itemImg = document.getElementById("itemImg").value;
+document.getElementById("NewItemImage").src = itemImg;
+//document.getElementById("itemImg").value = '';
+}
 
 //-----------------------------------------------Load Associated Items----------------------------------------------------------------
-            var itemListRes = JSON.parse('<%-JSON.stringify(answer.itemListRes)%>');
-            
-            var itemName = '';
-            var supplierName = '';
-            var storeItemLink = '';
-            var supItemLink = '';
-            var itemPic = '';
-            var category = '';
-            var itemPrice = '';
-            var data = '';
-            var supItemPrice = '';
-            var altSupplierName = '';
-            var altSupItemLink = '';
-            var altSupItemPrice = '';
-            //itemListRes[0].altSupItemLink = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
-            
-            for (var j = 0; j < itemListRes.length; j++) { 
-            if(itemListRes[j].supplierName2 == null)itemListRes[j].supplierName2 = 'Associate supplier';
-            if(itemListRes[j].supItemLink2 == null)itemListRes[j].supItemLink2 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
-            if(itemListRes[j].supItemPrice2 == null)itemListRes[j].supItemPrice2 = '';
-            }
+var itemListRes = JSON.parse('<%-JSON.stringify(answer.itemListRes)%>');
 
-            for (var j = 0; j < itemListRes.length; j++) { 
-            if(itemListRes[j].supplierName3 == null)itemListRes[j].supplierName3 = 'Associate supplier';
-            if(itemListRes[j].supItemLink3 == null)itemListRes[j].supItemLink3 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
-            if(itemListRes[j].supItemPrice3 == null)itemListRes[j].supItemPrice3 = '';
-            }
-            
+var itemName = '';
+var supplierName = '';
+var storeItemLink = '';
+var supItemLink = '';
+var itemPic = '';
+var category = '';
+var itemPrice = '';
+var data = '';
+var supItemPrice = '';
+//var altSupplierName = '';
+//var altSupItemLink = '';
+//var altSupItemPrice = '';
+//itemListRes[0].altSupItemLink = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
 
-            var i = ''
-            for (i = 0; i < itemListRes.length; i++) { 
-            data +=  '<div class="box"> \
-                            <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div> \
-                            <section class="products-a"> \
-                              <div class="product-card"> \
-                                <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div> \
-                                <div class="product-info"><span style="font-weight: bold">Name: </span>'+ itemListRes[i].itemName +'<br><br> \
-                                <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
-                                <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br> \
-                                <span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'<br><br> \
-                                <div style="text-align:center"> \
-                                </div> \
-                                <div class="row"> \
-                                    <div class="column" onclick='+"openTab("+[i]+"+'b1');"+' style="background:green;"> \
-                                    1st Sup \
-                                    </div> \
-                                    <div class="column" onclick='+"openTab("+[i]+"+'b2');"+' style="background:orange;"> \
-                                    2nd Sup \
-                                    </div> \
-                                    <div class="column" onclick='+"openTab("+[i]+"+'b3');"+' style="background:red;">\
-                                    3rd Sup \
-                                    </div> \
-                                </div> \
-                                <div id="'+[i]+'b1" class="containerTab" > \
-                                    <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
-                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
-                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$ \
-                                </div> \
-                                <div id="'+[i]+'b2" class="containerTab" style="display:none;"> \
-                                    <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName2 +'<br> \
-                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink2 +'" target="_blank">Go</a><br> \
-                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice2 +'$ \
-                                </div> \
-                                <div id="'+[i]+'b3" class="containerTab" style="display:none;"> \
-                                    <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
-                                    <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName3 +'<br> \
-                                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink3 +'" target="_blank">Go</a><br> \
-                                    <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice3 +'$</div> \
-                                </div> \
-                            </section> \
-                            </div> \
-                    </div>'
-            }
+for (var j = 0; j < itemListRes.length; j++) { 
+if(itemListRes[j].supplierName2 == null)itemListRes[j].supplierName2 = 'Associate supplier';
+if(itemListRes[j].supItemLink2 == null)itemListRes[j].supItemLink2 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
+if(itemListRes[j].supItemPrice2 == null)itemListRes[j].supItemPrice2 = '';
+}
 
-            function openTab(tabName) {
-            var i, x;
-            x = document.getElementsByClassName("containerTab");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            document.getElementById(tabName).style.display = "block";
-            }
+for (var j = 0; j < itemListRes.length; j++) { 
+if(itemListRes[j].supplierName3 == null)itemListRes[j].supplierName3 = 'Associate supplier';
+if(itemListRes[j].supItemLink3 == null)itemListRes[j].supItemLink3 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
+if(itemListRes[j].supItemPrice3 == null)itemListRes[j].supItemPrice3 = '';
+}
 
-            function make() {alert()}
-            document.getElementById("createNewAccosiatedItem").innerHTML = data;
+
+var i = ''
+for (i = 0; i < itemListRes.length; i++) { 
+data +=  '<div class="box"> \
+                <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div> \
+                <section class="products-a"> \
+                    <div class="product-card"> \
+                    <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div> \
+                    <div class="product-info"><span style="font-weight: bold">Name: </span>'+ itemListRes[i].itemName +'<br><br> \
+                    <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
+                    <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br> \
+                    <span style="font-weight: bold">price:</span> '+ itemListRes[i].itemPrice +'$<br><br> \
+                    <div style="text-align:center"> \
+                    </div> \
+                    <div class="row"> \
+                        <div class="column" onclick='+"openTab("+[i]+"+'b1');"+' style="background:green;"> \
+                        1st Sup \
+                        </div> \
+                        <div class="column" onclick='+"openTab("+[i]+"+'b2');"+' style="background:orange;"> \
+                        2nd Sup \
+                        </div> \
+                        <div class="column" onclick='+"openTab("+[i]+"+'b3');"+' style="background:red;">\
+                        3rd Sup \
+                        </div> \
+                    </div> \
+                    <div id="'+[i]+'b1" class="containerTab" > \
+                        <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
+                        <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName +'<br> \
+                        <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink +'" target="_blank">Go</a><br> \
+                        <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice +'$ \
+                    </div> \
+                    <div id="'+[i]+'b2" class="containerTab" style="display:none;"> \
+                        <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
+                        <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName2 +'<br> \
+                        <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink2 +'" target="_blank">Go</a><br> \
+                        <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice2 +'$ \
+                    </div> \
+                    <div id="'+[i]+'b3" class="containerTab" style="display:none;"> \
+                        <span onclick='+"this.parentElement.style.display='none'"+' class="closebtn">&times;</span> \
+                        <span style="font-weight: bold">Supplier name: </span>'+ itemListRes[i].supplierName3 +'<br> \
+                        <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].supItemLink3 +'" target="_blank">Go</a><br> \
+                        <span style="font-weight: bold">Price: </span>'+ itemListRes[i].supItemPrice3 +'$</div> \
+                    </div> \
+                </section> \
+                </div> \
+        </div>'
+}
+
+function openTab(tabName) {
+var i, x;
+x = document.getElementsByClassName("containerTab");
+for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+}
+document.getElementById(tabName).style.display = "block";
+}
+
+function make() {alert()}
+document.getElementById("createNewAccosiatedItem").innerHTML = data;
 
 //-----------------------------------------------Load Non Associated Items----------------------------------------------------------------
             
-            var itemListRes = JSON.parse('<%-JSON.stringify(answer.nitemListRes)%>');
-            
-            var itemName = '';
-            var supplierName = '';
-            var storeItemLink = '';
-            var supItemLink = '';
-            var itemPic = '';
-            var category = '';
-            var itemPrice = '';
-            var data = '';
+var itemListRes = JSON.parse('<%-JSON.stringify(answer.nitemListRes)%>');
 
-            var i = ''
-            for (i = 0; i < itemListRes.length; i++) { 
-            data += '<div class="box">\
-                        <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>\
-                        <section class="products">\
-                            <div class="product-card">\
-                                <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div>\
-                                <div class="product-info">\
-                                        <span style="font-weight: bold">Name: </span> '+ itemListRes[i].itemName +'<br><br>\
-                                        <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
-                                        <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br>\
-                                        <span style="font-weight: bold">Price: </span><span>'+ itemListRes[i].itemPrice + '$</span>\
-                                </div>\
-                            </div>\
-                        </section>\
-                    </div>'
-            }
-            function make(e) {alert()}
-            document.getElementById("createNewItem").innerHTML = data;
+var itemName = '';
+var supplierName = '';
+var storeItemLink = '';
+var supItemLink = '';
+var itemPic = '';
+var category = '';
+var itemPrice = '';
+var data = '';
+
+var i = ''
+for (i = 0; i < itemListRes.length; i++) { 
+data += '<div class="box">\
+            <div type="button" id="btn" style="float: right"><i class="fa fa-trash-o"></i></button></div>\
+            <section class="products">\
+                <div class="product-card">\
+                    <div class="product-image"><img src="'+ itemListRes[i].itemPic +'"></div>\
+                    <div class="product-info">\
+                            <span style="font-weight: bold">Name: </span> '+ itemListRes[i].itemName +'<br><br>\
+                            <span style="font-weight: bold">Category: </span>'+itemListRes[i].category+'<br> \
+                            <span style="font-weight: bold">Item link: </span><a href="'+ itemListRes[i].storeItemLink +'" target="_blank">Go</a><br>\
+                            <span style="font-weight: bold">Price: </span><span>'+ itemListRes[i].itemPrice + '$</span>\
+                    </div>\
+                </div>\
+            </section>\
+        </div>'
+}
+function make(e) {alert()}
+document.getElementById("createNewItem").innerHTML = data;
 
 //-----------------------------------------------Add New Item----------------------------------------------------------------
 
-            $('#addNewItem').submit(function(event){
-            event.preventDefault();
-            var post_url = $(this).attr("action");
-            var request_method = $(this).attr("method");
-            var form_data = $(this).serialize();
-                    
-            var addNewItem = $.ajax({
-                        url : post_url,
-                        type: request_method,
-                        data : form_data,
-                        });
-                        
-                        addNewItem.fail( function() {
-                        window.alert("Fail!");
-                        });
+$('#addNewItem').submit(function(event){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var addNewItem = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            addNewItem.fail( function() {
+            window.alert("Fail!");
+            });
 
-                        addNewItem.done( function(response) {
-                            if (response.redirect !== undefined && response.redirect) {
-                            window.location.href = response.redirect_url;
-                            }else{
-                                var delayInMilliseconds = 2000;
-                                
-                                setTimeout(function() {
-                                    location.reload();
-                                }, delayInMilliseconds);
-                                
-                                $("#message").html(response.message);
-                            }
-                        });
-             })
+            addNewItem.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
 
 //-----------------------------------------------Item Association To Suppliers----------------------------------------------------------------
 
-            $('#associateItem').submit(function(){
-            event.preventDefault();
-            var post_url = $(this).attr("action");
-            var request_method = $(this).attr("method");
-            var form_data = $(this).serialize();
-                    
-            var associateItem = $.ajax({
-                        url : post_url,
-                        type: request_method,
-                        data : form_data,
-                        });
-                        
-                        associateItem.fail( function() {
-                        window.alert("Fail!");
-                        });
+$('#associateItem').submit(function(){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var associateItem = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            associateItem.fail( function() {
+            window.alert("Fail!");
+            });
 
-                        associateItem.done( function(response) {
-                            if (response.redirect !== undefined && response.redirect) {
-                            window.location.href = response.redirect_url;
-                            }else{
-                                var delayInMilliseconds = 2000;
-                                
-                                setTimeout(function() {
-                                    location.reload();
-                                }, delayInMilliseconds);
-                                
-                                $("#message").html(response.message);
-                            }
-                        });
-             })
+            associateItem.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
 
 //-----------------------------------------------Add New Auto Item----------------------------------------------------------------
 
-            $('#addNewAutoItem').submit(function(event){
-            event.preventDefault();
-            var post_url = $(this).attr("action");
-            var request_method = $(this).attr("method");
-            var form_data = $(this).serialize();
-                    
-            var addNewAutoItem = $.ajax({
-                        url : post_url,
-                        type: request_method,
-                        data : form_data,
-                        });
-                        
-                        addNewAutoItem.fail( function() {
-                        window.alert("Fail!");
-                        });
+$('#addNewAutoItem').submit(function(event){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var addNewAutoItem = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            addNewAutoItem.fail( function() {
+            window.alert("Fail!");
+            });
 
-                        addNewAutoItem.done( function(response) {
-                            if (response.redirect !== undefined && response.redirect) {
-                            window.location.href = response.redirect_url;
-                            }else{
-                                var delayInMilliseconds = 5000;
-                                
-                                setTimeout(function() {
-                                    location.reload();
-                                }, delayInMilliseconds);
-                                
-                                $("#message").html(response.message);
-                            }
-                        });
-             })
+            addNewAutoItem.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
 
 //-----------------------------------------------Auto Item Association To Suppliers----------------------------------------------------------------
 
-            $('#associateAutoItem').submit(function(){
-            event.preventDefault();
-            var post_url = $(this).attr("action");
-            var request_method = $(this).attr("method");
-            var form_data = $(this).serialize();
-                    
-            var associateAutoItem = $.ajax({
-                        url : post_url,
-                        type: request_method,
-                        data : form_data,
-                        });
-                        
-                        associateAutoItem.fail( function() {
-                        window.alert("Fail!");
-                        });
+$('#associateAutoItem').submit(function(){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var associateAutoItem = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            associateAutoItem.fail( function() {
+            window.alert("Fail!");
+            });
 
-                        associateAutoItem.done( function(response) {
-                            if (response.redirect !== undefined && response.redirect) {
-                            window.location.href = response.redirect_url;
-                            }else{
-                                var delayInMilliseconds = 2000;
-                                
-                                setTimeout(function() {
-                                    location.reload();
-                                }, delayInMilliseconds);
-                                
-                                $("#message").html(response.message);
-                            }
-                        });
-             })
+            associateAutoItem.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
 
 //-----------------------------------------------Load Suppliers Options----------------------------------------------------------------
 
-            $('#supNameSelect').change(function(){
-            $('supNameForm').submit();
-            event.preventDefault();
-            var post_url = $(this).attr("action");
-            var request_method = $(this).attr("method");
-            var form_data = $(this).serialize();
+$('#supNameSelect').change(function(){
+$('supNameForm').submit();
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var loadStores = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            loadStores.fail( function() {
+            window.alert("Fail!");
+            });
+
+            loadStores.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var storeNumRes = response.storeNumRes;
+                    var selectStore = document.getElementById("storeNumSelect")
+                    selectStore.options.length = 0;
+                    for(index in storeNumRes) {
+                        selectStore.options[selectStore.options.length] = new Option(storeNumRes[index], storeNumRes[index]);
+
+                    var itemsNameRes = response.itemsNameRes;
+                    var selectItem = document.getElementById("itemNameSelect");
+                    selectItem.options.length = 0;
+                    for(index in itemsNameRes) {
+                        selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
+                    }
+
+                    }
+                }
+            
+            });
+    })
+
+var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+var select = document.getElementById("supNameSelect");
+for(index in supplierNameRes) {
+    select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
+    }
+
+var itemsNameResAuto = JSON.parse('<%-JSON.stringify(answer.itemsNameResAuto)%>');
+var selectItemAuto = document.getElementById("itemNameSelectAuto");
+for(index in itemsNameResAuto) {
+    selectItemAuto.options[selectItemAuto.options.length] = new Option(itemsNameResAuto[index], itemsNameResAuto[index]);
+}
+
+//-----------------------------------------------Load Item Using Excel----------------------------------------------------------------
+
+$('.file-upload__input').change(function(event){
+$('.file-upload').submit();
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var enctype_method = $(this).attr("enctype")
+var form_data = $(this).serialize();
+        
+var fileUpload = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            fileUpload.fail( function() {
+            window.alert("Fail!");
+            });
+
+            fileUpload.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
                     
-            var loadStores = $.ajax({
-                        url : post_url,
-                        type: request_method,
-                        data : form_data,
-                        });
-                        
-                        loadStores.fail( function() {
-                        window.alert("Fail!");
-                        });
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
+//-----------------------------------------------Loader js----------------------------------------------------------------
 
-                        loadStores.done( function(response) {
-                            if (response.redirect !== undefined && response.redirect) {
-                            window.location.href = response.redirect_url;
-                            }else{
-                                var storeNumRes = response.storeNumRes;
-                                var selectStore = document.getElementById("storeNumSelect")
-                                selectStore.options.length = 0;
-                                for(index in storeNumRes) {
-                                    selectStore.options[selectStore.options.length] = new Option(storeNumRes[index], storeNumRes[index]);
+$('.loader').hide();
+$( document ).ajaxStart(function() {
+    $( ".loader" ).show();
+});
 
-                                var itemsNameRes = response.itemsNameRes;
-                                var selectItem = document.getElementById("itemNameSelect");
-                                selectItem.options.length = 0;
-                                for(index in itemsNameRes) {
-                                    selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
-                                }
-
-                                }
-                            }
-                        
-                        });
-             })
-
-            var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
-            var select = document.getElementById("supNameSelect");
-            for(index in supplierNameRes) {
-                select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
-             }
-
-            var itemsNameResAuto = JSON.parse('<%-JSON.stringify(answer.itemsNameResAuto)%>');
-            var selectItemAuto = document.getElementById("itemNameSelectAuto");
-            for(index in itemsNameResAuto) {
-                selectItemAuto.options[selectItemAuto.options.length] = new Option(itemsNameResAuto[index], itemsNameResAuto[index]);
-            }
-
+$( document ).ajaxComplete(function() {
+    $( ".loader" ).hide();
+});
 
 </script>
-
-
-</body></html>
+</body>
+</html>
