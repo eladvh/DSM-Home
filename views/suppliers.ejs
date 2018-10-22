@@ -485,14 +485,14 @@ var addLog = $.ajax({
 
                 for (var i = 0; i < ordersListRes.length; i++) {
                 if(ordersListRes[i].statusOfOrder == 'Refund'){
-                itemName += ordersListRes[i].itemName + "<br><br>";
+                itemName += ordersListRes[i].itemName.split(' ', 6).join(' ') + "..." + "<br><br>";
                 itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
                 orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
                 qtySold += ordersListRes[i].qtySold + "<br><br>";
                 statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
                 trackNum += ordersListRes[i].trackNum + "<br><br>";
                 }else{
-                itemName += ordersListRes[i].itemName + "<br><br>";
+                itemName += ordersListRes[i].itemName.split(' ', 6).join(' ') + "..." + "<br><br>";
                 itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
                 orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
                 qtySold += ordersListRes[i].qtySold + "<br><br>";

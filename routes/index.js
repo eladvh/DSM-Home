@@ -114,6 +114,7 @@ exports.suppliers = function(req, res){
       return asyncFunc3();
     }).then(result3 => {
       answer.itemListRes = itemListRes;
+      console.log(itemListRes)
       return asyncFunc4();
     }).then(result4 => {
       answer.ordersListRes = ordersListRes;

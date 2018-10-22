@@ -33,7 +33,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
     border-radius:1px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     outline: 0;
-    background: #f2f2f2;
     width: 300px;
     border-color: 1px solid black;
     border-radius: 5px;
@@ -118,6 +117,30 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
 }
 
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  position: fixed;
+  left: 52%;
+  top: 60%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
     </style>
 
 <body>
@@ -140,7 +163,8 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
                 <select id="itemNameSelect" data-live-search="true" class="selectpicker" multiple="multiple" name="itemName">
                 </select>
             </td rowspan="3">
-            <td><input type="datetime-local" placeholder="Order Date" name="orderDate"/></td>
+            
+            <td><input type="datetime-local" class="form-control" placeholder="Order Date" name="orderDate"></td>
             <td id="insertInput"></td><br>
             <td><input id="Clear" type="reset" value="Clear" style="width:70px"/></td>
         </tr>
@@ -151,10 +175,14 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
     </form>
 
     <div style="text-align:center"><h1 id="message"></h1></div><br>
-
+    <div class="loader"></div>
 
     <h2><nav>Orders History</nav></h2><br>
-    <table id="logshistory">
+    <form id="loadOrdersForm" action="/home/suppliers/addOrder" method="POST">
+    <div style="text-align: center"><input id="loadOrders" type="submit" value="Load Orders"/></div>
+    <input type="hidden" name="loadOrders" value="start">
+    </form>
+    <table id="logshistory" border="1">
         <tr>
             <th>Supplier Name</th>
             <th>Item Name</th>
@@ -163,10 +191,14 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
             <th>Order/Refund Date</th>
             <th>Quantity sold</th>
             <th>Order Status</th>
-            <th>Shipped?</th>
             <th>Tracking Number</th>
         </tr>
         <tr>
+            <form id="associateSupForm" action="/home/suppliers/addOrder" method="POST">
+            <input type="hidden" name="orderNum">
+            <input type="hidden" name="associateSup">
+            <input type="hidden" name="itemName">
+            </form>
             <td id="supplierNameRecord"></td>
             <td id="itemNameRecord"></td>
             <td id="supItemPriceRecord"></td>
@@ -174,7 +206,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
             <td id="orderDateRecord"></td>
             <td id="qtySoldRecord"></td>
             <td id="statusOfOrderRecord"></td>
-            <td id="awShipRecord"></td>
             <td id="trackNumRecord"></td>
             <td id="addTrackNumRecord"></td>
             <td id="deleteRecord"></td>
@@ -263,318 +294,463 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
+
 //-----------------------------------------------Add New Order----------------------------------------------------------------
 
-        $('#addNewOrder').submit(function(event){
-        event.preventDefault();
-        var post_url = $(this).attr("action");
-        var request_method = $(this).attr("method");
-        var form_data = $(this).serialize();
-                
-        var addNewItem = $.ajax({
-                    url : post_url,
-                    type: request_method,
-                    data : form_data,
-                    });
-                    
-                    addNewItem.fail( function() {
-                    window.alert("Fail!");
-                    });
-
-                    addNewItem.done( function(response) {
-                        if (response.redirect !== undefined && response.redirect) {
-                        window.location.href = response.redirect_url;
-                        }else{
-                            var delayInMilliseconds = 2000;
-                            
-                            setTimeout(function() {
-                                location.reload();
-                            }, delayInMilliseconds);
-                            
-                            $("#message").html(response.message);
-                        }
-                    });
-            })
-//-----------------------------------------------Load orders details----------------------------------------------------------------
-$(document).ready(function(){
-        var ordersListRes = JSON.parse('<%-JSON.stringify(answer.ordersListRes)%>');
-        var TrakerInfo = JSON.parse('<%-JSON.stringify(answer.trakeInfo)%>');
-
-        var supplierName = '';
-        var itemName = '';
-        var itemPrice = '';
-        var supItemPrice = '';
-        var orderDate = '';
-        var qtySold = '';
-        var statusOfOrder = '';
-        var awShip = '';
-        var trackNum = '';
-        var addTrackNum = '';
-        var deleteOrder = '';
-        var refundOrder = '';
-        var j = -1;
-
-        for (var i = 0; i < ordersListRes.length; i++) {
-        if(ordersListRes[i].statusOfOrder == 'Refund'){
-        supplierName += ordersListRes[i].supplierName + "<br><br>";
-        itemName += ordersListRes[i].itemName + "<br><br>";
-        supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
-        itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
-        orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
-        qtySold += ordersListRes[i].qtySold + "<br><br>";
-        statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
-        awShip += ordersListRes[i].awShip + "<br><br>";
-        trackNum += ordersListRes[i].trackNum + "<br><br>";
-        addTrackNum += "<br><br>";
-        deleteOrder += "<br><br>";
-        refundOrder += "<br><br>";
-        }else{
-        supplierName += ordersListRes[i].supplierName + "<br><br>";
-        itemName += ordersListRes[i].itemName + "<br><br>";
-        supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
-        itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
-        orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
-        qtySold += ordersListRes[i].qtySold + "<br><br>";
-        statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
-        awShip += ordersListRes[i].awShip + "<br><br>";
-        if(ordersListRes[i].trackNum != null){
-            j++;
-            trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
-            //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
-            }else{
-            trackNum += ordersListRes[i].trackNum + "<br><br>";
-        }   
-        addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br style='line-height: 33px'>";
-        deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
-        refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br style='line-height: 33px'>";
-        }
-        }
+$('#addNewOrder').submit(function(event){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
         
-        document.getElementById("supplierNameRecord").innerHTML = supplierName;
-        document.getElementById("itemNameRecord").innerHTML = itemName;
-        document.getElementById("supItemPriceRecord").innerHTML = supItemPrice;
-        document.getElementById("itemPriceRecord").innerHTML = itemPrice;
-        document.getElementById("orderDateRecord").innerHTML = orderDate;
-        document.getElementById("qtySoldRecord").innerHTML = qtySold;
-        document.getElementById("statusOfOrderRecord").innerHTML = statusOfOrder;
-        document.getElementById("awShipRecord").innerHTML = awShip;
-        document.getElementById("trackNumRecord").innerHTML = trackNum;
-        document.getElementById("addTrackNumRecord").innerHTML = addTrackNum;
-        document.getElementById("deleteRecord").innerHTML = deleteOrder;
-        document.getElementById("refundRecord").innerHTML = refundOrder;
+var addNewItem = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            addNewItem.fail( function() {
+            window.alert("Fail!");
+            });
+
+            addNewItem.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
+//-----------------------------------------------Load orders details----------------------------------------------------------------
+function loadOrders(){
+    var ordersListRes = JSON.parse('<%-JSON.stringify(answer.ordersListRes)%>');
+    var TrakerInfo = JSON.parse('<%-JSON.stringify(answer.trakeInfo)%>');
+
+    var supplierName = '';
+    var itemName = '';
+    var itemPrice = '';
+    var supItemPrice = '';
+    var orderDate = '';
+    var qtySold = '';
+    var statusOfOrder = '';
+    var trackNum = '';
+    var addTrackNum = '';
+    var deleteOrder = '';
+    var refundOrder = '';
+    var sup = [];
+    var sup1 = '';
+    var sup2 = '';
+    var sup3 = '';
+    var j = -1;
+
+    for (var i = 0; i < ordersListRes.length; i++) {
+    if(ordersListRes[i].statusOfOrder == 'Refund'){
+        sup = ordersListRes[i].supplierName.split('|');
+        if(sup){
+            sup1 = sup[0];
+            sup2 = sup[1];
+            sup3 = sup[2];
+        }
+    if(!ordersListRes[i].supItemPrice){
+        supplierName +=  '<select data-id="associate'+[i]+'" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].itemName +'" data-target="#associateSupForm" style="width: 200px; text-align-last:center;">\
+                          <option disabled selected>Select supplier</option>\
+                          <option>'+sup1+'</option>\
+                          <option>'+sup2+'</option>\
+                          <option>'+sup3+'</option>\
+                          </select>\
+                          <br><br>'
+    }else{
+        
+        supplierName += `${ordersListRes[i].supplierName} (<a href=${ordersListRes[i].supItemLink} target="_blank">Order item</a>) <br><br>`;
+    }
+
+    itemName += ordersListRes[i].itemName.split(' ', 8).join(' ') + "..." + "<br><br>";
+    supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
+    itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
+    orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
+    qtySold += ordersListRes[i].qtySold + "<br><br>";
+    statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+    if(ordersListRes[i].trackNum != null){
+        j++;
+        trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+        //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+        }else{
+        trackNum += ordersListRes[i].trackNum + "<br><br>";
+    } 
+    addTrackNum += "<br><br>";
+    deleteOrder += "<br><br>";
+    refundOrder += "<br><br>";
+    /*supplierName += '<select><option disabled="disabled">choose</option></select><br><br>'
+    //supplierName += ordersListRes[i].supplierName + "<br><br>";
+    itemName +=  ordersListRes[i].itemName.split(' ', 8).join(' ') + "..." + "<br><br>";
+    supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
+    itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
+    orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
+    qtySold += ordersListRes[i].qtySold + "<br><br>";
+    statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+    trackNum += ordersListRes[i].trackNum + "<br><br>";
+    addTrackNum += "<br><br>";
+    deleteOrder += "<br><br>";
+    refundOrder += "<br><br>";*/
+    }else{
+        sup = ordersListRes[i].supplierName.split('|');
+        if(sup){
+            sup1 = sup[0];
+            sup2 = sup[1];
+            sup3 = sup[2];
+        }
+    if(!ordersListRes[i].supItemPrice){
+        supplierName +=  '<select data-id="associate'+[i]+'" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].itemName +'" data-target="#associateSupForm" style="width: 200px; text-align-last:center;">\
+                          <option disabled selected>Select supplier</option>\
+                          <option>'+sup1+'</option>\
+                          <option>'+sup2+'</option>\
+                          <option>'+sup3+'</option>\
+                          </select>\
+                          <br><br>'
+    }else{
+        
+        supplierName += `${ordersListRes[i].supplierName} (<a href=${ordersListRes[i].supItemLink} target="_blank">Order item</a>) <br><br>`;
+    }
+
+    itemName += ordersListRes[i].itemName.split(' ', 8).join(' ') + "..." + "<br><br>";
+    supItemPrice += ordersListRes[i].supItemPrice*ordersListRes[i].qtySold  + "<br><br>";
+    itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
+    orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
+    qtySold += ordersListRes[i].qtySold + "<br><br>";
+    statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+    if(ordersListRes[i].trackNum != null){
+        j++;
+        trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+        //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+        }else{
+        trackNum += ordersListRes[i].trackNum + "<br><br>";
+    }   
+    addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br style='line-height: 33px'>";
+    deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
+    refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br style='line-height: 33px'>";
+    }
+    }
+    
+    document.getElementById("supplierNameRecord").innerHTML = supplierName;
+    document.getElementById("itemNameRecord").innerHTML = itemName;
+    document.getElementById("supItemPriceRecord").innerHTML = supItemPrice;
+    document.getElementById("itemPriceRecord").innerHTML = itemPrice;
+    document.getElementById("orderDateRecord").innerHTML = orderDate;
+    document.getElementById("qtySoldRecord").innerHTML = qtySold;
+    document.getElementById("statusOfOrderRecord").innerHTML = statusOfOrder;
+    document.getElementById("trackNumRecord").innerHTML = trackNum;
+    document.getElementById("addTrackNumRecord").innerHTML = addTrackNum;
+    document.getElementById("deleteRecord").innerHTML = deleteOrder;
+    document.getElementById("refundRecord").innerHTML = refundOrder;
 
 
-        //triggered when modal is about to be shown
-        $('#myEditModal').on('show.bs.modal', function(e) {
+    $('#supplierNameRecord').change(function(e) {
+    var orderNum = $(e.target).data('value');
+    var itemName = $(e.target).data('value1');
+    if(itemName.includes("[")){
+    itemName = itemName.slice(0, itemName.lastIndexOf("["))
+    }
+    var supplierName = $(e.target).val()
+    $('input[name="orderNum"]').val(orderNum);
+    $('input[name="itemName"]').val(itemName);
+    $('input[name="associateSup"]').val(supplierName);
+    })
+    
 
-        //get data-id attribute of the clicked element
-        var orderNum = $(e.relatedTarget).data('value');
-
-        $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
-        });
-
-
-        $('#myDeleteModal').on('show.bs.modal', function(e) {
-
-        //get data-id attribute of the clicked element
-        var orderNum = $(e.relatedTarget).data('value');
-
-        $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
-        });
-
-
-        //triggered when modal is about to be shown
-        $('#myRefundModal').on('show.bs.modal', function(e) {
-
-
-        var currentdate = new Date(); 
-        var refundDate = currentdate.getFullYear() + "-"
-                + (currentdate.getMonth()+1)  + "-" 
-                + currentdate.getDate() + " "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
-
-        //get data-id attribute of the clicked element
-        var orderNum = $(e.relatedTarget).data('value');
-        var supplierName = $(e.relatedTarget).data('value1');
-        var itemName = $(e.relatedTarget).data('value2');
-        var itemPrice = $(e.relatedTarget).data('value3');
-        var qtySold = $(e.relatedTarget).data('value4');
-
-        $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
-        $(e.currentTarget).find('input[name="supplierName"]').val(supplierName);
-        $(e.currentTarget).find('input[name="itemName"]').val(itemName);
-        $(e.currentTarget).find('input[name="itemPrice"]').val(itemPrice);
-        $(e.currentTarget).find('input[name="qtySold"]').val(qtySold).attr("max",qtySold);
-        $(e.currentTarget).find('input[name="refundDate"]').val(refundDate);
-
-        $("[type='number']").keypress(function (evt) {
-            evt.preventDefault();
-        });
-
-
-        });
+    //triggered when modal is about to be shown
+    $('#myEditModal').on('show.bs.modal', function(e) {
+    //get data-id attribute of the clicked element
+    var orderNum = $(e.relatedTarget).data('value');
+    $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
     });
+
+
+    $('#myDeleteModal').on('show.bs.modal', function(e) {
+
+    //get data-id attribute of the clicked element
+    var orderNum = $(e.relatedTarget).data('value');
+
+    $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
+    });
+
+
+    //triggered when modal is about to be shown
+    $('#myRefundModal').on('show.bs.modal', function(e) {
+
+
+    var currentdate = new Date(); 
+    var refundDate = currentdate.getFullYear() + "-"
+            + (currentdate.getMonth()+1)  + "-" 
+            + currentdate.getDate() + " "  
+            + currentdate.getHours() + ":"  
+            + currentdate.getMinutes() + ":" 
+            + currentdate.getSeconds();
+
+    //get data-id attribute of the clicked element
+    var orderNum = $(e.relatedTarget).data('value');
+    var supplierName = $(e.relatedTarget).data('value1');
+    var itemName = $(e.relatedTarget).data('value2');
+    var itemPrice = $(e.relatedTarget).data('value3');
+    var qtySold = $(e.relatedTarget).data('value4');
+
+    $(e.currentTarget).find('input[name="orderNum"]').val(orderNum);
+    $(e.currentTarget).find('input[name="supplierName"]').val(supplierName);
+    $(e.currentTarget).find('input[name="itemName"]').val(itemName);
+    $(e.currentTarget).find('input[name="itemPrice"]').val(itemPrice);
+    $(e.currentTarget).find('input[name="qtySold"]').val(qtySold).attr("max",qtySold);
+    $(e.currentTarget).find('input[name="refundDate"]').val(refundDate);
+
+    $("[type='number']").keypress(function (evt) {
+        evt.preventDefault();
+    });
+
+
+    });
+}
+
+loadOrders();
+    
 //-----------------------------------------------Load item names----------------------------------------------------------------
 
-        $('#supNameSelect').change(function(){
-        $('supNameForm').submit();
-        event.preventDefault();
-        var post_url = $(this).attr("action");
-        var request_method = $(this).attr("method");
-        var form_data = $(this).serialize();
-        //var itemsNameResNew = [];
-        //var supplierOpt = [];
-        var loadItems = $.ajax({
-                    url : post_url,
-                    type: request_method,
-                    data : form_data,
-                    });
+$('#supNameSelect').change(function(){
+$('supNameForm').submit();
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+//var itemsNameResNew = [];
+//var supplierOpt = [];
+var loadItems = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            loadItems.fail( function() {
+            window.alert("Fail!");
+            });
+
+            loadItems.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    //var optgroup = '';
+                    //var removed = false;
+                    var itemsNameRes = response.itemsNameRes;
+                    /*for(var x = 0; x < supplierOpt.length; x++ ){
+                    if(supplierOpt[x] == response.last_element){
+                        supplierOpt.splice(x, 1);
+                        removed = true;
+                    }
+                    }
+
+                    if(removed == false){
+                        supplierOpt = response.last_element;
+                        itemsNameResNew = response.itemsNameRes;
+                    }*/
+
+                    var selectItem = document.getElementById("itemNameSelect");
+                    selectItem.options.length = 0;
+
+                    /*var createItem = document.createElement("OPTGROUP");
+                    createItem.setAttribute("label", response.last_element);
+                    createItem.appendChild(selectItem.options[selectItem.options.length])
+                    selectItem.insertBefore(createItem, selectItem.options[selectItem.options.length]);*/
+
+                    optgroup = "<optgroup label='" + response.last_element + "'>" + response.last_element + "</optgroup>"
+                    $("#itemNameSelect").append(optgroup);
+                    for(index in itemsNameRes) {
+                        selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
+                        $("#itemNameSelect").selectpicker("refresh");
+                    }
                     
-                    loadItems.fail( function() {
-                    window.alert("Fail!");
+                    
+                    $("#itemNameSelect").change(function(e) {
+                        var count = $("#itemNameSelect :selected").length;
+                        $('#insertInput').append('<input type="number" placeholder="How many were sold from item '+count+'?" name="qtySold" value="qtySold'+count+'" min="1" />');
+                        e.stopImmediatePropagation();
+                        //$('<input type="number" placeholder="Quantity sold" name="qtySold" min="1" />').appendTo('#insertInput');
                     });
-
-                    loadItems.done( function(response) {
-                        if (response.redirect !== undefined && response.redirect) {
-                        window.location.href = response.redirect_url;
-                        }else{
-                            //var optgroup = '';
-                            //var removed = false;
-                            var itemsNameRes = response.itemsNameRes;
-                            /*for(var x = 0; x < supplierOpt.length; x++ ){
-                            if(supplierOpt[x] == response.last_element){
-                                supplierOpt.splice(x, 1);
-                                removed = true;
-                            }
-                            }
-
-                            if(removed == false){
-                                supplierOpt = response.last_element;
-                                itemsNameResNew = response.itemsNameRes;
-                            }*/
-
-                            var selectItem = document.getElementById("itemNameSelect");
-                            selectItem.options.length = 0;
-
-                            /*var createItem = document.createElement("OPTGROUP");
-                            createItem.setAttribute("label", response.last_element);
-                            createItem.appendChild(selectItem.options[selectItem.options.length])
-                            selectItem.insertBefore(createItem, selectItem.options[selectItem.options.length]);*/
-
-                            optgroup = "<optgroup label='" + response.last_element + "'>" + response.last_element + "</optgroup>"
-                            $("#itemNameSelect").append(optgroup);
-                            for(index in itemsNameRes) {
-                                selectItem.options[selectItem.options.length] = new Option(itemsNameRes[index], itemsNameRes[index]);
-                                $("#itemNameSelect").selectpicker("refresh");
-                            }
-                            
-                            
-                            $("#itemNameSelect").change(function(e) {
-                                var count = $("#itemNameSelect :selected").length;
-                                $('#insertInput').append('<input type="number" placeholder="How many were sold from item '+count+'?" name="qtySold" value="qtySold'+count+'" min="1" />');
-                                e.stopImmediatePropagation();
-                                //$('<input type="number" placeholder="Quantity sold" name="qtySold" min="1" />').appendTo('#insertInput');
-                            });
-                        }
-                    });
-            })
+                }
+            });
+    })
 
 //-----------------------------------------------Load supplier names----------------------------------------------------------------
-        var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
-        var select = document.getElementById("supNameSelect");
-        for(index in supplierNameRes) {
-            select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
-            }
+var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+var select = document.getElementById("supNameSelect");
+for(index in supplierNameRes) {
+    select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
+    }
 
 
 //-----------------------------------------------Edit Tracking Number----------------------------------------------------------------
 
-        $('#editTrackForm').submit(function(event){
-            event.preventDefault();
-        var post_url = $(this).attr("action");
-        var request_method = $(this).attr("method");
-        var form_data = $(this).serialize();
-                
-        var editTrack = $.ajax({
-                    url : post_url,
-                    type: request_method,
-                    data : form_data,
-                    });
-                    
-                    editTrack.fail( function() {
-                    window.alert("Fail!");
-                    });
+$('#editTrackForm').submit(function(event){
+    event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var editTrack = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            editTrack.fail( function() {
+            window.alert("Fail!");
+            });
 
-                    editTrack.done( function(response) {
-                        if (response.redirect !== undefined && response.redirect) {
-                        window.location.href = response.redirect_url;
-                        }else{
-                            var delayInMilliseconds = 2000;
-                            setTimeout(function() {
-                                location.reload();
-                            }, delayInMilliseconds);
-                            $('#myEditModal').modal('hide');
-                        }
-                    });
-            })
+            editTrack.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    $('#myEditModal').modal('hide');
+                }
+            });
+    })
 //-----------------------------------------------Delete Record----------------------------------------------------------------
 
-        $('#deleteForm').submit(function(event){
-            event.preventDefault();
-        var post_url = $(this).attr("action");
-        var request_method = $(this).attr("method");
-        var form_data = $(this).serialize();
-                
-        var deleteRecord = $.ajax({
-                    url : post_url,
-                    type: request_method,
-                    data : form_data,
-                    });
-                    
-                    deleteRecord.fail( function() {
-                    window.alert("Fail!");
-                    });
+$('#deleteForm').submit(function(event){
+    event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var deleteRecord = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            deleteRecord.fail( function() {
+            window.alert("Fail!");
+            });
 
-                    deleteRecord.done( function(response) {
-                        if (response.redirect !== undefined && response.redirect) {
-                        window.location.href = response.redirect_url;
-                        }else{
-                            location.reload();
-                            $('#myDeleteModal').modal('hide');
-                        }
-                    });
-            })
+            deleteRecord.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    location.reload();
+                    $('#myDeleteModal').modal('hide');
+                }
+            });
+    })
 
 //-----------------------------------------------Delete Record----------------------------------------------------------------
 
-        $('#refundForm').submit(function(event){
-            event.preventDefault();
-        var post_url = $(this).attr("action");
-        var request_method = $(this).attr("method");
-        var form_data = $(this).serialize();
-                
-        var refundRecord = $.ajax({
-                    url : post_url,
-                    type: request_method,
-                    data : form_data,
-                    });
-                    
-                    refundRecord.fail( function() {
-                    window.alert("Fail!");
-                    });
+$('#refundForm').submit(function(event){
+    event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var refundRecord = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            refundRecord.fail( function() {
+            window.alert("Fail!");
+            });
 
-                    refundRecord.done( function(response) {
-                        if (response.redirect !== undefined && response.redirect) {
-                        window.location.href = response.redirect_url;
-                        }else{
-                            location.reload();
-                            $('#myRefundModal').modal('hide');
-                        }
-                    });
-            })
+            refundRecord.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    location.reload();
+                    $('#myRefundModal').modal('hide');
+                }
+            });
+    })
+
+//-----------------------------------------------Get Orders----------------------------------------------------------------
+$('#loadOrdersForm').submit(function(event){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var loadOrders = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            loadOrders.fail( function() {
+            window.alert("Fail!");
+            });
+
+            loadOrders.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
+
+//-----------------------------------------------Loader code----------------------------------------------------------------
+
+$('.loader').hide();
+$( document ).ajaxStart(function() {
+    $( ".loader" ).show();
+});
+
+$( document ).ajaxComplete(function() {
+$( ".loader" ).hide();
+});
+
+//-----------------------------------------------Associate Supplier To Item----------------------------------------------------------------
+$('#supplierNameRecord').change(function(event){
+$('#associateSupForm').submit();
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var associateSup = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            associateSup.fail( function($xhr) {
+            window.alert("Fail!");
+            });
+
+            associateSup.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+    })
 
     </script>
 
