@@ -345,6 +345,45 @@ cursor: pointer;
   top: 50%;
 }
 
+#callGetData {
+    border: none;
+    border-radius: 8px;
+    outline: 0;
+    color: white;
+    background-color: darkorange;
+    cursor: pointer;
+    width:200px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 4px darkgray; 
+}
+
+#callGetData:hover {
+    opacity: 0.7;
+}
+
+.alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
 </style>
 <body>
 <div class="padding">
@@ -357,7 +396,7 @@ cursor: pointer;
         </nav>
     </h2>
 </div>
-<form id='getData' style="text-align: center" action="/home/suppliers/addItem" method="POST"><input id="sub" type="submit" name="data" value="Get updated data"></form>
+<form id="getData" style="text-align: center" action="/home/suppliers/addItem" method="POST"><input id="callGetData" type="submit" name="itemsData" value="Get updated data"></form>
     <div class="wrapper">
         <div class="card1">
                 <div class="NewItem">Upload Item </div><br>
@@ -423,7 +462,7 @@ cursor: pointer;
     </div>
     <div class="loader"></div>
     <div style="text-align:center"><h1 id="message"></h1></div>
-
+    <div id="actionRequired"></div>
     <div class="header">
             <h2><nav class="header">Supplier items</nav></h2>
     </div>
@@ -568,7 +607,18 @@ data += '<div class="box">\
 }
 function make(e) {alert()}
 document.getElementById("createNewItem").innerHTML = data;
+//-----------------------------------------------Load Alerts----------------------------------------------------------------
+var alerts = JSON.parse('<%-JSON.stringify(answer.notificationArr)%>');
+//alert(alerts.length)
+alertArr = [];
+for(x = 0; x < alerts.length; x++){
+    alertArr += '<div class="alert"> \
+            <span class="closebtn" onclick="this.parentElement.style.display=`none`;">&times;</span> \
+            <strong>ACTION REQUIRED! - </strong> '+ alerts[x] + ' - EDIT ITEM PRICE ASAP\
+            </div><br>'
+}
 
+document.getElementById("actionRequired").innerHTML = alertArr;
 //-----------------------------------------------Add New Item----------------------------------------------------------------
 
 $('#addNewItem').submit(function(event){
@@ -799,6 +849,43 @@ $( document ).ajaxStart(function() {
 $( document ).ajaxComplete(function() {
     $( ".loader" ).hide();
 });
+
+//-----------------------------------------------Load Item Using Excel----------------------------------------------------------------
+
+$('#callGetData').click(function(event){
+$('#getData').submit()
+    //event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var getData = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            getData.fail( function() {
+            window.alert("Fail!");
+            });
+
+            getData.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+
+                    var delayInMilliseconds = 2000;
+                    
+                    setTimeout(function() {
+                        location.reload();
+                    }, delayInMilliseconds);
+                    
+                    $("#message").html(response.message);
+                }
+            });
+            //event.preventDefault();
+    })
+
 
 </script>
 </body>

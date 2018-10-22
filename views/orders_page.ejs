@@ -379,7 +379,8 @@ function loadOrders(){
     statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
     if(ordersListRes[i].trackNum != null){
         j++;
-        trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+        trackNum += `<a href="https://global.cainiao.com/detail.htm?mailNoList=${ordersListRes[i].trackNum}" target="_blank">${ordersListRes[i].trackNum}</a><br><br>`
+        //trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
         //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
         }else{
         trackNum += ordersListRes[i].trackNum + "<br><br>";
@@ -427,7 +428,7 @@ function loadOrders(){
     statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
     if(ordersListRes[i].trackNum != null){
         j++;
-        trackNum += '<a href="https://t.17track.net/en#nums='+ ordersListRes[i].trackNum +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
+        trackNum += `<a href="https://global.cainiao.com/detail.htm?mailNoList=${ordersListRes[i].trackNum}" target="_blank">${ordersListRes[i].trackNum}</a><br><br>`
         //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
         }else{
         trackNum += ordersListRes[i].trackNum + "<br><br>";

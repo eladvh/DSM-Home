@@ -21,7 +21,8 @@ var itemsNameRes = [];
 var itemsNameResAuto = [];
 var supplierNameRes = [];
 var storeNumRes = [];
-var answer = {sendName, message, supplierNameRes, storeNumRes, nitemListRes, itemsNameRes, itemsNameResAuto, itemListRes};
+var notificationArr = []
+var answer = {sendName, message, supplierNameRes, storeNumRes, nitemListRes, itemsNameRes, itemsNameResAuto, itemListRes, notificationArr};
 
 var userId = req.session.userId;
 if(userId == null){
@@ -41,7 +42,9 @@ if(userId == null){
       var supItemPrice = post.supItemPrice;
       var eBayItemNumberAuto = post.eBayItemNumberAuto;
       var aliexpressItemNumberAuto = post.aliexpressItemNumberAuto;
+      var itemsData = post.itemsData;
       var excel = req.file;
+
       console.log(post);
       function asyncFunc() {
         return new Promise(
@@ -547,16 +550,186 @@ if(userId == null){
 function asyncFunc8() {
   return new Promise(
     function (resolve, reject) { 
-      console.log('Get Item Details1');
-      db.query("SELECT itemName FROM `tblItems` ORDER BY itemCode DESC", function(err, results, fields)
-      {
-           if(results.length){
-          for(var i = 0; i<results.length; i++ ){     
-                    itemsNameRes.push(results[i].itemName);
+
+      function getUserItemsList() {
+        return new Promise(resolve => {
+          let ebayItemsArr = [];
+          db.query("SELECT itemCode FROM `tblitems`", function(err, results) {
+          if(results.length){
+            for(var i = 0;i < results.length; i++){
+              ebayItemsArr.push(results[i].itemCode)
+            }
+          }
+          resolve(ebayItemsArr);
+        })
+      })
+    }
+
+    function getSupItemsList() {
+      return new Promise(resolve => {
+        let aliexpressItemsArr = [];
+        db.query("SELECT supItemCode FROM `tblsupplieritem`", function(err, results) {
+        if(results.length){
+          for(var i = 0;i < results.length; i++){
+            aliexpressItemsArr.push(results[i].supItemCode)
+          }
+        }
+        resolve(aliexpressItemsArr);
+      })
+    })
+  }
+
+
+function getItemsFromEbay(eBayItemNumberAuto) {
+  return new Promise(resolve => {
+    if(eBayItemNumberAuto){
+    db.query("SELECT * FROM `tblitems` WHERE itemCode = '"+eBayItemNumberAuto+"'", function(err, results) {
+      if(results.length){
+        var titleDB = results[0].itemName
+        var imageUrlDB = results[0].itemPic
+        var categoryPathDB = results[0].category
+        var valueDB = results[0].itemPrice
+          ebay.xmlRequest({
+          'serviceName': 'Shopping',
+          'opType': 'GetSingleItem',
+          'appId': process.env.APPID,
+          
+          params: {
+            'ItemID': eBayItemNumberAuto
+          }
+        },
+          function(error, data) {
+            if(!error){
+              var title = data.Item.Title.replace(/['"]/g,'');
+            if(data.Item.PictureURL.constructor === Array){
+              var imageUrl = data.Item.PictureURL[0];
+            }else{
+              var imageUrl = data.Item.PictureURL;
+            }
+            var categoryPath = data.Item.PrimaryCategoryName.split(':').slice(-1)[0];
+            var value = data.Item.ConvertedCurrentPrice.amount;
+            if(titleDB != title || imageUrlDB != imageUrl || categoryPathDB != categoryPath || valueDB != value){
+            var sql = "update tblItems SET itemName = ?, itemPic = ?,category = ?,itemPrice = ? WHERE itemCode = ?";
+            db.query(sql, [title, imageUrl, categoryPath, value, eBayItemNumberAuto], function(err, result) {
+              if(err){
+                console.log(`${eBayItemNumberAuto} - Item Update Failed`);
+              }else{
+                var sql = "update tblsupplieritem SET itemName = ? WHERE itemName = ?";
+                db.query(sql, [title, titleDB], function(err, result) {
+                console.log(`${eBayItemNumberAuto} - Item Update Success`);
+                })
               }
-           }
-           resolve(itemsNameRes);
+            })
+            }else{
+              console.log('No update')
+            }
+            }
+            })
+
+      }
+    })
+  }
+  resolve();
+  });
+}
+
+function getItemsFromAliexpress(aliexpressItemNumberAuto) {
+  return new Promise(resolve => {
+    if(aliexpressItemNumberAuto){
+      db.query("SELECT * FROM `tblsupplieritem` WHERE supItemCode = '"+aliexpressItemNumberAuto+"'", function(err, results) {
+        if(results.length){
+          var priceDB = results[0].supItemPrice
+      AliexScrape(aliexpressItemNumberAuto)
+      .then(async response => {
+        var obj = JSON.parse(response);
+        var price = obj.variations[0].pricing;
+        if(priceDB != price){
+          var sql = "update tblsupplieritem SET supItemPrice = ? WHERE supItemCode = ?";
+            db.query(sql, [price, aliexpressItemNumberAuto], function(err, result) {
+              if(err){
+                console.log(`${aliexpressItemNumberAuto} - Item Update Failed`);
+              }else{
+                console.log(`${aliexpressItemNumberAuto} - Item Update Success`);
+              }
+            })
+          }else{
+            console.log('No association update')
+          }
+        }).catch(error => console.log('Item Link Broken - Item Update Failed'));
+      }
+    })
+    }
+    resolve();
+  });
+}
+
+/*function checkDiff() {
+  return new Promise(resolve => {
+    console.log('check differnce');
+    let itemPrice ='';
+    let supItemPrice = '';
+    let supItemPrice2 = '';
+    let supItemPrice3 = '';
+    db.query("CALL Get_Associated_Items_Details", function(err, results) {
+      if(results[0].length){
+        for(var i = 0; i < results[0].length; i++){
+          itemPrice = results[0][i].itemPrice;
+          supItemPrice = results[0][i].supItemPrice;
+          supItemPrice2 = results[0][i].supItemPrice2;
+          supItemPrice3 = results[0][i].supItemPrice3;
+          if(itemPrice - supItemPrice < supItemPrice * 0.4){
+            console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName}`)
+            notificationArr.push(results[0][i].itemName)
+          }
+          if(supItemPrice2){
+            if(itemPrice - supItemPrice2 < supItemPrice2 * 0.4){
+              console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName2}`)
+              notificationArr.push(results[0][i].itemName)
+            }
+          }
+          if(supItemPrice3){
+            if(itemPrice - supItemPrice3 < supItemPrice3 * 0.4){
+              console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName3}`)
+              notificationArr.push(results[0][i].itemName)
+            }
+          }
+        }
+      }
+    })
+    resolve(notificationArr);
+})
+}*/
+
+function finishFunc(x){
+  return new Promise(resolve => {
+  //console.log('complete!')
+  setTimeout(() => {
+    console.log(x)
+    answer.message = 'Update Items Data Was Successful!'
+    resolve(message)
+  }, (x*600)+2000);
+  })
+}
+      
+      async function addAsync() {
+        let ebayItemsArr = await getUserItemsList()
+        let aliexpressItemsArr = await getSupItemsList()
+        for(var i = 0; i < ebayItemsArr.length; i++){
+          await getItemsFromEbay(ebayItemsArr[i])
+        }
+        for(var j = 0; j < aliexpressItemsArr.length; j++){
+          await getItemsFromAliexpress(aliexpressItemsArr[j])
+        }
+        //notificationArr = await checkDiff()
+        
+        await finishFunc(ebayItemsArr.length, notificationArr)
+      }
+      
+      
+      addAsync().then(() => {
+        console.log('done');
       });
+
 })
 }
 
@@ -614,7 +787,8 @@ function asyncFunc8() {
       function callGetData(){
         asyncFunc8()
         .then(result => {
-          res.JSON(answer);
+          console.log(answer.notificationArr)
+          res.send(answer);
         })
         .catch(error => {});
       }
@@ -626,7 +800,7 @@ if(itemName && supplierName)callInsertSupFunc();
 if(eBayItemNumberAuto)callAutoInsertFunc();
 if(aliexpressItemNumberAuto && itemName)callAutoInsertSupFunc();
 if(excel)callInsertExcelRows();
-if(data)callGetData();
+if(itemsData)callGetData();
 
     }else{
   
@@ -693,6 +867,43 @@ if(data)callGetData();
             });
           });
     }
+
+    function asyncFunc5() {
+      return new Promise(resolve => {
+        console.log('check differnce');
+        let itemPrice ='';
+        let supItemPrice = '';
+        let supItemPrice2 = '';
+        let supItemPrice3 = '';
+        db.query("CALL Get_Associated_Items_Details", function(err, results) {
+          if(results[0].length){
+            for(var i = 0; i < results[0].length; i++){
+              itemPrice = results[0][i].itemPrice;
+              supItemPrice = results[0][i].supItemPrice;
+              supItemPrice2 = results[0][i].supItemPrice2;
+              supItemPrice3 = results[0][i].supItemPrice3;
+              if(itemPrice - supItemPrice < supItemPrice * 0.4){
+                console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName}`)
+                notificationArr.push(results[0][i].itemName)
+              }
+              if(supItemPrice2){
+                if(itemPrice - supItemPrice2 < supItemPrice2 * 0.4){
+                  console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName2}`)
+                  notificationArr.push(results[0][i].itemName)
+                }
+              }
+              if(supItemPrice3){
+                if(itemPrice - supItemPrice3 < supItemPrice3 * 0.4){
+                  console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName3}`)
+                  notificationArr.push(results[0][i].itemName)
+                }
+              }
+            }
+          }
+        })
+        resolve(notificationArr);
+    })
+    }
     
       function main() {
         asyncFunc()
@@ -710,7 +921,15 @@ if(data)callGetData();
         })
         .then(result4 => {
           answer.supplierNameRes = supplierNameRes;
-          res.render('item_page',{answer:answer});
+          return asyncFunc5();
+        })
+        .then(result5 => {
+          answer.notificationArr = notificationArr;
+
+          setTimeout(() => {
+            console.log(notificationArr)
+            res.render('item_page',{answer:answer});
+          }, 1000);
         })
         .catch(error => {});
       }
