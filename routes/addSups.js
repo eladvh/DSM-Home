@@ -139,7 +139,7 @@
             });
       }
     
-      function asyncFunc2() {
+      /*function asyncFunc2() {
         return new Promise(
            async function (resolve, reject) {
               console.log('get_contact_data');
@@ -167,21 +167,33 @@
               //}, 4000);
               
             });
-      }
+      }*/
     
 
+      function main() {
+        asyncFunc()
+        .then(result => {
+          answer.suppliersListRes = suppliersListRes;
+          res.render('addsup_page',{answer:answer});
+        })
+        .catch(error => {});
+      }
 
       function main() {
         asyncFunc()
         .then(result => {
           answer.suppliersData = suppliersData;
+          res.send(answer);
+        })
+        .catch(error => {});
+      }
+        /*}).then(result2 => {
           return asyncFunc2();
-        }).then(result2 => {
           answer.contactData = contactData;
           console.log(contactData);
           res.send(answer);
-        }).catch(error => {});
-      }
+        }).catch(error => {});*/
+
       main();
 
     }else{
