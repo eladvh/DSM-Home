@@ -42,7 +42,7 @@
     "start": "node app.js"
   },
   "repository": {
-    "type": "git",
+    "type": "./bin/www",
     "url": "git+https://github.com/eladvh/DSM-Home.git"
   },
   "author": "eladp",
