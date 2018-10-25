@@ -12,11 +12,11 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 app.listen(port,function(){
-  console.log('listening on port 5000 server working')
+  console.log('listening on port 3000 server working')
 });
 
-var port = normalizePort(process.env.PORT || '5000');
-app.set('port', port, app.get('env'));
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
 /**
  * Create HTTP server.
