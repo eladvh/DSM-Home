@@ -127,14 +127,14 @@
               console.log('get_aliexpress_data');
                 await AliExpressSpider.Search({
                 keyword: search,
-                page: 2
+                page: 3
         
               }).then(data => {
                   for(var i = 0; i < qty ; i++){
                     suppliersData.push(data.list[i].store);
                     console.log('Item data: ', data.list[i].store);
                   }
-              })
+              }).catch(error => {console.log('error')});
               resolve(suppliersData);
             });
       }
