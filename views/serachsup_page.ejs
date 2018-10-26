@@ -135,16 +135,15 @@ table#logshistory th {
                                 if (response.redirect !== undefined && response.redirect) {
                                 window.location.href = response.redirect_url;
                                 }else{
-    
+
                                     var suppliersData = response.suppliersData;
-                
                                     var supplierName = '';
                                     var storeLink = '';
                                     var i = '';
     
                                     for (i = 0; i < suppliersData.length; i++) { 
-                                    supplierName += suppliersData[i].name + "<br><br>";
-                                    storeLink +='<a href="'+ suppliersData[i].url +'" target="_blank">Go To Store</a>' + "<br><br>";
+                                    supplierName += suppliersData[i].store.name + "<br><br>";
+                                    storeLink +='<a href="'+ suppliersData[i].store.url +'" target="_blank">Go To Store</a>' + "<br><br>";
                                     }
                                     
                                     document.getElementById("supplierNameRecord").innerHTML = supplierName;

@@ -131,8 +131,8 @@
         
               }).then(data => {
                   for(var i = 0; i < qty ; i++){
-                    suppliersData.push(data.list[i].store);
-                    console.log('Item data: ', data.list[i].store);
+                    suppliersData.push(data.list[i]);
+                    //console.log('Item data: ', data.list[i]);
                   }
               }).catch(error => {console.log('error' + error)});
               resolve(suppliersData);
@@ -185,9 +185,10 @@
         asyncFunc()
         .then(result => {
           answer.suppliersData = suppliersData;
-          setTimeout(() => {
+          //setTimeout(() => {
+            console.log(answer.suppliersData)
           res.send(answer);
-          }, 2000);
+          //}, 2000);
         })
         .catch(error => {});
       }
