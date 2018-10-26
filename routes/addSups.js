@@ -174,7 +174,9 @@
         asyncFunc()
         .then(result => {
           answer.suppliersListRes = suppliersListRes;
-          res.render('addsup_page',{answer:answer});
+          setTimeout(() => {
+            res.render('addsup_page',{answer:answer});
+          }, 2000);
         })
         .catch(error => {});
       }
