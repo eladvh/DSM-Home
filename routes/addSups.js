@@ -185,7 +185,9 @@
         asyncFunc()
         .then(result => {
           answer.suppliersData = suppliersData;
+          setTimeout(() => {
           res.send(answer);
+          }, 2000);
         })
         .catch(error => {});
       }
