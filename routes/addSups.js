@@ -127,7 +127,7 @@
               console.log('get_aliexpress_data');
                 await AliExpressSpider.Search({
                 keyword: search,
-                page: 3
+                page: 2
         
               }).then(data => {
                   for(var i = 0; i < qty ; i++){
