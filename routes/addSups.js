@@ -170,7 +170,7 @@
       }*/
     
 
-      function main() {
+      /*function main() {
         asyncFunc()
         .then(result => {
           answer.suppliersListRes = suppliersListRes;
@@ -179,7 +179,7 @@
           }, 2000);
         })
         .catch(error => {});
-      }
+      }*/
 
       function main() {
         asyncFunc()
