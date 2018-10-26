@@ -134,7 +134,7 @@
                     suppliersData.push(data.list[i].store);
                     console.log('Item data: ', data.list[i].store);
                   }
-              }).catch(error => {console.log('error')});
+              }).catch(error => {console.log('error' + error)});
               resolve(suppliersData);
             });
       }
