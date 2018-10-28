@@ -891,11 +891,23 @@ if(itemsData)callGetData();
                   console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName2}`)
                   notificationArr.push(results[0][i].itemName)
                 }
+                if(supItemPrice2 < supItemPrice){
+                  var sql = "UPDATE tblitemref SET supItemCode=(@temp:=supItemCode), supItemCode = sup2ItemCode, sup2ItemCode = @temp WHERE itemCode = ?";
+                  db.query(sql, [results[0][i].itemCode])
+                }
               }
               if(supItemPrice3){
                 if(itemPrice - supItemPrice3 < supItemPrice3 * 0.4){
                   console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName3}`)
                   notificationArr.push(results[0][i].itemName)
+                }
+                if(supItemPrice3 < supItemPrice){
+                  var sql = "UPDATE tblitemref SET supItemCode=(@temp:=supItemCode), supItemCode = sup3ItemCode, sup3ItemCode = @temp WHERE itemCode = ?";
+                  db.query(sql, [results[0][i].itemCode])
+                }
+                if(supItemPrice3 < supItemPrice2){
+                  var sql = "UPDATE tblitemref SET sup2ItemCode=(@temp:=sup2ItemCode), sup2ItemCode = sup3ItemCode, sup3ItemCode = @temp WHERE itemCode = ?";
+                  db.query(sql, [results[0][i].itemCode])
                 }
               }
             }

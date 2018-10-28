@@ -4,8 +4,10 @@
     console.log('analytics page');
     var user =  req.session.user;
     var sendName = user.first_name + ' ' + user.last_name;
+    var supplierNameRes = [];
     var supOrdSumListRes = [];
-    var answer = {sendName, supOrdSumListRes};
+    var supRefunds = '';
+    var answer = {sendName, supOrdSumListRes, supplierNameRes};
   
     var userId = req.session.userId;
   
@@ -15,33 +17,57 @@
     }
   
     if(req.method == "POST"){
-      var message = "check if work";
-      res.send(message);
+        var post  = req.body;
+        var supplierName = post.supplierName;
+        var firstDate = post.firstDate;
+        var secondDate = post.secondDate;
+
+
+        function asyncFunc() {
+            return new Promise(
+              function (resolve, reject) {
+                console.log('Get Num Of Refunds'); 
+                db.query(`CALL Get_num_of_supplier_refunds_by_suppliername(${supplierName}, ${firstDate}, ${secondDate})`, function(err, results, fields){
+                    if(results[0].length){
+                        supRefunds = results[0][0].numoOfRefunds;
+                    }
+                    resolve(supRefunds);
+                })
+          })
+        }
+        
+        function getRefundsNum() {
+            asyncFunc()
+            .then(result => {
+                console.log(supRefunds)
+                res.send(answer)
+            })
+            .catch(error => {});
+        }
+        if(supplierName && firstDate && secondDate)getRefundsNum();
     }
 
   
-    function asyncFunc() {
-        return new Promise(
-            function (resolve, reject) {
-              console.log('items sold by supplier');
-              db.query("SELECT supplierName, sum(itemPrice*qtySold) AS Sum FROM `tblorders` GROUP BY supplierName HAVING Sum > 100", function(err, results, fields)
-              {
-                   if(results.length){
-                    for(var i = 0; i<results.length; i++){   
-                        supOrdSumListRes.push(results[i]);
-                    }
-                   }
-                   resolve(supOrdSumListRes);
-              });
-            });
-      }
+function asyncFunc() {
+    return new Promise(
+        function (resolve, reject) {
+          console.log('Get Suppliers Names List');
+          db.query("SELECT DISTINCT supplierName FROM `tblSuppliers`", function(err, results, fields)
+          {
+               if(results.length){
+              for(var i = 0; i < results.length; i++ ){     
+                        supplierNameRes.push(results[i].supplierName);
+                  }
+               }
+               resolve(supplierNameRes);
+          });
+        });
+  }
     
     
     function main() {
         asyncFunc()
         .then(result => {
-            answer.supOrdSumListRes = supOrdSumListRes;
-            console.log(answer.supOrdSumListRes);
             res.render('analytics', {answer:answer});
         })
         .catch(error => {});

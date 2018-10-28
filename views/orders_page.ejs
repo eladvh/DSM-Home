@@ -40,7 +40,6 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding: 5px;
     box-sizing: border-box;
     font-size: 12px;
-    
     }
 
     h2{
@@ -425,9 +424,18 @@ function loadOrders(){
     itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
     orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
     qtySold += ordersListRes[i].qtySold + "<br><br>";
-    statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+    var date1 = new Date();
+    var date2 = ordersListRes[i].orderDate
+    date1 = Date.parse(date1)/ (1000 * 60 * 60 * 24)
+    date2 = Date.parse(date2)/ (1000 * 60 * 60 * 24)
+    var diffDays = parseInt((date1 - date2) / (1000 * 60 * 60 * 24)); 
+    if(diffDays > 2 && ordersListRes[i].statusOfOrder != 'DELIVERED'){
+        statusOfOrder += `<span style="background-color: tomato">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    }else{
+        statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+    }
     if(ordersListRes[i].trackNum != null){
-        j++;
+        //j++;
         trackNum += `<a href="https://global.cainiao.com/detail.htm?mailNoList=${ordersListRes[i].trackNum}" target="_blank">${ordersListRes[i].trackNum}</a><br><br>`
         //trackNum += '<a href="'+ TrakerInfo[j].trackerWebsite +'" target="_blank">'+ ordersListRes[i].trackNum +'</a>' + "<br><br>";
         }else{
@@ -436,6 +444,7 @@ function loadOrders(){
     addTrackNum += '<button data-id="edit'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myEditModal"><i class="glyphicon glyphicon-edit"></i></button>' + "<br style='line-height: 33px'>";
     deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
     refundOrder += '<button data-id="refund'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-value1="'+ ordersListRes[i].supplierName +'" data-value2="'+ ordersListRes[i].itemName +'" data-value3="'+ ordersListRes[i].itemPrice +'" data-value4="'+ ordersListRes[i].qtySold +'" data-toggle="modal" data-target="#myRefundModal"><i class="glyphicon glyphicon-usd"></i></button>' + "<br style='line-height: 33px'>";
+
     }
     }
     

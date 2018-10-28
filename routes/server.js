@@ -37,8 +37,8 @@ app.get('/home/suppliers/addItemAuto', addItems.addItemAuto);//call for auto ite
 app.post('/home/suppliers/addItemAuto', addItems.addItemAuto);//call for auto item page post
 app.get('/home/suppliers/addOrder', addOrders.addOrder);//call for orders_page page 
 app.post('/home/suppliers/addOrder', addOrders.addOrder);//call for products_page post
-app.get('/home/analitics', analytics.analytics);//call for analytics page 
-app.post('/home/analitics', analytics.analytics);//call for analytics post page 
+app.get('/home/analytics', analytics.analytics);//call for analytics page 
+app.post('/home/analytics', analytics.analytics);//call for analytics post page 
 
 module.exports = app;
 
