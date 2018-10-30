@@ -6,9 +6,16 @@
     var sendName = user.first_name + ' ' + user.last_name;
     var supplierNameRes = [];
     var supOrdSumListRes = [];
-    var supRefunds = '';
+    var supRefundsQty = [];
+    var supRefundsDates = [];
+    var supRefundsNum = '';
+    var supOrdersQty = [];
+    var supOrdersDates = [];
+    var supOrdersNum = [];
+
     var answer = {sendName, supOrdSumListRes, supplierNameRes};
-  
+    var refundAnswer = {sendName, supRefundsQty, supRefundsDates, supRefundsNum}
+    var orderAnswer = {sendName, supOrdersQty, supOrdersDates, supOrdersNum}
     var userId = req.session.userId;
   
     if(userId == null){
@@ -18,20 +25,42 @@
   
     if(req.method == "POST"){
         var post  = req.body;
-        var supplierName = post.supplierName;
+        var supplierName1 = post.supplierName1;
+        var supplierName2 = post.supplierName2;
         var firstDate = post.firstDate;
         var secondDate = post.secondDate;
-
+        console.log(post)
 
         function asyncFunc() {
             return new Promise(
               function (resolve, reject) {
                 console.log('Get Num Of Refunds'); 
-                db.query(`CALL Get_num_of_supplier_refunds_by_suppliername(${supplierName}, ${firstDate}, ${secondDate})`, function(err, results, fields){
+                db.query('CALL Get_num_of_supplier_refunds_by_suppliername("'+supplierName1+'","'+firstDate+'","'+secondDate+'")', function(err, results, fields){
                     if(results[0].length){
-                        supRefunds = results[0][0].numoOfRefunds;
+                        for(i = 0; i < results[0].length; i++){
+                            supRefundsDates.push(results[0][i].refundDate)
+                            supRefundsQty.push(results[0][i].numOfRefunds) 
+                        }
+                        refundAnswer.supRefundsNum = results[0].length;
                     }
-                    resolve(supRefunds);
+                    resolve();
+                })
+          })
+        }
+
+        function asyncFunc2() {
+            return new Promise(
+              function (resolve, reject) {
+                console.log('Get Num Of Orders'); 
+                db.query('CALL Get_num_of_supplier_orders_by_suppliername("'+supplierName2+'","'+firstDate+'","'+secondDate+'")', function(err, results, fields){
+                    if(results[0].length){
+                        for(i = 0; i < results[0].length; i++){
+                        supOrdersQty.push(results[0][i].numOfOrders)
+                        supOrdersDates.push(results[0][i].orderDate)
+                        }
+                        orderAnswer.supOrdersNum = results[0].length;
+                    }
+                    resolve();
                 })
           })
         }
@@ -39,13 +68,25 @@
         function getRefundsNum() {
             asyncFunc()
             .then(result => {
-                console.log(supRefunds)
-                res.send(answer)
+                console.log(refundAnswer)
+                res.send(refundAnswer)
             })
             .catch(error => {});
         }
-        if(supplierName && firstDate && secondDate)getRefundsNum();
-    }
+
+        function getOrdersNum() {
+            asyncFunc2()
+            .then(result => {
+                console.log(orderAnswer)
+                res.send(orderAnswer)
+            })
+            .catch(error => {});
+        }
+
+        if(supplierName1 && firstDate && secondDate)getRefundsNum();
+        if(supplierName2 && firstDate && secondDate)getOrdersNum();
+
+    }else{
 
   
 function asyncFunc() {
@@ -75,5 +116,5 @@ function asyncFunc() {
       main();
     
 
-
+    }
   }

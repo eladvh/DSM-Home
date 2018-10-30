@@ -225,74 +225,74 @@ h2{
 }
 
 .products-a {
-display:flex;
-flex-wrap: wrap;
-min-height: 500px
+    display:flex;
+    flex-wrap: wrap;
+    min-height: 500px
 }
 
 .product-card {
-display:table-column;
-flex-direction:column;
-padding: 2%;
-flex: 1 16%;
-background-color: #FFF;
-box-shadow: none;
+    display:table-column;
+    flex-direction:column;
+    padding: 2%;
+    flex: 1 16%;
+    background-color: #FFF;
+    box-shadow: none;
 }
 
 .product-image img {
-width: 80%;
-height: 200px;
+    width: 80%;
+    height: 200px;
 }
 
 .product-info {
-line-height: 1.6;
-margin-top: auto;
-padding-top: 20px;
-text-align: left;
-font-size: 13px;
-font-family:Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    margin-top: auto;
+    padding-top: 20px;
+    text-align: left;
+    font-size: 13px;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 * {
-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-margin: 0;
-font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* The grid: Three equal columns that floats next to each other */
 .column {
-float: left;
-width: 31%;
-text-align: center;
-font-size: 17px;
-cursor: pointer;
-color: white;
-border-radius: 20px;
-border:none;
-margin: 1%;
+    float: left;
+    width: 31%;
+    text-align: center;
+    font-size: 17px;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    border:none;
+    margin: 1%;
 }
 
 .containerTab {
-padding-top: 10px;
--webkit-text-fill-color: black;
+    padding-top: 10px;
+    -webkit-text-fill-color: black;
 }
 
 /* Clear floats after the columns */
 .row:after {
-content: "";
-display: table;
-clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
 
 /* Closable button inside the container tab */
 .closebtn {
-float: right;
-color: black;
-font-size: 35px;
-cursor: pointer;
+    float: right;
+    color: black;
+    font-size: 35px;
+    cursor: pointer;
 }
 
 /*****************************************
@@ -305,14 +305,13 @@ cursor: pointer;
 }
 
 .file-upload__label {
-
-  padding: 1em 2em;
-  color: #fff;
-  background: green;
-  border-radius: .4em;
-  transition: background .3s;
-  font-size: 18px;
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
+    padding: 1em 2em;
+    color: #fff;
+    background: green;
+    border-radius: .4em;
+    transition: background .3s;
+    font-size: 18px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 .file-upload__label:hover {
     cursor: pointer;
@@ -507,9 +506,6 @@ for (var j = 0; j < itemListRes.length; j++) {
 if(itemListRes[j].supplierName2 == null)itemListRes[j].supplierName2 = 'Associate supplier';
 if(itemListRes[j].supItemLink2 == null)itemListRes[j].supItemLink2 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
 if(itemListRes[j].supItemPrice2 == null)itemListRes[j].supItemPrice2 = '';
-}
-
-for (var j = 0; j < itemListRes.length; j++) { 
 if(itemListRes[j].supplierName3 == null)itemListRes[j].supplierName3 = 'Associate supplier';
 if(itemListRes[j].supItemLink3 == null)itemListRes[j].supItemLink3 = onclick="javascript:alert('You have not selected a supplier to associate the item with')"
 if(itemListRes[j].supItemPrice3 == null)itemListRes[j].supItemPrice3 = '';

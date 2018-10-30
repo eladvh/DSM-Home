@@ -89,7 +89,7 @@ h1{
     <h1>DSM-Home Analytics</h1>
     <div class="wrapper">
         <div class="card1">
-            <form id="numOfRefundsForm" style="display:-webkit-inline-box" method="POST" action="/home/analytics"><select id="supNameSelect" data-live-search="true" class="selectpicker" name="supplierName"></select>
+            <form id="numOfRefundsForm" style="display:-webkit-inline-box" method="POST" action="/home/analytics"><select id="supNameSelect1" data-live-search="true" class="selectpicker" name="supplierName1"></select>
             <input type="date" class="form-control" placeholder="firstDate" name="firstDate" style="width: 180px; margin-left:15px">
             <input type="date" class="form-control" placeholder="secondDate" name="secondDate" style="width: 180px; margin-left:15px">
             <button type="submit" class="btn btn-primary" style="margin-left:15px">Submit</button>
@@ -97,7 +97,12 @@ h1{
             <div class="boxsize"><canvas id="bar-chart"></canvas></div>
         </div>
         <div class="card2">
-            <div class="boxsize"><canvas id="line-chart"></canvas></div>
+            <form id="numOfOrdersForm" style="display:-webkit-inline-box" method="POST" action="/home/analytics"><select id="supNameSelect2" data-live-search="true" class="selectpicker" name="supplierName2"></select>
+            <input type="date" class="form-control" placeholder="firstDate" name="firstDate" style="width: 180px; margin-left:15px">
+            <input type="date" class="form-control" placeholder="secondDate" name="secondDate" style="width: 180px; margin-left:15px">
+            <button type="submit" class="btn btn-primary" style="margin-left:15px">Submit</button>
+            </form>
+            <div class="boxsize"><canvas id="bar-chart-horizontal"></canvas></div>
         </div>
         <div class="card3">
             <div class="boxsize"><canvas id="pie-chart"></canvas></div>
@@ -110,67 +115,52 @@ h1{
 
 <script>
 //chart1
+function chart1(){
 new Chart(document.getElementById("bar-chart"), { 
     type: 'bar',
     data: {
-      labels: ["Num Of Refunds Of Specific Supplier"],
-      datasets: [
+      labels: supRefundsDates,
+      datasets: [ 
         {
-          label: "Population (millions)",
+          label: "(Total Refunds - "+supRefundsNum+")",
           backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-          data: [2478,5267,734,784,433]
+          data: supRefundsQty  
         }
       ]
     },
     options: {
-      legend: { display: false },
       title: {
         display: true,
-        text: 'Predicted world population (millions) in 2050'
+        text: 'Num Of Refunds Of Specific Supplier'
       }
     }
 });
 
+}
+chart1()
+
 //chart2
-new Chart(document.getElementById("line-chart"), {
-  type: 'line',
+function chart2(){
+new Chart(document.getElementById("bar-chart-horizontal"), {
+  type: 'horizontalBar',
   data: {
-    labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+    labels: supOrdersDates,
     datasets: [{ 
-        data: [86,114,106,106,107,111,133,221,783,2478],
-        label: "Africa",
-        borderColor: "#3e95cd",
-        fill: false
-      }, { 
-        data: [282,350,411,502,635,809,947,1402,3700,5267],
-        label: "Asia",
-        borderColor: "#8e5ea2",
-        fill: false
-      }, { 
-        data: [168,170,178,190,203,276,408,547,675,734],
-        label: "Europe",
-        borderColor: "#3cba9f",
-        fill: false
-      }, { 
-        data: [40,20,10,16,24,38,74,167,508,784],
-        label: "Latin America",
-        borderColor: "#e8c3b9",
-        fill: false
-      }, { 
-        data: [6,3,2,2,7,26,82,172,312,433],
-        label: "North America",
-        borderColor: "#c45850",
-        fill: false
+        label: "(Total Orders - "+supOrdersNum+")",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+        data: supOrdersQty
       }
     ]
   },
   options: {
     title: {
       display: true,
-      text: 'World population per region (in millions)'
+      text: 'Number Of Orders Of Supplier'
     }
   }
 });
+}
+chart2()
 
 //chart3
 new Chart(document.getElementById("pie-chart"), {
@@ -225,43 +215,86 @@ new Chart(document.getElementById("radar-chart"), {
     }
 });
 
-var supplierNameRes = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
-var select = document.getElementById("supNameSelect");
-for(index in supplierNameRes) {
-    select.options[select.options.length] = new Option(supplierNameRes[index], supplierNameRes[index]);
+var supplierNameRes1 = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+var select1 = document.getElementById("supNameSelect1");
+for(index in supplierNameRes1) {
+    select1.options[select1.options.length] = new Option(supplierNameRes1[index], supplierNameRes1[index]);
 }
 
+var supplierNameRes2 = JSON.parse('<%-JSON.stringify(answer.supplierNameRes)%>');
+var select2 = document.getElementById("supNameSelect2");
+for(index in supplierNameRes2) {
+    select2.options[select2.options.length] = new Option(supplierNameRes2[index], supplierNameRes2[index]);
+}
+
+var supRefundsQty
+var supRefundsDates
+var supRefundsNum
 $('#numOfRefundsForm').submit(function(event){
 event.preventDefault();
 var post_url = $(this).attr("action");
 var request_method = $(this).attr("method");
 var form_data = $(this).serialize();
         
-var loadOrders = $.ajax({
+var refundGraph = $.ajax({
             url : post_url,
             type: request_method,
             data : form_data,
             });
             
-            loadOrders.fail( function() {
+            refundGraph.fail( function() {
             window.alert("Fail!");
             });
 
-            loadOrders.done( function(response) {
+            refundGraph.done( function(response) {
                 if (response.redirect !== undefined && response.redirect) {
                 window.location.href = response.redirect_url;
                 }else{
-                    /*var delayInMilliseconds = 2000;
-                    
-                    setTimeout(function() {
-                        location.reload();
-                    }, delayInMilliseconds);*/
-                    
-                    var result = response.supRefunds;
+                  supRefundsQty = response.supRefundsQty;
+                  supRefundsDates = response.supRefundsDates
+                  supRefundsNum = response.supRefundsNum
+                  console.log(supRefundsQty)
+                  console.log(supRefundsDates)
+                  console.log(supRefundsNum)
+                  chart1()
                 }
             });
     })
-    console.log(result)
+
+
+var supOrdersQty
+var supOrdersDates
+var supOrdersNum
+$('#numOfOrdersForm').submit(function(event){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var ordersGraph = $.ajax({
+            url : post_url,
+            type: request_method,
+            data : form_data,
+            });
+            
+            ordersGraph.fail( function() {
+            window.alert("Fail!");
+            });
+
+            ordersGraph.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                  supOrdersQty = response.supOrdersQty;
+                  supOrdersDates = response.supOrdersDates
+                  supOrdersNum = response.supOrdersNum
+                  console.log(supOrdersQty)
+                  console.log(supOrdersDates)
+                  console.log(supOrdersNum)
+                  chart2()
+                }
+            });
+    })
 </script>
 
 </body>

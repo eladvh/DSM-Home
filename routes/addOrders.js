@@ -159,15 +159,18 @@ if(req.method == "POST"){
                         authToken: process.env.EBAY_AUTHTOKEN,
                       
                         params: {
-                          'OrderStatus': 'Completed',
+
                           'NumberOfDays': 30
                         }
                       }, function(error, results) {
                         var obj = JSON.parse(JSON.stringify(results))
+                        
                         var orderArr = []
                         var order = {};
                         for(i = 0; i < obj.Orders.length; i++){
                           try{
+                            console.log(obj.Orders[i].OrderStatus)
+                            var OrderStatus = obj.Orders[i].OrderStatus;
                             var eBayItemNumberAuto = obj.Orders[i].Transactions[0].Item.ItemID;
                             var orderNum = obj.Orders[i].Transactions[0].OrderLineItemID;
                             var itemName = obj.Orders[i].Transactions[0].Item.Title;
@@ -178,7 +181,7 @@ if(req.method == "POST"){
                           }catch (error){
                             trackNum = '';
                           }finally{
-                            orderArr.push(order = {orderNum , itemName, itemPrice, orderDate, qtySold, trackNum, eBayItemNumberAuto})
+                            orderArr.push(order = {orderNum , itemName, itemPrice, orderDate, qtySold, trackNum, eBayItemNumberAuto, OrderStatus})
                           }
                         }
                         setTimeout(() => {
@@ -190,7 +193,7 @@ if(req.method == "POST"){
 
               function getSupNames(order, supNamesArr){
                 return new Promise(resolve => {
-                    console.log('here:' + order.eBayItemNumberAuto)
+                    console.log(order.eBayItemNumberAuto)
                     db.query("Call get_supNames_by_itemName('"+order.eBayItemNumberAuto+"')", function(err, results, fields){
                         if(results[0].length){
                             if(results[0][0].supplierName){
@@ -252,25 +255,40 @@ if(req.method == "POST"){
                                     var value = data.Item.ConvertedCurrentPrice.amount;
                                     db.query("INSERT INTO `tblItems`(`itemCode`,`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + order.eBayItemNumberAuto + "','" + title + "','" + itemWebUrl + "','" + imageUrl + "' ,'" +categoryPath + "','" + value + "')", function(err, results, fields){
                                         if(err){
-                                            console.log('bug')
+                                            console.log('bug1')
                                         }
                                     })
                                     db.query("INSERT INTO `tblitemref`(`itemCode`) VALUES ('" + order.eBayItemNumberAuto + "')", function(err, results, fields){
                                     if(err){
-                                        console.log('bug')
+                                        console.log('bug2')
                                     }
-                                })
+                                    })
                                 }
                             })
                         }
-                        db.query("INSERT INTO `tblorders`(`orderNum`,`supplierName`,`itemName`,`itemPrice`,`orderDate`, `qtySold`,`trackNum`) VALUES ('" + order.orderNum + "','"+`${sup1}|${sup2}|${sup3}`+"','" + order.itemName + "','" + order.itemPrice + "','" + order.orderDate + "','" + order.qtySold + "','" + order.trackNum + "')", function(err, results, fields){   
+                        if(order.OrderStatus == 'Active'){
+                        db.query("INSERT INTO `tblorders`(`orderNum`,`supplierName`,`itemName`,`itemPrice`,`orderDate`, `qtySold`,`statusOfOrder`,`trackNum`) VALUES ('" + order.orderNum + "','"+`${sup1}|${sup2}|${sup3}`+"','" + order.itemName + "','" + order.itemPrice + "','" + order.orderDate + "','" + order.qtySold + "','Refund','" + order.trackNum + "')", function(err, results, fields){   
                         if(err){
-                            console.log('bug')
+                            console.log('bug3')
+                        }
+                        })
+                        db.query("INSERT INTO `tblrefunds`(`refundNum`,`supplierName`,`itemName`,`refundAmount`,`qtyRefunded`, `refundDate`) VALUES ('" + order.orderNum + "','"+`${sup1}|${sup2}|${sup3}`+"','" + order.itemName + "','" + order.itemPrice*order.qtySold + "','" + order.qtySold + "','" + order.orderDate + "')", function(err, results, fields){   
+                            if(err){
+                                console.log('bug4')
+                            }
+                        })
+                        }else{
+                        db.query("INSERT INTO `tblorders`(`orderNum`,`supplierName`,`itemName`,`itemPrice`,`orderDate`, `qtySold`,`trackNum`) VALUES ('" + order.orderNum + "','"+`${sup1}|${sup2}|${sup3}`+"','" + order.itemName + "','" + order.itemPrice + "','" + order.orderDate + "','" + order.qtySold + "','" + order.trackNum + "')", function(err, results, fields){   
+                            if(err){
+                                console.log('bug5')
+                            }
+                        })
                         }
                     })
-                    })
                         }else{
-                            if(results[0].supItemPrice){
+                            if(order.OrderStatus == 'Active'){
+                                console.log('Already refunded')
+                            }else if(results[0].supItemPrice){
                                 var sql = "update tblorders SET itemName = ?, itemPrice = ?, orderDate = ?, qtySold = ?, trackNum = ? WHERE orderNum = ?";
                                 db.query(sql, [order.itemName, order.itemPrice, order.orderDate, order.qtySold, order.trackNum, order.orderNum])
                             }else{
@@ -320,7 +338,7 @@ if(req.method == "POST"){
                         for(var i = 0; i<results.length; i++){
                             id.push(results[i].trackNum);
                         }
-    
+
                         function delay() {
                             return new Promise(resolve => setTimeout(resolve, 300));
                            }
@@ -334,12 +352,12 @@ if(req.method == "POST"){
                                         arr[i] = TrakerInfo.states[i].state.split(/[&\/\\#,+()$~%.'":*?<>{}' ']/g)
                                         for(var j = 0; j < arr[i].length ; j++){
                                             //console.log(arr[i][j])
-                                            if(arr[i][j] == 'delivered' || arr[i][j] == 'delivery' || arr[i][j] == '交付' || arr[i][j] == '交貨'){
+                                            if(arr[i][j] == 'delivered' || arr[i][j] == 'Delivered' || arr[i][j] == 'delivery' || arr[i][j] == 'Delivery' || arr[i][j] == '交付' || arr[i][j] == '交貨'){
                                                 var sql = "update tblOrders SET statusOfOrder = ? WHERE trackNum = ?";
                                                 db.query(sql, ['DELIVERED', tracking], function(err, result) {
                                                 })
                                             }
-                                            if(arr[i][j] == 'transit.' || arr[i][j] == 'Accepted' || arr[i][j] == 'Acceptance'){
+                                            if(arr[i][j] == 'transit' || arr[i][j] == 'Transit' || arr[i][j] == 'Despatch' || arr[i][j] == 'Accepted' || arr[i][j] == 'Acceptance'){
                                                 var sql = "update tblOrders SET statusOfOrder = ? WHERE trackNum = ?";
                                                 db.query(sql, ['IN TRANSIT', tracking], function(err, result) {
                                                 })

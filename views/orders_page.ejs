@@ -375,7 +375,8 @@ function loadOrders(){
     itemPrice += ordersListRes[i].itemPrice*ordersListRes[i].qtySold  + "<br><br>";
     orderDate += ordersListRes[i].orderDate.replace("T", ",").substr(0, ordersListRes[i].orderDate.lastIndexOf(".")) + "<br><br>";
     qtySold += ordersListRes[i].qtySold + "<br><br>";
-    statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
+    statusOfOrder += `<span style="color: gray;font-weight: bold;">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    //statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
     if(ordersListRes[i].trackNum != null){
         j++;
         trackNum += `<a href="https://global.cainiao.com/detail.htm?mailNoList=${ordersListRes[i].trackNum}" target="_blank">${ordersListRes[i].trackNum}</a><br><br>`
@@ -385,7 +386,7 @@ function loadOrders(){
         trackNum += ordersListRes[i].trackNum + "<br><br>";
     } 
     addTrackNum += "<br><br>";
-    deleteOrder += "<br><br>";
+    deleteOrder += '<button data-id="delete'+[i]+'" type="button" data-value="'+ ordersListRes[i].orderNum +'" data-toggle="modal" data-target="#myDeleteModal"><i class="glyphicon glyphicon-trash"></i></button>' + "<br style='line-height: 33px'>";
     refundOrder += "<br><br>";
     /*supplierName += '<select><option disabled="disabled">choose</option></select><br><br>'
     //supplierName += ordersListRes[i].supplierName + "<br><br>";
@@ -428,12 +429,22 @@ function loadOrders(){
     var date2 = ordersListRes[i].orderDate
     date1 = Date.parse(date1)/ (1000 * 60 * 60 * 24)
     date2 = Date.parse(date2)/ (1000 * 60 * 60 * 24)
-    var diffDays = parseInt((date1 - date2) / (1000 * 60 * 60 * 24)); 
-    if(diffDays > 2 && ordersListRes[i].statusOfOrder != 'DELIVERED'){
-        statusOfOrder += `<span style="background-color: tomato">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    var diffDays = parseInt((date1 - date2))
+    //console.log(diffDays)
+    if(ordersListRes[i].statusOfOrder == 'DELIVERED'){
+        statusOfOrder += `<span style="color: green;font-weight: bold;">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    }else if(diffDays < 35 && ordersListRes[i].statusOfOrder == 'IN TRANSIT'){
+        statusOfOrder += `<span style="color: green;font-weight: bold;">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    }else if(diffDays < 5 && ordersListRes[i].statusOfOrder == 'PENDING'){
+        statusOfOrder += `<span style="color: green;font-weight: bold;">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    }else if(diffDays > 35 && ordersListRes[i].statusOfOrder != 'DELIVERED'){
+        statusOfOrder += `<span style="color: red;font-weight: bold;">${ordersListRes[i].statusOfOrder}</span><br><br>`
+    }else if(diffDays > 5 && ordersListRes[i].statusOfOrder == 'PENDING'){
+        statusOfOrder += `<span style="color: red;font-weight: bold;">${ordersListRes[i].statusOfOrder}</span><br><br>`
     }else{
         statusOfOrder += ordersListRes[i].statusOfOrder + "<br><br>";
     }
+
     if(ordersListRes[i].trackNum != null){
         //j++;
         trackNum += `<a href="https://global.cainiao.com/detail.htm?mailNoList=${ordersListRes[i].trackNum}" target="_blank">${ordersListRes[i].trackNum}</a><br><br>`
