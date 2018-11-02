@@ -62,7 +62,7 @@
     font-size:14px;
     text-indent: 20px;
     line-height: 15px;
-    min-width:500px;
+
 }
 
 /*logs*/
@@ -71,7 +71,7 @@
     grid-column-end: 2; 
     grid-row-start: 1; 
     grid-row-end: 3;
-    min-width:800px;
+
 }
 
 /*analystics*/
@@ -89,7 +89,7 @@
     grid-column-end: 2; 
     grid-row-start:3;
     grid-row-end:5;
-    min-width:800px
+
 }
 
 /*products*/
@@ -112,7 +112,7 @@
 .button {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-transform: uppercase;
-    background: rgba(3, 34, 134, 0.842);
+    background: rgb(3, 33, 134);
     border-color:black;
     border-radius: 5px; 
     border-width: 1px;
@@ -191,6 +191,22 @@ h3 {
     font-size: 22px;
     font-family: 'Times New Roman', Times, serif;
     text-transform: uppercase;
+    margin:0;
+}
+
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+    margin:0;
+}
+nav{
+    width: 100%;
+    background: rgb(3, 33, 134);
+    padding: 20px;
+    box-shadow: 0 4px rgb(80, 193, 221); 
+    /* border-bottom: 1px solid black;*/
 }
 
 .b{
@@ -254,11 +270,21 @@ h3 {
     cursor: pointer;
 }
 
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
+
 </style>
 <body>
-
+<h2 style="text-align: center"><nav id="stickHeader">Suppliers Page</nav></h2><br><br><br><br>
 <div class="padding">
-    <div style="text-align:center">
+    <div style="text-align:center"><br>
     <h3>Select Supplier</h3>
     <form id="supNameForm" method="POST" action="/home/suppliers">
         <select id="supNameSelect" data-live-search="true" class="selectpicker" name="supplierName"  method="POST" action="/home/suppliers">
@@ -274,7 +300,7 @@ h3 {
             <a href="#" target="_blank" id="storeLink"><i class=" fa fa-cart-arrow-down"></i> go to store</a>
             </div>
             <h3><i style="font-size: 20px" class="fa fa-vcard"></i> Supplier Details</h3>
-            <img style="float: right" width:="200px" height="200px" src="https://png.icons8.com/color/1600/supplier.png" alt="No Picture">
+            <img style="float: right" width:="250px" height="250px" src="https://image.ibb.co/eAXQyL/delivery-man-1-1.png" alt="No Picture">
             <span style="text-align:left">
             <div><br>
             <i class="fa fa-user-secret"></i><span class="b"> Supplier Name: </span><span id="supplierName"></span><br><br>
@@ -296,13 +322,13 @@ h3 {
             <br>
             <table id="logshistory">
                 <tr>
-                    <th> Date of conversion</th>
+                    <th> Date of conversation</th>
                     <th> Subject</th>
                     <th> communication method</th>
                     <th colspan="2"> Content</th>
                 </tr>
                 <tr>
-                    <td id="dateOfConversionLogs"> </td>
+                    <td id="dateOfConversationLogs"> </td>
                     <td id="titleLogs"> </td>
                     <td id="communicationMethodLogs"> </td>
                     <td id="contentLogs" colspan="2"> </td>
@@ -315,7 +341,7 @@ h3 {
                 <form action="/home/analitics" method="get">
                     <button class="button" type="submit">Analytics Page</button>
                 </form>
-                <div class="boxsize"><canvas id="line-chart" height="95px"></canvas></div>
+                <div class="boxsize"><canvas id="bar-chart" height="110px !important" style="padding-left: 50px"></canvas></div>
         </div>
                 
         <div class="box4">
@@ -359,47 +385,46 @@ h3 {
 
 <script>
 
-//Analitics
-new Chart(document.getElementById("line-chart"), {
-  type: 'line',
-  data: {
-    labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
-    datasets: [{ 
-        data: [86,114,106,106,107,111,133,221,783,2478],
-        label: "Africa",
-        borderColor: "#3e95cd",
-        fill: false
-      }, { 
-        data: [282,350,411,502,635,809,947,1402,3700,5267],
-        label: "Asia",
-        borderColor: "#8e5ea2",
-        fill: false
-      }, { 
-        data: [168,170,178,190,203,276,408,547,675,734],
-        label: "Europe",
-        borderColor: "#3cba9f",
-        fill: false
-      }, { 
-        data: [40,20,10,16,24,38,74,167,508,784],
-        label: "Latin America",
-        borderColor: "#e8c3b9",
-        fill: false
-      }, { 
-        data: [6,3,2,2,7,26,82,172,312,433],
-        label: "North America",
-        borderColor: "#c45850",
-        fill: false
-      }
-    ]
-  },
-  options: {
-    title: {
-      display: true,
-      text: 'World population per region (in millions)'
-    }
-  }
-});
+window.onscroll = function() {myFunction()};
 
+var navbar = document.getElementById("stickHeader");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+
+//Analitics
+var supOrdersQty
+var supOrdersDates
+var supOrdersNum
+function chart(){
+    new Chart(document.getElementById("bar-chart"), { 
+    type: 'bar',
+    data: {
+      labels: supOrdersDates,
+      datasets: [ 
+        {
+          label: "(Total Orders - "+supOrdersNum+")",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: supOrdersQty 
+        }
+      ]
+    },
+    options: {
+        responsive: true,
+      title: {
+        display: true,
+        text: 'Num Of Orders Per Supplier'
+      }
+    }
+});
+}
+chart()
 //-----------------------------------------------Load Logs List----------------------------------------------------------------
 
 $('#supNameForm').change(function(){
@@ -445,7 +470,7 @@ var addLog = $.ajax({
 
                 var supplierNameLog = '';
                 var storeNumLog = '';
-                var dateOfConversionLog = '';
+                var dateOfConversationLog = '';
                 var titleLog = '';
                 var communicationMethodLog = '';
                 var contentLog = '';
@@ -454,14 +479,14 @@ var addLog = $.ajax({
                 var logsListRes = response.logsListRes;
 
                 for (i = 0; i < logsListRes.length; i++) { 
-                dateOfConversionLog += logsListRes[i].dateOfConversion.replace("T", ",").substr(0, logsListRes[i].dateOfConversion.lastIndexOf(".")) + "<br><br>";
+                    dateOfConversationLog += logsListRes[i].dateOfConversation.replace("T", ",").substr(0, logsListRes[i].dateOfConversation.lastIndexOf(".")) + "<br><br>";
                 titleLog += logsListRes[i].title + "<br><br>";
                 communicationMethodLog += logsListRes[i].communicationMethod + "<br><br>";
                 contentLog += logsListRes[i].content + "<br><br>";
                 }
                   
 
-                document.getElementById("dateOfConversionLogs").innerHTML = dateOfConversionLog;
+                document.getElementById("dateOfConversationLogs").innerHTML = dateOfConversationLog;
                 document.getElementById("titleLogs").innerHTML = titleLog;
                 document.getElementById("communicationMethodLogs").innerHTML = communicationMethodLog;
                 document.getElementById("contentLogs").innerHTML = contentLog;
@@ -514,7 +539,13 @@ var addLog = $.ajax({
                 document.getElementById("statusOfOrderRecord").innerHTML = statusOfOrder;
                 document.getElementById("trackNumRecord").innerHTML = trackNum;
 
-
+                supOrdersQty = response.supOrdersQty;
+                supOrdersDates = response.supOrdersDates
+                supOrdersNum = response.supOrdersNum
+                console.log(supOrdersQty)
+                console.log(supOrdersDates)
+                console.log(supOrdersNum)
+                chart()
 
                 var itemListRes = response.itemListRes;
             

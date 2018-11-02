@@ -1,14 +1,75 @@
 <!DOCTYPE html>
 <html>
-        <%- include sidebar %>
-<body>
+<head>
+<%- include sidebar %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Supplier</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 <style>
 body{
-    background-image:url("/images/home_pic.jpg");
-    background-repeat: no-repeat;
+    background-image:url("https://image.ibb.co/iLJNtL/image-2.jpg");
+    background-repeat:repeat;
     background-position:top right;
-    background-size: 90%;}
-</style>
+    background-size: 100%;}
+    
 
+h2{
+    text-align:left;
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
+    font-weight: bold;
+    margin:0;
+}
+
+#stickHeader {
+    background-color:rgba(0, 0, 0, 0.904);
+    overflow-x: hidden;
+    border-style:ridge;
+    height: 68px;
+}
+
+#stickHeader a {
+    float: right;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 0px 50px;
+    text-decoration: none;
+}
+
+
+div.fixed {
+    position: fixed;
+    bottom: 0;
+    left: 300px;
+    top:200px;
+    width: 100px;
+}
+div img {
+    width: 1500px;
+}
+
+</style>
+<body>
+        <div class="navbar"></div>
+
+</div>
+<h2><nav id="stickHeader">
+        <div class="dropdown">
+                <button class="dropbtn"> 
+                    <a href="#"><i class="fa fa-user icon fa-2x"></i></a>
+                </button>
+                <div class="dropdown-content">
+                  <a href="/login" value="/login">Sign In</a>
+                  <a href="/signup" value="/signup">Sign Up</a>
+                  <a href="/home/profile" value="/home/profile">User</a>
+                  <a href="/home/logout" value="/home/logout">Log Out</a>
+                </div>
+          </div> 
+          <a selected disabled style="padding-top:12px;font-size: 40px;float: right "><% if (answer.sendName.length > 0) { %><div><%= answer.sendName %></div><% } %> </a>
+    <a href="/home/dashboard" style="float:left"><img style="height: 50px" src="https://image.ibb.co/cO4y00/DSM-Home-Elad-Pinto.png"  alt="DSM-Home-Elad-Pinto"  border="0" ></a>
+</nav></h2>
+<div class="fixed"><a ><img src="https://image.ibb.co/cO4y00/DSM-Home-Elad-Pinto.png"  alt="DSM-Home-Elad-Pinto"  border="0"></a></div>
 </body>
 </html>

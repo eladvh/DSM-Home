@@ -9,6 +9,7 @@ h2{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: white;
     font-weight: bold;
+    margin:0;
 }
 nav{
     width: 100%;
@@ -68,10 +69,19 @@ table#logshistory th {
    color: white;
    font-size: 20px
 }
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
 </style>
 <body>
+<h2 style="text-align: center"><nav id="stickHeader">Search suppliers in <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Aliexpress_logo.svg/2000px-Aliexpress_logo.svg.png" alt="Aliexpress" width="180px" height="25px"></span></nav></h2><br>
 <div class="padding">
-<h2><nav>Search suppliers in <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Aliexpress_logo.svg/2000px-Aliexpress_logo.svg.png" alt="Aliexpress" width="180px"></span></nav></h2><br>
 <form id="searchNewSup" action="/home/suppliers/searchsup" method="POST"> 
   <div class="row">
     <div class="col-xs-6 col-md-offset-3">
@@ -104,6 +114,20 @@ table#logshistory th {
 </div>
 
 <script>
+
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("stickHeader");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+
         $('.loader').hide();
         $( document ).ajaxStart(function() {
             $( ".loader" ).show();

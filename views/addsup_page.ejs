@@ -1,74 +1,47 @@
 
 <!DOCTYPE html>
-
 <html>
+<head>
 <%- include sidebar %>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Supplier</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<title>new-supplier</title>
-
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+</head>
 <style>
 
-/*body {
-  width: 100%;
-  height: 2000px;
-  margin: 1;
-  padding: 0;
-}
-
-.border {
-  position:fixed;
-  top: 0;
-  left: 0;
-  border: 1px solid #000;
-  border-radius: 5px;
-  width: 100%;
-  height: 100%;
-  margin: 12;
-  padding: 1em;
-  box-sizing: border-box;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}*/
-
 #logs{
-width:100% ;
-border: none;
-border-radius:none;
-padding:1px;
-font-size: 16px;
-text-align:left;
-font-family: Verdana, Geneva, Tahoma, sans-serif;            
+    width:100%;
+    border: none;
+    border-radius:none;
+    padding:1px;
+    font-size: 16px;
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;             
 }
 
 #logs input{
-  border-radius:1px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  outline: 0;
-  background: #f2f2f2;
-  width: 85%;
-  border-color: 1px solid black;
-  border-radius: 5px;
-  margin: 0 0 15px;
-  padding: 1px;
-  box-sizing: border-box;
-  font-size: 12px;
-        
-    }
-    h2{
-        text-align:left;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        color: white;
-        font-weight: bold;
-    }
-    nav{
-        width: 100%;
-        background: darkred;
-        padding: 20px;
-        box-shadow: 0 4px darksalmon; 
-       /* border-bottom: 1px solid black;*/
-    }
+    width: 150px;
+}
+
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+    margin:0;
+}
+nav{
+    width: 100%;
+    background: darkred;
+    padding: 20px;
+    box-shadow: 0 4px darksalmon; 
+    /* border-bottom: 1px solid black;*/
+}
   #methodform{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-transform: uppercase;
@@ -103,43 +76,38 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #submitbutt {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  text-transform: uppercase;
   background:darkred;
-  border-radius: 5px; 
-  border-width: 1px;
-  width: 120px;
-  padding: 6px;
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center; 
-  box-shadow: 0 4px darksalmon; 
 }
 #submitbutt:hover,.form button:active,.form button:focus {
   background:darksalmon;
 }
 
 #logshistory{
-width:100% ;
-border: none;
-border-radius:none;
-padding:1px;
-font-size: 16px;
-text-align:center;
-font-family: Verdana, Geneva, Tahoma, sans-serif;   
+    width:100%;
+    border: rgb(190, 190, 190);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align:center;
+    font-size: 13px;
 }
 #logshistory th{
-text-decoration-line: underline; 
+    text-align: center;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
 }
     </style>
 
 <body>
-        <div class="padding">
-<div class="border"></div>
+<h2 style="text-align: center"><nav id="stickHeader">Suppliers Page</nav></h2><br>
+<div class="padding"><br><br><br><br>
 <form id="addNewSup" method="POST" action="/home/suppliers/addSup">
-    <h2><nav> + New Supplier</nav></h2>
         <table id="logs">
             <tr>
             <th> Supplier name</th>
@@ -152,57 +120,38 @@ text-decoration-line: underline;
             <th> Phone number</th>
             </tr>
         <tr>
-            <td> <input type="text" placeholder="Supplier Name" name="supplierName"/></td>
-            <td> <input type="text" placeholder="Store Num" name="storeNum"/></td>
-            <td> <input type="text" placeholder="Store Link" name="storeLink"/></td>
-            <td> <input type="text" placeholder="Establish Year" name="establishYear"/></td>
-            <td> <input type="text" placeholder="Mail" name="email"/></td>
-            <td> <input type="text" placeholder="We-Chat" name="wechat"/></td>
-            <td> <input type="text" placeholder="Skype ID" name="skypeID"/></td>
-            <td> <input type="text" placeholder="Phone Number" name="phoneNum"/></td>
-            <td> <input id="Clear" type="reset" value=" Clear  "/></td>
+            <td> <input type="text" class="form-control" name="supplierName"/></td>
+            <td> <input type="text" class="form-control" name="storeNum"/></td>
+            <td> <input type="text" class="form-control" name="storeLink"/></td>
+            <td> <input type="text" class="form-control" name="establishYear"/></td>
+            <td> <input type="text" class="form-control" name="email"/></td>
+            <td> <input type="text" class="form-control" name="wechat"/></td>
+            <td> <input type="text" class="form-control" name="skypeID"/></td>
+            <td> <input type="text" class="form-control" name="phoneNum"/></td>
+            <td> <input id="Clear" type="reset" class="form-control" value="Clear"/></td>
             </tr>
-        </table>
-        <div style="text-align:center"><button id="submitbutt" type="submit">Submit</button></div>
+        </table><br>
+        <div style="text-align:center"><button id="submitbutt" type="submit" class="btn btn-primary btn-lg">Submit</button></div>
 
     </form>
         
-        <script>
-            function addRow() {
-                var table = document.getElementById('logs');
-                var columnLength = table.getElementsByTagName('tr')[0].children.length;
-                var units = document.getElementsByClassName('unit-table');
-                var tr = document.createElement('tr');
-                tr.className = 'unit-table';
-                for (var i = 0; i < columnLength; i++) {
-                    var td = document.createElement('td');
-                    var text = document.createElement('input');
-                    text.type = 'text';
-                    td.appendChild(text);
-                    tr.appendChild(td);
-                }
-                table.appendChild(tr);
-            }
-
-            document.getElementById('newlog').onclick = addRow;
-
-        </script>
         
-            <div style="text-align:center"><h1 id="message"></h1></div>
+        <div style="text-align:center"><h1 id="message"></h1></div>
 
-</form>
+
     <form>
     <h2><nav>Suppliers List</nav></h2><br>
-    <table id="logshistory">
+    <table id="logshistory" border="1">
         <tr>
-                <th> Supplier Name</th>
-                <th> Store Num</th>
-                <th> Store Link</th>
-                <th> Establish Year</th>
-                <th> Mail</th>
-                <th> We-Chat</th>
-                <th> Skype ID</th>
-                <th> Phone Number</th>
+                <th>Supplier Name</th>
+                <th>Store Num</th>
+                <th>Store Link</th>
+                <th>Establish Year</th>
+                <th>Mail</th>
+                <th>We-Chat</th>
+                <th>Skype ID</th>
+                <th>Phone Number</th>
+                <th>blackList</th>
         </tr>
         <tr>
             <td id="supplierNameRecord"> </td>
@@ -213,83 +162,162 @@ text-decoration-line: underline;
             <td id="wechatRecord"> </td>
             <td id="skypeIDRecord"> </td>
             <td id="phoneNumRecord"> </td>
+            <td id="blackListButton"> </td>
+            
         </tr>
         </table>
+    </form>
+    
+        <div class="container">
+                <div class="modal fade" id="blackListModal" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="text-center">Are you sure move to blacklist?</h4>
+                      </div>
+                      <form id="blackListForm" action="/home/suppliers/addsup" method="POST">
+                        <div class="modal-body">
+                            <input type="hidden" name="supplierName">
+                            <input type="hidden" name="blackDate">
+                        </div>
+                      <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button id="saveModal" type="submit" class="btn btn-primary">BlackList</button>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-      
 
-        </form>
     </div>
 
-    <script>
+<script>
+window.onscroll = function() {myFunction()};
 
-            $('#addNewSup').submit(function(){
-            event.preventDefault(); //prevent default action 
-            var post_url = $(this).attr("action"); //get form action url
-            var request_method = $(this).attr("method"); //get form GET/POST method
-            var form_data = $(this).serialize(); //Encode form elements for submission
+var navbar = document.getElementById("stickHeader");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+
+
+        $('#addNewSup').submit(function(){
+        event.preventDefault(); //prevent default action 
+        var post_url = $(this).attr("action"); //get form action url
+        var request_method = $(this).attr("method"); //get form GET/POST method
+        var form_data = $(this).serialize(); //Encode form elements for submission
+                
+        var addSup = $.ajax({
+                    url : post_url,
+                    type: request_method,
+                    data : form_data,
+                    });
                     
-            var addSup = $.ajax({
-                        url : post_url,
-                        type: request_method,
-                        data : form_data,
-                        });
-                        
-                        addSup.fail( function() {
-                        window.alert("Fail!");
-                        });
+                    addSup.fail( function() {
+                    window.alert("Fail!");
+                    });
 
-                        addSup.done( function(response) {
-                            if (response.redirect !== undefined && response.redirect) {
-                            window.location.href = response.redirect_url;
-                            }else{
-                                var delayInMilliseconds = 2000;
-                                
-                                setTimeout(function() {
-                                    location.reload();
-                                }, delayInMilliseconds);
-                                
-                                $("#message").html(response.message);
-                            }
-                        });
-             })
+                    addSup.done( function(response) {
+                        if (response.redirect !== undefined && response.redirect) {
+                        window.location.href = response.redirect_url;
+                        }else{
+                            var delayInMilliseconds = 2000;
+                            
+                            setTimeout(function() {
+                                location.reload();
+                            }, delayInMilliseconds);
+                            
+                            $("#message").html(response.message);
+                        }
+                    });
+            })
 //--------------------------
 
 
-            var suppliersListRes = JSON.parse('<%-JSON.stringify(answer.suppliersListRes)%>');
-            
-            var supplierName = '';
-            var storeNum = '';
-            var storeLink = '';
-            var storeLinkName = [];
-            var establishYear = '';
-            var email = '';
-            var wechat = '';
-            var skypeID= '';
-            var phoneNum = '';
-            var i = '';
+var suppliersListRes = JSON.parse('<%-JSON.stringify(answer.suppliersListRes)%>');
 
-            for (i = 0; i < suppliersListRes.length; i++) { 
-            storeNum += suppliersListRes[i].storeNum + "<br><br>";
-            supplierName += suppliersListRes[i].supplierName + "<br><br>";
-            storeLink +='<a href="'+ suppliersListRes[i].storeLink +'" target="_blank">Go To Store</a>' + "<br><br>";
-            establishYear += suppliersListRes[i].establishYear + "<br><br>";
-            email += suppliersListRes[i].email + "<br><br>";
-            wechat += suppliersListRes[i].wechat + "<br><br>";
-            skypeID += suppliersListRes[i].skypeID + "<br><br>";
-            phoneNum += suppliersListRes[i].phoneNum + "<br><br>";
-            }
-            
-            document.getElementById("supplierNameRecord").innerHTML = supplierName;
-            document.getElementById("storeNumRecord").innerHTML = storeNum;
-            document.getElementById("storeLinkRecord").innerHTML = storeLink;
-            document.getElementById("establishYearRecord").innerHTML = establishYear;
-            document.getElementById("emailRecord").innerHTML = email;
-            document.getElementById("wechatRecord").innerHTML = wechat;
-            document.getElementById("skypeIDRecord").innerHTML = skypeID;
-            document.getElementById("phoneNumRecord").innerHTML = phoneNum;
+var supplierName = '';
+var storeNum = '';
+var storeLink = '';
+var storeLinkName = [];
+var establishYear = '';
+var email = '';
+var wechat = '';
+var skypeID= '';
+var phoneNum = '';
+var blackList = '';
+var i = '';
 
-    </script>
+for (i = 0; i < suppliersListRes.length; i++) { 
+storeNum += suppliersListRes[i].storeNum + "<br><br>";
+supplierName += suppliersListRes[i].supplierName + "<br><br>";
+storeLink +='<a href="'+ suppliersListRes[i].storeLink +'" target="_blank">Go To Store</a>' + "<br><br>";
+establishYear += suppliersListRes[i].establishYear + "<br><br>";
+email += suppliersListRes[i].email + "<br><br>";
+wechat += suppliersListRes[i].wechat + "<br><br>";
+skypeID += suppliersListRes[i].skypeID + "<br><br>";
+phoneNum += suppliersListRes[i].phoneNum + "<br><br>";
+blackList += '<button data-id="blackList'+[i]+'" type="button" data-value="'+ suppliersListRes[i].supplierName +'" data-toggle="modal" data-target="#blackListModal"><i class="fa fa-thumbs-o-down"></i></button>' + "<br style='line-height: 33px'>";
+}
+
+document.getElementById("supplierNameRecord").innerHTML = supplierName;
+document.getElementById("storeNumRecord").innerHTML = storeNum;
+document.getElementById("storeLinkRecord").innerHTML = storeLink;
+document.getElementById("establishYearRecord").innerHTML = establishYear;
+document.getElementById("emailRecord").innerHTML = email;
+document.getElementById("wechatRecord").innerHTML = wechat;
+document.getElementById("skypeIDRecord").innerHTML = skypeID;
+document.getElementById("phoneNumRecord").innerHTML = phoneNum;
+document.getElementById("blackListButton").innerHTML = blackList;
+
+$('#blackListModal').on('show.bs.modal', function(e) {
+var currentdate = new Date(); 
+var blackDate = currentdate.getFullYear() + "-"
+        + (currentdate.getMonth()+1)  + "-" 
+        + currentdate.getDate() + " "  
+
+var supplierName = $(e.relatedTarget).data('value');
+
+$(e.currentTarget).find('input[name="supplierName"]').val(supplierName);
+$(e.currentTarget).find('input[name="blackDate"]').val(blackDate);
+});
+
+
+$('#blackListForm').submit(function(event){
+event.preventDefault();
+var post_url = $(this).attr("action");
+var request_method = $(this).attr("method");
+var form_data = $(this).serialize();
+        
+var blackList = $.ajax({
+            url : post_url,
+            type: POST,
+            data : form_data,
+            });
+            
+            blackList.fail( function() {
+            window.alert("Fail!");
+            });
+
+            blackList.done( function(response) {
+                if (response.redirect !== undefined && response.redirect) {
+                window.location.href = response.redirect_url;
+                }else{
+                    location.reload();
+                    $('#blackListModal').modal('hide');
+                }
+            });
+    })
+
+</script>
 
 </body>
 </html>

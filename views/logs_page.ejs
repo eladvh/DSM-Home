@@ -1,34 +1,18 @@
 
 <!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
+<head>
 <%- include sidebar %>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>logs</title>
+<title>Documentation</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+</head>
 <style>
-
-/*body {
-  width: 100%;
-  height: 2000px;
-  margin: 1;
-  padding: 0;
-}
-
-.border {
-  position:fixed;
-  top: 0;
-  left: 0;
-  border: 1px solid #000;
-  border-radius: 5px;
-  width: 100%;
-  height: 100%;
-  margin: 12;
-  padding: 1em;
-  box-sizing: border-box;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}*/
 
 #logs{
 width:100%;
@@ -37,36 +21,30 @@ border-radius:none;
 padding:1px;
 font-size: 16px;
 text-align:left;
-font-family: Verdana, Geneva, Tahoma, sans-serif;            
+font-family: Verdana, Geneva, Tahoma, sans-serif;   
 }
 
+#logs th{
+    text-align: left;
+}
 
 #logs input,#logs select {
-  border-radius:1px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  outline: 0;
-  background: #f2f2f2;
-  width: 85%;
-  border-color: 1px solid black;
-  border-radius: 5px;
-  margin: 0 0 15px;
-  padding: 1px;
-  box-sizing: border-box;
-  font-size: 12px;
-    }
-    h2{
-        text-align:left;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        color: white;
-        font-weight: bold;
-    }
-    nav{
-        width: 100%;
-        background: Indigo;
-        padding: 20px;
-        box-shadow: 0 4px goldenrod; 
-       /* border-bottom: 1px solid black;*/
-    }
+  width: 200px;
+}
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+    margin:0;
+}
+nav{
+    width: 100%;
+    background: Indigo;
+    padding: 20px;
+    box-shadow: 0 4px goldenrod; 
+    /* border-bottom: 1px solid black;*/
+}
   #methodform{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-transform: uppercase;
@@ -99,156 +77,85 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
 #newlog:hover,.form button:active,.form button:focus {
   background:darkgrey; ;
 }
-/*#Clear{
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  text-transform: uppercase;
-  background: rgba(3, 34, 134, 0.842);
-  border-color:black;
-  border-radius: 5px; 
-  border-width: 1px;
-  width: 120px;
-  padding: 6px;
-  color: #FFFFFF;
-  font-size: 12px;
-  cursor: pointer;
-  text-align: center;  
-}
-.button:hover,.form button:active,.form button:focus {
-  background:goldenrod;
-}*/
 
-/*#submitbutt{
-    background: white ;
-    border-radius: 5px;
-    border-color:LightSlateGray;
-    color: Teal;
-    box-shadow: 0 4px LightSlateGray;
-    padding: 1px;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: center;
-    width: 80px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}*/
 #submitbutt {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  text-transform: uppercase;
   background:indigo;
-  border-radius: 5px; 
-  border-width: 1px;
-  width: 120px;
-  padding: 6px;
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center; 
-  box-shadow: 0 4px goldenrod; 
 }
 #submitbutt:hover,.form button:active,.form button:focus {
   background:goldenrod;
 }
-    #logshistory{
-       width:100%;
-       border: none;
-       font-family: Verdana, Geneva, Tahoma, sans-serif;
-       text-align:left;
-    }
 
-    #logshistory th{
-text-decoration-line: underline; 
+#logshistory{
+    width:100%;
+    border: rgb(190, 190, 190);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align:center;
+    font-size: 13px;
+}
+#logshistory th{
+    text-align: center;
 }
 
-    </style>
+</style>
+<h2 style="text-align: center"><nav>Documentation Page</nav></h2><br>
 <div class = "padding">
 <body>
 
 <div class="border"></div>
 
     <form id="addNewLog" method="POST" action="/home/suppliers/logs">
-    <h2><nav> + New log</nav></h2>
+
         <table id="logs"><tr>
             <th> Supplier Name</th>
             <th> Store Num</th>
-            <th>Date Of Conversion</th>
+            <th>Date</th>
             <th> Subject</th>
-            <th> Communication Method</th>
+            <th> Method</th>
             <th> Content</th>
             </tr>
         <tr>
             <td>
                 <form id="supNameForm" method="POST" action="/home/suppliers/logs">
-                    <select id="supNameSelect" name="supplierName1" method="POST" action="/home/suppliers/logs">
-                    <option selected disabled>Selecet Supplier</option>
-                  </select>
+                    <select id="supNameSelect" data-live-search="true" class="selectpicker" name="supplierName1"  method="POST" action="/home/suppliers/logs"></select>
                 </form>
             </td>
             <td> 
-                <select id="storeNumSelect" placeholder="Store Number" name="storeNum">
-                <option selected disabled>Select Store Num</option>
-              </select>
+                <select id="storeNumSelect" data-live-search="true" class="form-control" name="storeNum"></select>
             </td>
-            <td> <input type="datetime-local" name="dateOfConversion"/></td>
-            <td> <input type="text" placeholder="subject" name="subject" /></td>
-            <td> <select id="methodlist" name="methodList">
+            <td> <input class="form-control" type="datetime-local" name="dateOfConversation"/></td>
+            <td> <input type="text" class="form-control" name="subject" /></td>
+            <td> <select id="methodlist" class="form-control" name="methodList">
                 <option value="Mail">Mail</option>
                 <option value="WeChat">Wechat</option>
                 <option value="Skype">Skype</option>
                 <option value="Phone">Phone</option>
                 </select>
             </td>
-            <td> <input type="text"placeholder="content" name="content"/></td>
-            <td> <input id="Clear" type="reset" value="Clear"/></td>
+            <td><input type="text" class="form-control" name="content"/></td>
+            <td><input id="Clear" type="reset" value="Clear" class="form-control"/></td>
             </tr>
-        </table>
-        <div style="text-align:center"><button id="submitbutt" type="submit">Submit</button></div>
+        </table><br>
+        <div style="text-align:center"><button id="submitbutt" type="submit" class="btn btn-primary btn-lg">Submit</button></div>
 
     </form>
-
-        <input id="newlog" onclick="addRow()" type="button" value="+Add new log"/>
         
         <div style="text-align:center"><h1 id="message"></h1></div>
-
-        <script>
-            function addRow() {
-                var table = document.getElementById('logs');
-                var columnLength = table.getElementsByTagName('tr')[0].children.length;
-                var units = document.getElementsByClassName('unit-table');
-                var tr = document.createElement('tr');
-                tr.className = 'unit-table';
-                for (var i = 0; i < columnLength; i++) {
-                    var td = document.createElement('td');
-                    var text = document.createElement('input');
-                    text.type = 'text';
-                    td.appendChild(text);
-                    tr.appendChild(td);
-                }
-                table.appendChild(tr);
-            }
-
-            document.getElementById('newlog').onclick = addRow;
-
-        </script>
         
-
-    <h2><nav> Logs history</nav></h2><br>
+    <h2><nav> Documentation history</nav></h2><br>
     <div style="text-align:center"><form id="supForm" method="POST" action="/home/suppliers/logs">
-        <select id="supSelect" name="supplierName2" method="POST" action="/home/suppliers/logs">
-          <option selected disabled>Selecet Supplier</option>
-        </select>
-        <table id="logshistory">
+        <select id="supSelect" data-live-search="true" class="selectpicker" name="supplierName2" method="POST" action="/home/suppliers/logs"></select><br><br>
+        <table id="logshistory" border="1">
                 <tr>
+                    <th> Supplier Name</th>
                     <th> Store num</th>
-                    <th>Supplier Name</th>
-                    <th>Date of conversion</th>
+                    <th> Date</th>
                     <th> Subject</th>
-                    <th> communication method</th>
+                    <th> method</th>
                     <th> Content</th>
                 </tr>
-                <tr> <td id="storeNumLogs"></td>
-                    <td id="supplierNameLogs"> </td>
-                    <td id="dateOfConversionLogs"> </td>
+                <tr><td id="supplierNameLogs"></td>
+                    <td id="storeNumLogs"></td>
+                    <td id="dateOfConversationLogs"> </td>
                     <td id="titleLogs"> </td>
                     <td id="communicationMethodLogs"> </td>
                     <td id="contentLogs"> </td>
@@ -331,7 +238,7 @@ text-decoration-line: underline;
 
             var storeNum = '';
             var supplierName = '';
-            var dateOfConversion = '';
+            var dateOfConversation = '';
             var title = '';
             var communicationMethod = '';
             var content = '';
@@ -340,7 +247,7 @@ text-decoration-line: underline;
             for (i = 0; i < logsListRes.length; i++) { 
             storeNum += logsListRes[i].storeNum + "<br><br>";
             supplierName += logsListRes[i].supplierName + "<br><br>";
-            dateOfConversion += logsListRes[i].dateOfConversion.replace("T", ",").substr(0, logsListRes[i].dateOfConversion.lastIndexOf(".")) + "<br><br>";
+            dateOfConversation += logsListRes[i].dateOfConversation.replace("T", ",").substr(0, logsListRes[i].dateOfConversation.lastIndexOf(".")) + "<br><br>";
             title += logsListRes[i].title + "<br><br>";
             communicationMethod += logsListRes[i].communicationMethod + "<br><br>";
             content += logsListRes[i].content + "<br><br>";
@@ -348,7 +255,7 @@ text-decoration-line: underline;
             
             document.getElementById("storeNumLogs").innerHTML = storeNum;
             document.getElementById("supplierNameLogs").innerHTML = supplierName;
-            document.getElementById("dateOfConversionLogs").innerHTML = dateOfConversion;
+            document.getElementById("dateOfConversationLogs").innerHTML = dateOfConversation;
             document.getElementById("titleLogs").innerHTML = title;
             document.getElementById("communicationMethodLogs").innerHTML = communicationMethod;
             document.getElementById("contentLogs").innerHTML = content;

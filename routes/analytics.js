@@ -12,10 +12,16 @@
     var supOrdersQty = [];
     var supOrdersDates = [];
     var supOrdersNum = [];
+    var monthCalc = [];
+    var monthCalc1 = [];
+    var expensesSummary = [];
+    var revenueSummary = [];
 
     var answer = {sendName, supOrdSumListRes, supplierNameRes};
     var refundAnswer = {sendName, supRefundsQty, supRefundsDates, supRefundsNum}
     var orderAnswer = {sendName, supOrdersQty, supOrdersDates, supOrdersNum}
+    var revenueAnswer = {sendName, monthCalc, revenueSummary}
+    var expensesAnswer = {sendName, monthCalc1, expensesSummary}
     var userId = req.session.userId;
   
     if(userId == null){
@@ -95,13 +101,47 @@ function asyncFunc() {
           console.log('Get Suppliers Names List');
           db.query("SELECT DISTINCT supplierName FROM `tblSuppliers`", function(err, results, fields)
           {
-               if(results.length){
-              for(var i = 0; i < results.length; i++ ){     
-                        supplierNameRes.push(results[i].supplierName);
-                  }
-               }
+            if(results.length){
+                for(var i = 0; i < results.length; i++ ){     
+                    supplierNameRes.push(results[i].supplierName);
+                }   
+            }
                resolve(supplierNameRes);
           });
+        });
+  }
+    
+  function asyncFunc2() {
+    return new Promise(
+        function (resolve, reject) {
+          console.log('Get User Revenue');
+          db.query("CALL Get_revenue_by_supplier", function(err, results, fields)
+          {
+            if(results[0].length){
+                for(var i = 0; i < results[0].length; i++){
+                    monthCalc.push(results[0][i].Month)
+                    revenueSummary.push(results[0][i].totalUserRevenue)
+                }
+            }
+            resolve();
+          })  
+        });
+  }
+
+  function asyncFunc3() {
+    return new Promise(
+        function (resolve, reject) {
+          console.log('Get User Expenses');
+          db.query("CALL Get_expenses_by_supplier", function(err, results, fields)
+          {
+            if(results[0].length){
+                for(var i = 0; i < results[0].length; i++){
+                    monthCalc1.push(results[0][i].Month)
+                    expensesSummary.push(results[0][i].totalUserExpenses)
+                }
+            }
+            resolve();
+          })  
         });
   }
     
@@ -109,7 +149,13 @@ function asyncFunc() {
     function main() {
         asyncFunc()
         .then(result => {
-            res.render('analytics', {answer:answer});
+            return asyncFunc2();
+        }).then(result => {
+            console.log(revenueAnswer)
+            return asyncFunc3();
+        }).then(result => {
+            console.log(expensesAnswer)
+            res.render('analytics', {answer:answer,revenueAnswer:revenueAnswer,expensesAnswer:expensesAnswer});
         })
         .catch(error => {});
       }

@@ -394,6 +394,7 @@ if(userId == null){
 
                 if(eBayItemNumberAuto){
                db.query("SELECT itemCode FROM `tblitems` WHERE `ItemCode`='"+eBayItemNumberAuto+"'", function(err, results, fields){
+                if(err){console.log('bug1')};
                 if(!results.length){
                     ebay.xmlRequest({
                     'serviceName': 'Shopping',
@@ -415,8 +416,12 @@ if(userId == null){
                       }
                     var categoryPath = data.Item.PrimaryCategoryName.split(':').slice(-1)[0];
                     var value = data.Item.ConvertedCurrentPrice.amount;
-                     db.query("INSERT INTO `tblItems`(`itemCode`,`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + eBayItemNumberAuto + "','" + title + "','" + itemWebUrl + "','" + imageUrl + "' ,'" +categoryPath + "','" + value + "')")
-                     db.query("INSERT INTO `tblitemref`(`itemCode`) VALUES ('" + eBayItemNumberAuto + "')")
+                     db.query("INSERT INTO `tblItems`(`itemCode`,`itemName`,`storeItemLink`, `itemPic`,`category`, `itemPrice`) VALUES ('" + eBayItemNumberAuto + "','" + title + "','" + itemWebUrl + "','" + imageUrl + "' ,'" +categoryPath + "','" + value + "')", function(err, result1, fields){
+                      if(err){console.log('bug2')};
+                    })
+                     db.query("INSERT INTO `tblitemref`(`itemCode`) VALUES ('" + eBayItemNumberAuto + "')", function(err, result2, fields){
+                      if(err){console.log('bug3')};
+                    })
                   }
                   })
               //titleArr.push(title)
@@ -445,7 +450,11 @@ if(userId == null){
             return new Promise(resolve => {
               if(aliexpressItemNumberAuto && title){
                   db.query("SELECT supItemCode, itemName FROM `tblsupplieritem` WHERE `supItemCode`='"+aliexpressItemNumberAuto+"' AND `itemName`='"+title+"'", function(err, result, fields){
-                  if(!result.length){
+                    if(err){
+                      console.log('bug4')
+                      //return;
+                    };
+                    if(!result.length){
                      AliexScrape(aliexpressItemNumberAuto)
                     .then(async response => {
                       var obj = JSON.parse(response);
@@ -454,22 +463,26 @@ if(userId == null){
                       var storeLink = aliexpressItemLink;
                       var price = obj.variations[0].pricing;
                       var supStoreLink = `https://www.aliexpress.com/store/${storeID}`;
+
                     db.query("INSERT INTO `tblsuppliers`(`supplierName`,`storeNum`,`storeLink`) VALUES ('" + storeName + "','" + storeID + "','" + supStoreLink + "')", function(err, result2, fields){
-                      if(err){console.log('bug')};
+                      if(err){console.log('bug5')};
                     })
                     db.query("INSERT INTO `tblsupplieritem`(`supItemCode`,`supplierName`,`storeNum`,`itemName`, `supItemLink`,`supItemPrice`) VALUES ('" + aliexpressItemNumberAuto + "','" + storeName + "','" + storeID + "','" + title + "','" + storeLink + "','" + price + "')", function(err, result2, fields){
-                      if(err){console.log('bug')};
+                      if(err){console.log('bug6')};
                     })
                     }).catch(error => console.log('Item Link Broken - Association Failed'));
                     db.query("SELECT itemCode FROM `tblItems` WHERE `itemName`='"+title+"'", function(err, result2, fields){
-                    if(result2.length){
+                      if(err){console.log('bug7')};
+                      if(result2.length){
                       db.query("SELECT IFNULL(supItemCode,sup2ItemCode) AS supItemCode FROM `tblitemref` where itemCode = '"+result2[0].itemCode+"'", function(err, result3, fields){
+                        if(err){console.log('bug8')};
                         if(!result3[0].supItemCode){
                           var sql1 = "update tblitemref SET supItemCode = ? WHERE itemCode = ?";
                           db.query(sql1, [aliexpressItemNumberAuto, result2[0].itemCode], function(err, result) {
                           })
                         }else if(result3[0].supItemCode){
                           db.query("SELECT IFNULL(sup2ItemCode,sup3ItemCode) AS sup2ItemCode FROM `tblitemref` where itemCode = '"+result2[0].itemCode+"'", function(err, result4, fields){
+                            if(err){console.log('bug9')};
                             if(!result4[0].sup2ItemCode){
                               var sql2 = "update tblitemref SET sup2ItemCode = ? WHERE itemCode = ?";
                               db.query(sql2, [aliexpressItemNumberAuto, result2[0].itemCode], function(err, result) {
@@ -501,7 +514,7 @@ if(userId == null){
             answer.message = 'Import data from Excel was successful!'
             setTimeout(() => {
               resolve(message)
-            }, (x*500)+2000);
+            }, (x*800)+2000);
             })
             }
 
@@ -884,12 +897,12 @@ if(itemsData)callGetData();
               supItemPrice3 = results[0][i].supItemPrice3;
               if(itemPrice - supItemPrice < supItemPrice * 0.4){
                 console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName}`)
-                notificationArr.push(results[0][i].itemName)
+                notificationArr.push(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName}`)
               }
               if(supItemPrice2){
                 if(itemPrice - supItemPrice2 < supItemPrice2 * 0.4){
                   console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName2}`)
-                  notificationArr.push(results[0][i].itemName)
+                  notificationArr.push(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName2}`)
                 }
                 if(supItemPrice2 < supItemPrice){
                   var sql = "UPDATE tblitemref SET supItemCode=(@temp:=supItemCode), supItemCode = sup2ItemCode, sup2ItemCode = @temp WHERE itemCode = ?";
@@ -899,7 +912,7 @@ if(itemsData)callGetData();
               if(supItemPrice3){
                 if(itemPrice - supItemPrice3 < supItemPrice3 * 0.4){
                   console.log(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName3}`)
-                  notificationArr.push(results[0][i].itemName)
+                  notificationArr.push(`ACTION REQUIRED - EDIT PRICE FOR ${results[0][i].itemName} ASAP FOR ${results[0][i].supplierName3}`)
                 }
                 if(supItemPrice3 < supItemPrice){
                   var sql = "UPDATE tblitemref SET supItemCode=(@temp:=supItemCode), supItemCode = sup3ItemCode, sup3ItemCode = @temp WHERE itemCode = ?";

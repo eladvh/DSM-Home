@@ -8,7 +8,6 @@ exports.addLogs = function(req, res){
     var supplierNameMenuRes = [];
     var supplierNameRes= [];
     var storeNumRes = [];
-     //var post = {storeNum: '', supplierName: '', dateOfConversion: '',subject: '',methodList: '',content: ''};
     var answer = {storeNumRes ,supplierNameMenuRes , supplierNameRes, logsListRes, post:'', message: '', sendName};
   
     var userId = req.session.userId;
@@ -24,7 +23,7 @@ exports.addLogs = function(req, res){
       var storeNum = post.storeNum;
       var supplierName1 = post.supplierName1;
       var supplierName2 = post.supplierName2;
-      var dateOfConversion = post.dateOfConversion;
+      var dateOfConversation = post.dateOfConversation;
       var subject= post.subject;
       var methodList= post.methodList;
       var content= post.content;
@@ -59,11 +58,11 @@ exports.addLogs = function(req, res){
       promise3 = new Promise((resolve, reject) => {
         console.log('Update DB'); 
         if(storeNum){
-        var sql = "INSERT INTO `tblLogs`(`storeNum`,`supplierName`,`dateOfConversion`,`title`, `communicationMethod`, `content`) VALUES ('" + storeNum + "','" + supplierName1 + "','" + dateOfConversion + "','" + subject + "','" + methodList + "' ,'" + content + "')";
+        var sql = "INSERT INTO `tblLogs`(`storeNum`,`supplierName`,`dateOfConversation`,`title`, `communicationMethod`, `content`) VALUES ('" + storeNum + "','" + supplierName1 + "','" + dateOfConversation + "','" + subject + "','" + methodList + "' ,'" + content + "')";
               db.query(sql, function(err, results) {
                 console.log('success');
           });
-          resolve(storeNum, supplierName2, dateOfConversion, subject, methodList, content);
+          resolve(storeNum, supplierName2, dateOfConversation, subject, methodList, content);
         }
         });
   

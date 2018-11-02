@@ -2,6 +2,7 @@ const express = require('express')
 const routes = require('../routes')
 const user = require('../routes/user')
 const index = require('../routes/index')
+const suppliers = require('../routes/suppliers')
 const addLogs = require('../routes/addLogs')
 const addSups = require('../routes/addSups')
 const addItems = require('../routes/addItems')
@@ -23,8 +24,8 @@ app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
 app.get('/home/logout', user.logout);//call for logout
 app.get('/home/profile',user.profile);//to render users profile page
 app.post('/home/profile',user.profile);//to render users profile post page
-app.get('/home/suppliers', index.suppliers);//to render suppliers page
-app.post('/home/suppliers', index.suppliers);//call for suppliers post
+app.get('/home/suppliers', suppliers.suppliers);//to render suppliers page
+app.post('/home/suppliers', suppliers.suppliers);//call for suppliers post
 app.get('/home/suppliers/logs', addLogs.addLogs);//call for logs_page
 app.post('/home/suppliers/logs', addLogs.addLogs);//call for logs_page post
 app.get('/home/suppliers/addsup', addSups.addsup);//call for addsup_page page 

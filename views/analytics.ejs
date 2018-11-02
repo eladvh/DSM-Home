@@ -18,6 +18,21 @@
 
 * {box-sizing: border-box;}
 
+h2{
+    text-align:left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    font-weight: bold;
+    margin:0;
+}
+nav{
+    width: 100%;
+    background: black;
+    padding: 20px;
+    box-shadow: 0 4px gray; 
+    color:white;
+}
+
 .wrapper { 
     display: grid; 
     grid-gap: 15px;
@@ -76,6 +91,16 @@ h1{
     font-size: 25px;
     font-family: 'Times New Roman', Times, serif;
     text-transform: uppercase;
+    margin:0;
+}
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
 }
 
 /* On small screens, set height to 'auto' for sidenav and grid */
@@ -85,11 +110,11 @@ h1{
 
 </style>
 <body>
+<h1 style="text-align: center"><nav id="stickHeader">DSM-Home Analytics Page</nav></h1><br><br><br><br>
 <div class="padding">
-    <h1>DSM-Home Analytics</h1>
     <div class="wrapper">
         <div class="card1">
-            <form id="numOfRefundsForm" style="display:-webkit-inline-box" method="POST" action="/home/analytics"><select id="supNameSelect1" data-live-search="true" class="selectpicker" name="supplierName1"></select>
+            <form id="numOfRefundsForm" style="display:-webkit-inline-box" method="POST" action="/home/analytics"><select id="supNameSelect1" data-live-search="true" class="selectpicker" name="supplierName1" style="position:static !important;"></select>
             <input type="date" class="form-control" placeholder="firstDate" name="firstDate" style="width: 180px; margin-left:15px">
             <input type="date" class="form-control" placeholder="secondDate" name="secondDate" style="width: 180px; margin-left:15px">
             <button type="submit" class="btn btn-primary" style="margin-left:15px">Submit</button>
@@ -108,11 +133,65 @@ h1{
             <div class="boxsize"><canvas id="pie-chart"></canvas></div>
         </div>
         <div class="card4">
-            <div class="boxsize"><canvas id="radar-chart"></canvas></div>
+            <div class="boxsize"><canvas id="doughnut-chart"></canvas></div>
         </div>
     </div>
+    <canvas id="myChart" width="400" height="400"></canvas>
 </div>
 
+<script>
+
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("stickHeader");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
+
+    var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
 <script>
 //chart1
 function chart1(){
@@ -126,14 +205,24 @@ new Chart(document.getElementById("bar-chart"), {
           backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
           data: supRefundsQty  
         }
-      ]
+      ],
+      borderWidth: 1
     },
     options: {
-      title: {
-        display: true,
-        text: 'Num Of Refunds Of Specific Supplier'
-      }
+    title: {
+      display: false,
+      text: 'Number Of Refunds Per Supplier'
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
     }
+  }
 });
 
 }
@@ -150,12 +239,22 @@ new Chart(document.getElementById("bar-chart-horizontal"), {
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
         data: supOrdersQty
       }
-    ]
+    ],
+    borderWidth: 1
   },
   options: {
     title: {
-      display: true,
-      text: 'Number Of Orders Of Supplier'
+      display: false,
+      text: 'Number Of Orders Per Supplier'
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
     }
   }
 });
@@ -163,54 +262,47 @@ new Chart(document.getElementById("bar-chart-horizontal"), {
 chart2()
 
 //chart3
+var revenueAnswer = JSON.parse('<%-JSON.stringify(revenueAnswer)%>');
+var monthCalc = revenueAnswer.monthCalc
+var revenueSummary = revenueAnswer.revenueSummary
 new Chart(document.getElementById("pie-chart"), {
     type: 'pie',
     data: {
-      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      labels: monthCalc,
       datasets: [{
-        label: "Population (millions)",
+        label: "Month Revenue",
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-        data: [2478,5267,734,784,433]
+        data: revenueSummary
       }]
     },
     options: {
       title: {
         display: true,
-        text: 'Predicted world population (millions) in 2050'
+        text: 'Revenue Per Month'
       }
     }
 });
 
 //chart4
-new Chart(document.getElementById("radar-chart"), {
-    type: 'radar',
+var expensesAnswer = JSON.parse('<%-JSON.stringify(expensesAnswer)%>');
+var monthCalc1 = expensesAnswer.monthCalc1
+var expensesSummary = expensesAnswer.expensesSummary
+new Chart(document.getElementById("doughnut-chart"), {
+    type: 'doughnut',
     data: {
-      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+      labels: monthCalc1,
       datasets: [
         {
-          label: "1950",
-          fill: true,
-          backgroundColor: "rgba(179,181,198,0.2)",
-          borderColor: "rgba(179,181,198,1)",
-          pointBorderColor: "#fff",
-          pointBackgroundColor: "rgba(179,181,198,1)",
-          data: [8.77,55.61,21.69,6.62,6.82]
-        }, {
-          label: "2050",
-          fill: true,
-          backgroundColor: "rgba(255,99,132,0.2)",
-          borderColor: "rgba(255,99,132,1)",
-          pointBorderColor: "#fff",
-          pointBackgroundColor: "rgba(255,99,132,1)",
-          pointBorderColor: "#fff",
-          data: [25.48,54.16,7.61,8.06,4.45]
+          label: "Month Expenses",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: expensesSummary
         }
       ]
     },
     options: {
       title: {
         display: true,
-        text: 'Distribution in % of world population'
+        text: 'Expenses Per Month'
       }
     }
 });

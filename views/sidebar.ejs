@@ -3,16 +3,80 @@
 <body>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-    body{
-        background-image:none;}
+body{
+    background-image:none;
+    margin:0;
+    }
+    
+
+.navbar {
+    background-color:rgba(0, 0, 0, 0.904);
+    overflow-x: hidden;
+    border-style:ridge;
+}
+
+.navbar a {
+    float: right;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    padding: 0px 50px;
+    text-decoration: none;
+}
+
+.dropdown {
+    float: right;
+    overflow: hidden;
+}
+
+.dropdown .dropbtn {
+    font-size: 30px;    
+    border: none;
+    outline: none;
+    color: black;
+    padding: 14px 30px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.dropdown:hover .dropbtn {
+    background-color:rgba(245, 245, 245, 0.719);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: black;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: darkgoldenrod;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
     .sidenav {
     height: 100%;
-    width: 180px;
+    width: 200px;
     position: fixed;
     z-index: 1;
-    top: 0;
     left: 0;
+    top:74px;
     background-color:white;
     overflow-x: hidden;
     padding-top: 0px;
@@ -32,8 +96,7 @@
 }
 
 div.padding {
-    padding-top: 35px;
-    padding-left: 182px;
+    padding-left: 202px;
 }
 
 div.floatRight {
@@ -44,30 +107,18 @@ div.floatRight {
     font-size: 25px;
     }
 </style>
-
     
-        <div class="sidenav">
-                <a class="active" href="/home/dashboard"><i class="fa fa-home"></i> DSM-Home</i></a><br>
-                <a href="/home/profile"><i class="fa fa-bars"></i> User Profile</a>
-                <a href="/home/suppliers"><i class="fa fa-handshake-o"></i> Suppliers</a>
-                <a href="/home/suppliers/addOrder"><i class="fa fa-cart-arrow-down"></i> Orders</a>
-                <a href="/home/analytics"><i class="fa fa-area-chart"></i> Analytics</a>  
-                <a href="/home/suppliers/addsup"><i class="fa fa-area-chart"></i> Add New Sup</a>
-                <a href="/home/suppliers/searchsup"><i class="fa fa-area-chart"></i> Search New Sup</a>  
-                <a href="/home/suppliers/logs"><i class="fa fa-area-chart"></i> Logs</a>
-                <a href="/home/suppliers/addItem"><i class="fa fa-area-chart"></i> Items</a>
-        </div>
-
-
-        <div class="floatRight"> 
-            <select id="login-icon" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                  <option selected disabled><% if (answer.sendName.length > 0) { %><div><%= answer.sendName %></div><% } %> </option>
-                  <option href="login" value="/login">Sign In</option>
-                  <option href="signup" value="/signup">Sign Up</option>
-                  <option href="home/profile" value="/home/profile">User</option>
-                  <option href="/home/logout" value="/home/logout">Log Out</option>
-            </select>
-          </div>
+<div class="sidenav">
+        <a class="active" href="/home/dashboard"><i class="fa fa-home"></i> DSM-Home</i></a><br>
+        <a href="/home/profile"><i class="fa fa-bars"></i> User Profile</a>
+        <a href="/home/suppliers"><i class="fa fa-handshake-o"></i> Suppliers</a>
+        <a href="/home/suppliers/addOrder"><i class="fa fa-cart-arrow-down"></i> Orders</a>
+        <a href="/home/analytics"><i class="fa fa-area-chart"></i> Analytics</a>  
+        <a href="/home/suppliers/addsup"><i class="fa fa-plus"></i> Add New Sup</a>
+        <a href="/home/suppliers/searchsup"><i class="fa fa-search"></i> Search New Sup</a>  
+        <a href="/home/suppliers/logs"><i class="fa fa-envelope"></i> Documentation</a>
+        <a href="/home/suppliers/addItem"><i class="fa fa-shopping-bag"></i> Items</a>
+</div>
 
 </body>
 </html>

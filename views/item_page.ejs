@@ -39,6 +39,7 @@ h2{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: white;
     font-weight: bold;
+    margin:0;
 }
 .header nav{
     width: 100%;
@@ -98,7 +99,6 @@ h2{
     font-weight: bold;
     text-align: center;
     text-decoration-line: underline; 
-    position:relative;
 }
 
 .inp {
@@ -202,7 +202,7 @@ h2{
 
 .alignImg{
     display:inline-block;
-    position:absolute;;
+
     text-align:center;
     padding:20px;
 }
@@ -299,9 +299,8 @@ body {
   upload button styles
 ******************************************/
 .file-upload {
-	position: relative;
 	display: inline-block;
-    left:80%;
+    top:10px;
 }
 
 .file-upload__label {
@@ -383,18 +382,25 @@ body {
 .closebtn:hover {
     color: black;
 }
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
 </style>
 <body>
+        <div class="header">
+        <h2 style="text-align: center"><nav id="stickHeader">Items Page</nav></h2><br><br><br><br>
+    </div><br>
 <div class="padding">
-<div class="header">
-    <h2><nav class="header"> + New Item 
-        <form class="file-upload" action="/home/suppliers/addItem" method="POST" enctype="multipart/form-data">   
-            <label for="upload" class="file-upload__label"><i class="fa fa-file-excel-o" style="font-size:18px"></i> Excel </label>
-            <input id="upload" class="file-upload__input" type="file" name="excel" >
-        </form>
-        </nav>
-    </h2>
-</div>
+<form class="file-upload" action="/home/suppliers/addItem" method="POST" enctype="multipart/form-data">   
+    <label for="upload" class="file-upload__label"><i class="fa fa-file-excel-o" style="font-size:18px"></i> Excel </label>
+    <input id="upload" class="file-upload__input" type="file" name="excel" >
+</form>
 <form id="getData" style="text-align: center" action="/home/suppliers/addItem" method="POST"><input id="callGetData" type="submit" name="itemsData" value="Get updated data"></form>
     <div class="wrapper">
         <div class="card1">
@@ -477,6 +483,18 @@ body {
 
 <script>
 
+window.onscroll = function() {myFunction()};
+
+var navbar = document.getElementById("stickHeader");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
 //-----------------------------------------------Image preview to item upload section----------------------------------------------------------------
 
 function insertPic(){
@@ -610,7 +628,7 @@ alertArr = [];
 for(x = 0; x < alerts.length; x++){
     alertArr += '<div class="alert"> \
             <span class="closebtn" onclick="this.parentElement.style.display=`none`;">&times;</span> \
-            <strong>ACTION REQUIRED! - </strong> '+ alerts[x] + ' - EDIT ITEM PRICE ASAP\
+            <strong>'+ alerts[x] + '</strong>\
             </div><br>'
 }
 

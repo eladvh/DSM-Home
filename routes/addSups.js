@@ -23,6 +23,8 @@
       var wechat = post.wechat;
       var skypeID = post.skypeID;
       var phoneNum = post.phoneNum;
+      var blackDate = post.blackDate;
+      console.log(post)
 
       function asyncFunc() {
         return new Promise(
@@ -50,8 +52,25 @@
         })
       }
 
+      function asyncFunc2() {
+        return new Promise(
+            function (resolve, reject) {
+              console.log('Insert to blackList'); 
+              db.query("SELECT * FROM `tblsupblacklist` WHERE supplierName = '"+supplierName+"'", function(err, results, fields){
+                if(!results.length){
+                  var sql = "INSERT INTO `tblsupblacklist`(`supplierName`,`blackDate`) VALUES ('" + supplierName + "','" + blackDate + "')";
+                  db.query(sql, function(err, result) {
+                    if(err){console.log('bug')}
+                    console.log('success');
+                  });
+                }
+              })
+              resolve();
+        })
+      }
 
-      function mainPost() {
+
+      function insertDB() {
         asyncFunc()
         .then(result => {
             console.log(answer);
@@ -59,8 +78,18 @@
         })
         .catch(error => {});
       }
-    
-    mainPost();
+
+      function moveToBlackList() {
+        asyncFunc2()
+        .then(result => {
+            res.send(answer);
+        })
+        .catch(error => {});
+      }
+
+    if(supplierName && storeNum && storeLink)insertDB();
+    if(supplierName && blackDate)moveToBlackList();
+
     }else{
   
     function asyncFunc() {
