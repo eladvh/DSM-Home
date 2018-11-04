@@ -452,7 +452,7 @@ if(userId == null){
                   db.query("SELECT supItemCode, itemName FROM `tblsupplieritem` WHERE `supItemCode`='"+aliexpressItemNumberAuto+"' AND `itemName`='"+title+"'", function(err, result, fields){
                     if(err){
                       console.log('bug4')
-                      //return;
+                      return;
                     };
                     if(!result.length){
                      AliexScrape(aliexpressItemNumberAuto)
@@ -954,7 +954,7 @@ if(itemsData)callGetData();
           setTimeout(() => {
             console.log(notificationArr)
             res.render('item_page',{answer:answer});
-          }, 1000);
+          }, 2000);
         })
         .catch(error => {});
       }

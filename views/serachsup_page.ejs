@@ -78,13 +78,18 @@ table#logshistory th {
 .sticky + .content {
   padding-top: 60px;
 }
+.row > div {
+  margin: 5px 0;
+  left:200px;
+}
+
 </style>
 <body>
 <h2 style="text-align: center"><nav id="stickHeader">Search suppliers in <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Aliexpress_logo.svg/2000px-Aliexpress_logo.svg.png" alt="Aliexpress" width="180px" height="25px"></span></nav></h2><br>
 <div class="padding">
 <form id="searchNewSup" action="/home/suppliers/searchsup" method="POST"> 
   <div class="row">
-    <div class="col-xs-6 col-md-offset-3">
+    <div class="col-xs-6 col-md-offset-3" style="top:150px">
         <p class="spacer">How many supplier do you want to search? <input id="qty" type="number" min="1" max="20" name="qty"/></p>
       <div class="input-group">
         <input id="search" type="text" name="search" class="form-control" placeholder="What do you want to sell?"/>
@@ -95,6 +100,9 @@ table#logshistory th {
         </div>
       </div>
     </div>
+    <div class="col-xs-4">
+        <img class="img-responsive" src="https://image.ibb.co/gWNnTL/delivery-man-2-1.png" alt="Supplier Pic" width="500px" height="500px">
+      </div>
   </div>
 </form><br><br>
 
