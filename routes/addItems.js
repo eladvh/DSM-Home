@@ -282,7 +282,11 @@ if(userId == null){
                 var storeName = obj.store.name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
                 var storeID = obj.store.id
                 var storeLink = adr2;
-                var price = obj.variations[0].pricing;
+                if(obj.variations[0].discount){
+                  var price = obj.variations[0].discount;
+                }else{
+                  var price = obj.variations[0].pricing;
+                }
                 console.log(`store name is: ${storeName} and store ID is: ${storeID}`)
                 db.query("CALL check_if_sup_is_null('"+ storeName +"','"+ storeID +"')", function(err, results, fields){
                   console.log('result is: ' + results);
@@ -461,7 +465,11 @@ if(userId == null){
                       var storeName = obj.store.name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
                       var storeID = obj.store.id
                       var storeLink = aliexpressItemLink;
-                      var price = obj.variations[0].pricing;
+                      if(obj.variations[0].discount){
+                        var price = obj.variations[0].discount;
+                      }else{
+                        var price = obj.variations[0].pricing;
+                      }
                       var supStoreLink = `https://www.aliexpress.com/store/${storeID}`;
 
                     db.query("INSERT INTO `tblsuppliers`(`supplierName`,`storeNum`,`storeLink`) VALUES ('" + storeName + "','" + storeID + "','" + supStoreLink + "')", function(err, result2, fields){
@@ -655,7 +663,11 @@ function getItemsFromAliexpress(aliexpressItemNumberAuto) {
       AliexScrape(aliexpressItemNumberAuto)
       .then(async response => {
         var obj = JSON.parse(response);
-        var price = obj.variations[0].pricing;
+        if(obj.variations[0].discount){
+          var price = obj.variations[0].discount;
+        }else{
+          var price = obj.variations[0].pricing;
+        }
         if(priceDB != price){
           var sql = "update tblsupplieritem SET supItemPrice = ? WHERE supItemCode = ?";
             db.query(sql, [price, aliexpressItemNumberAuto], function(err, result) {
