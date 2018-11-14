@@ -951,10 +951,10 @@ if(itemsData)callGetData();
         .then(result5 => {
           answer.notificationArr = notificationArr;
 
-          //setTimeout(() => {
+          setTimeout(() => {
             console.log(notificationArr)
             res.render('item_page',{answer:answer});
-          //}, 1500);
+          }, 1200);
         })
         .catch(error => {});
       }
