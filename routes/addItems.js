@@ -954,7 +954,7 @@ if(itemsData)callGetData();
           setTimeout(() => {
             console.log(notificationArr)
             res.render('item_page',{answer:answer});
-          }, 2000);
+          }, 1500);
         })
         .catch(error => {});
       }

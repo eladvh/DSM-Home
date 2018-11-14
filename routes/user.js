@@ -34,11 +34,13 @@ exports.signup = function(req, res){
           res.render('new_signup.ejs',{answer:answer});
 
           }} else {
-          var sql = "INSERT INTO `tblUser`(`store_name`,`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + sname + "','" + fname + "','" + lname + "','" + name + "','" + pass + "')";
+          /*var sql = "INSERT INTO `tblUser`(`store_name`,`first_name`,`last_name`,`user_name`, `password`) VALUES ('" + sname + "','" + fname + "','" + lname + "','" + name + "','" + pass + "')";
           db.query(sql, function(err, result) {
           answer.message = "Succesfully! Your account has been created.";
           res.render('new_signup.ejs',{answer:answer});
-          })
+          })*/
+          answer.message = "Sorry, registration is currently closed";
+          res.render('new_signup.ejs',{answer:answer});
         }
       });
 
